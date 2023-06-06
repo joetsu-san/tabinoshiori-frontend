@@ -3,11 +3,11 @@
 import React, { ReactNode } from "react";
 import { MantineProvider } from "@mantine/core";
 
-interface IProviders {
+type ProvidersProps = {
   children: ReactNode;
-}
+};
 
-export const Providers = ({ children }: IProviders) => {
+export const Providers = ({ children }: ProvidersProps) => {
   return (
     <MantineProvider
       withGlobalStyles

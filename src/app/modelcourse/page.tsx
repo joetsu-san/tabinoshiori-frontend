@@ -1,7 +1,7 @@
 "use client";
 
 import { Container } from "@mantine/core";
-import { CardsCarousel } from "../components/CardsCarousel";
+import { CardsCarousel } from "../../components/CardsCarousel";
 
 const ModelCourse = () => {
   return (

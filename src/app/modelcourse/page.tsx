@@ -1,8 +1,13 @@
 "use client";
 
-import { Button } from "@mantine/core";
+import { Container } from "@mantine/core";
+import { CardsCarousel } from "../../components/CardsCarousel";
 
 const ModelCourse = () => {
-  return <Button color="ocean-blue">ModelCourse</Button>;
+  return (
+    <Container size="xl" mt="md">
+      <CardsCarousel />
+    </Container>
+  );
 };
 export default ModelCourse;

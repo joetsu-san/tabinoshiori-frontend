@@ -2,6 +2,7 @@
 
 import { Button } from "@mantine/core";
 
-export default function Bookmark() {
+const Bookmark = () => {
   return <Button color="ocean-blue">Bookmark</Button>;
 }
+export default Bookmark;

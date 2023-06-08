@@ -2,6 +2,7 @@
 
 import { Button } from "@mantine/core";
 
-export default function TourismSpot() {
+const TourismSpot = () => {
   return <Button color="ocean-blue">TourismSpot</Button>;
-}
+};
+export default TourismSpot;

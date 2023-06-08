@@ -14,19 +14,19 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function FooterNav() {
+export const FooterNav = () => {
   const { classes } = useStyles();
 
   return (
     <>
       <div className={classes.footer_nav}>
         <Group>
-          <Link href={"/bookmark"}>bookmark</Link>
-          <Link href={"/modelcourse"}>modelcourse</Link>
           <Link href={"/tourismspot"}>tourismspot</Link>
+          <Link href={"/modelcourse"}>modelcourse</Link>
+          <Link href={"/bookmark"}>bookmark</Link>
           <Link href={"/travelplan"}>travelplan</Link>
         </Group>
       </div>
     </>
   );
-}
+};

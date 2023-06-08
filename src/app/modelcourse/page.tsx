@@ -2,6 +2,7 @@
 
 import { Button } from "@mantine/core";
 
-export default function ModelCourse() {
+const ModelCourse = () => {
   return <Button color="ocean-blue">ModelCourse</Button>;
-}
+};
+export default ModelCourse;

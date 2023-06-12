@@ -1,14 +1,14 @@
 "use client";
 
-import { Button, Container, Input, Box, Card, Image, Group, Text, Title } from "@mantine/core";
-import { CardsCarousel } from "../../components/CardsCarousel";
+import { Container, Input, Box, Card, Image, Group, Text, Title, SimpleGrid, Stack } from "@mantine/core";
+import { CardsCarousel } from "@/components/CardsCarousel";
 import { IconClockFilled, IconSearch } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 
 const ModelCourse = () => {
   //サンプル画像
   const sampleImage: string =
-    "https://firebasestorage.googleapis.com/v0/b/my-portfolio-30354.appspot.com/o/ebe435f09324eb334280f879807e7842_t.jpeg?alt=media&token=78dd8564-07b7-4488-9574-ea0dae4ba6ea&_gl=1*14bl5h9*_ga*MTU5NTAyODI5Ni4xNjc2MjgzNDE3*_ga_CW55HF8NVT*MTY4NjIxMDU0Ny4xNS4xLjE2ODYyMTA2MTcuMC4wLjA.";
+    "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80";
   //テストデータ
   const datas = ["test1", "test2", "test3", "test4", "test5"];
   //
@@ -26,49 +26,40 @@ const ModelCourse = () => {
   };
 
   return (
-    <Container size="xl" mt="md">
+    <Container size="xl" mt={30}>
       <CardsCarousel />
       <Box>
-        <Title order={1} size={25} align="center" sx={{ margin: "20px 0 0 0" }}>
+        <Title size={25} align="center" mt={30}>
           モデルコース一覧
         </Title>
-        <Input placeholder="検索" radius={20} icon={<IconSearch color="#eee" />} style={{ margin: "30px 0 0 0" }} />
-        <Box>
+        <Input placeholder="検索" radius={20} icon={<IconSearch color="#eee" />} mt={30} />
+        <SimpleGrid
+          cols={3}
+          mt={20}
+          spacing="md"
+          breakpoints={[
+            { maxWidth: "48rem", cols: 2, spacing: "sm" },
+            { maxWidth: "36rem", cols: 1, spacing: "sm" },
+          ]}
+        >
           {datas.map((data, index) => (
-            <Card
-              id={"" + index}
-              key={index}
-              shadow="sm"
-              style={{ backgroundColor: "#eee" }}
-              sx={() => ({
-                margin: "50px 0 0 0",
-              })}
-              onClick={sendDetail}
-            >
+            <Card key={index} onClick={sendDetail}>
               <Card.Section>
-                <Image src={sampleImage} fit="fill" alt="サンプル画像" />
+                <Image src={sampleImage} fit="cover" alt="サンプル画像" height={160} />
               </Card.Section>
-              <Group position="apart" mt="md" mb="xs">
-                <Text fw={500} size={15}>
+              <Stack spacing="xs">
+                <Text fw={500} size={18} mt={10}>
                   {data}
                 </Text>
-              </Group>
-              <Text fw={100} size={12}>
-                テキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-              </Text>
-              <Group
-                sx={() => ({
-                  margin: "10px 0 0 0",
-                })}
-              >
-                <IconClockFilled />
-                <Text fw={300} size={13}>
-                  １時間
-                </Text>
-              </Group>
+                <Text size={12}>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</Text>
+                <Group spacing="xs">
+                  <IconClockFilled />
+                  <Text size={13}>１時間</Text>
+                </Group>
+              </Stack>
             </Card>
           ))}
-        </Box>
+        </SimpleGrid>
       </Box>
     </Container>
   );

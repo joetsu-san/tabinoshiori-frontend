@@ -1,8 +1,31 @@
 "use client";
+import type { NextPage } from "next";
+import useEditor from "@/hooks/useEditor";
+import { TimeLineWrapper } from "./TimeLineWrapper";
 
-import { Button } from "@mantine/core";
+const Page: NextPage = () => {
+  // const editor = useEditor();
 
-const TravelPlan = () => {
-  return <Button color="ocean-blue">TravelPlan</Button>;
+  // if (!editor) {
+  //   return null;
+  // }
+
+  return (
+    <main
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <h1>旅のしおり</h1>
+      <h2>上越旅行</h2>
+      <textarea />
+      <TimeLineWrapper />
+      {/* <EditorContent style={{ width: "100%", height: "100%", border: "1px solid #000" }} editor={editor} /> */}
+    </main>
+  );
 };
-export default TravelPlan;
+
+export default Page;

@@ -12,9 +12,8 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/*.{ts,.tsx}": [
-      "npm run lint",
-      "npm run format"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --cache --cache-location .next/cache/eslint/ --fix", "prettier --write --ignore-path .gitignore"
     ]
   },
   "dependencies": {

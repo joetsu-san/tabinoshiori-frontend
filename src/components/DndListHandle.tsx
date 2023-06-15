@@ -8,6 +8,7 @@ import { travelPlanTourismSpotListState } from "@/atoms";
 import { NextPage } from "next";
 import { useEffect } from "react";
 import Image from "next/image";
+import { MappedTypeDescription } from "@syncedstore/core/types/doc";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -46,13 +47,15 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-  data: TravelPlanSpot[];
+  storeState: MappedTypeDescription<{
+    arrayData: TravelPlanSpot[];
+  }>;
   state: TravelPlanSpot[];
   handlers: UseListStateHandlers<TravelPlanSpot>;
 }
 
 const DndListHandle: NextPage<Props> = (props) => {
-  const { data, state, handlers } = props;
+  const { storeState, state, handlers } = props;
   // const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
   // const [state, handlers] = useListState(data);
   const { classes, cx } = useStyles();
@@ -61,8 +64,7 @@ const DndListHandle: NextPage<Props> = (props) => {
     console.log(state);
   }, [state]);
 
-  const items = state.map((item, index) => (
-    // <Timeline.Item title={item.tourismSpots.title} key={item.id}>
+  const items = storeState.arrayData.map((item, index) => (
     <Draggable key={item.id} index={index} draggableId={item.id}>
       {(provided, snapshot) => (
         <div
@@ -83,21 +85,23 @@ const DndListHandle: NextPage<Props> = (props) => {
               autosize
               maxRows={5}
               style={{ display: "block", height: "100%" }}
+              onChange={(e) => {
+                item.comment = e.currentTarget.value;
+              }}
             />
           </div>
         </div>
       )}
     </Draggable>
-
-    // </Timeline.Item>
   ));
 
   return (
     <DragDropContext
-      onDragEnd={({ destination, source }) => handlers.reorder({ from: source.index, to: destination?.index || 0 })}
+      onDragEnd={({ destination, source }) => {
+        handlers.reorder({ from: source.index, to: destination?.index || 0 });
+        console.log(state);
+      }}
     >
-      {/* <Timeline bulletSize={24} lineWidth={2}> */}
-
       <Droppable droppableId="dnd-list" direction="vertical">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -106,7 +110,6 @@ const DndListHandle: NextPage<Props> = (props) => {
           </div>
         )}
       </Droppable>
-      {/* </Timeline> */}
     </DragDropContext>
   );
 };

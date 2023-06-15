@@ -1,15 +1,8 @@
 "use client";
 import type { NextPage } from "next";
-import useEditor from "@/hooks/useEditor";
 import { TimeLineWrapper } from "./TimeLineWrapper";
 
 const Page: NextPage = () => {
-  // const editor = useEditor();
-
-  // if (!editor) {
-  //   return null;
-  // }
-
   return (
     <main
       style={{

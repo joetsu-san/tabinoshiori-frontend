@@ -2,7 +2,7 @@
 
 import { Container, Input, Box, Title } from "@mantine/core";
 import { CardsCarousel } from "@/components/CardsCarousel";
-import { ModelCourseList } from "@/components/ModelcourseList";
+import { ModelCourseList } from "@/components/ModelCourseList";
 import { IconSearch } from "@tabler/icons-react";
 //TODO: バックエンドから取ってくる
 import { modelcourselist } from "@/mock/mockdata";

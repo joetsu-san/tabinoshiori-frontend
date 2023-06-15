@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <RecoilRoot>
       <Providers>
         <html lang="ja">
-          <body className={inter.className}>
+          <body className={inter.className} style={{ minHeight: "100vh", color: "#343434" }}>
             <Header />
             {children}
             <FooterNav />

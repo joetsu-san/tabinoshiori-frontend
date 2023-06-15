@@ -32,7 +32,7 @@ const ModelCourse = () => {
         <Title size={25} align="center" mt={30}>
           モデルコース一覧
         </Title>
-        <Input placeholder="検索" radius={20} icon={<IconSearch color="#eee" />} mt={30} />
+        <Input placeholder="検索" radius={20} icon={<IconSearch color="#eee" style={{ zIndex: 0 }} />} mt={30} />
         <SimpleGrid
           cols={3}
           mt={20}

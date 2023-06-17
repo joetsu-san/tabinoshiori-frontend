@@ -29,6 +29,7 @@
     "@mantine/modals": "^6.0.13",
     "@mantine/next": "^6.0.13",
     "@mantine/tiptap": "^6.0.13",
+    "@react-google-maps/api": "^2.18.1",
     "@syncedstore/core": "^0.5.1",
     "@syncedstore/react": "^0.5.1",
     "@tabler/icons-react": "^2.20.0",

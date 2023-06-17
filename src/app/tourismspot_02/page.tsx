@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import { Button } from "@mantine/core";
+import { Group, Button, Input } from "@mantine/core";
+import { IconAt } from "@tabler/icons-react";
 
 import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
@@ -14,7 +15,7 @@ const key = process.env.NEXT_PUBLIC_GOOGLEMAP_KEY as string;
 
 // マップサイズ
 const containerStyle = {
-  height: "50vh",
+  height: "40vh",
   width: "100%",
 };
 
@@ -34,7 +35,7 @@ const TourismSpot = () => {
 
   return (
     <>
-      <div style={{ width: "100%", height: "50vh" }}>
+      <div style={{ position: "sticky", top: "0", width: "100%", zIndex: "999" }}>
         <LoadScript googleMapsApiKey={key} onLoad={() => createOffsetSize()}>
           <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={17} clickableIcons={false}>
             <SpotMarker offsetSize={size} />
@@ -42,7 +43,7 @@ const TourismSpot = () => {
         </LoadScript>
       </div>
 
-      <SpotButton />
+      <SpotButton offsetSize={size} />
     </>
   );
 };

@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import { Button } from "@mantine/core";
+import { Group, Button, Input } from "@mantine/core";
+import { IconAt } from "@tabler/icons-react";
 
 import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
@@ -10,11 +11,15 @@ import { SpotButton } from "./_components/SpotButton";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { MapCenterState } from "@/atoms/SpotAtoms";
 
+import axios from "axios";
+import aspida from "@aspida/axios";
+import api from "../../../api/official_spot/$api";
+
 const key = process.env.NEXT_PUBLIC_GOOGLEMAP_KEY as string;
 
 // マップサイズ
 const containerStyle = {
-  height: "50vh",
+  height: "40vh",
   width: "100%",
 };
 
@@ -28,13 +33,21 @@ const TourismSpot = () => {
   const [size, setSize] = useState<undefined | google.maps.Size>(undefined);
   const mapCenter = useRecoilValue(MapCenterState);
 
+  // const axiosConfig = {
+  //   baseURL: "http://localhost:4000/api"
+  // }
+  // const client = api(aspida(axios, axiosConfig));
+  // (async () => {
+  //   const res = await client.$get()
+  // })()
+
   const createOffsetSize = () => {
     return setSize(new window.google.maps.Size(0, -45));
   };
 
   return (
     <>
-      <div style={{ width: "100%", height: "50vh" }}>
+      <div style={{ position: "sticky", top: "0", width: "100%", zIndex: "999" }}>
         <LoadScript googleMapsApiKey={key} onLoad={() => createOffsetSize()}>
           <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={17} clickableIcons={false}>
             <SpotMarker offsetSize={size} />
@@ -42,7 +55,7 @@ const TourismSpot = () => {
         </LoadScript>
       </div>
 
-      <SpotButton />
+      <SpotButton offsetSize={size} />
     </>
   );
 };

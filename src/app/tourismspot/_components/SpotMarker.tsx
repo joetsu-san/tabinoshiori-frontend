@@ -2,6 +2,7 @@ import React from "react";
 import { Marker, InfoWindow } from "@react-google-maps/api";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedSpotList, SpotInfoWindowState } from "@/atoms/SpotAtoms";
+import { SpotInfoWindow } from "./SpotInfoWindow";
 
 // スポット情報
 type PositionItem = {
@@ -11,10 +12,15 @@ type PositionItem = {
   lng: number;
 };
 
-// infoWindowスタイル
-const divStyle = {
-  background: "white",
-  fontSize: 16,
+type OfficialSpotOverview = {
+  id: string;
+  title: string;
+  ruby: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  officialSpotStatus: "open" | "close";
 };
 
 export const SpotMarker = (props: any) => {
@@ -25,27 +31,16 @@ export const SpotMarker = (props: any) => {
     pixelOffset: props.offsetSize,
   };
 
-  const clickMarker = (spot: PositionItem) => {
-    const LatLng = {
-      lat: spot.lat,
-      lng: spot.lng,
-    };
-
-    setSpotInfoWindow(
-      <InfoWindow position={LatLng} onCloseClick={() => setSpotInfoWindow(undefined)} options={infoOption}>
-        <div style={divStyle}>
-          <h1>{spot.label}</h1>
-        </div>
-      </InfoWindow>
-    );
+  const clickMarker = (spot: OfficialSpotOverview) => {
+    setSpotInfoWindow(<SpotInfoWindow spot={spot} infoOption={infoOption} />);
   };
 
   return (
     <>
-      {spotList.map((val: PositionItem, i: number) => {
+      {spotList.map((val: OfficialSpotOverview, i: number) => {
         const LatLng = {
-          lat: val.lat,
-          lng: val.lng,
+          lat: val.latitude,
+          lng: val.longitude,
         };
         return <Marker key={i} position={LatLng} onClick={() => clickMarker(val)} />;
       })}

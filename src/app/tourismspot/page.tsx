@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import { Group, Button, Input } from "@mantine/core";
 import { IconAt } from "@tabler/icons-react";
@@ -8,8 +8,8 @@ import { IconAt } from "@tabler/icons-react";
 import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
 
-import { useRecoilState, useRecoilValue } from "recoil";
-import { MapCenterState } from "@/atoms/SpotAtoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { SelectedSpotList, MapCenterState } from "@/atoms/SpotAtoms";
 
 import axios from "axios";
 import aspida from "@aspida/axios";
@@ -32,14 +32,18 @@ const center = {
 const TourismSpot = () => {
   const [size, setSize] = useState<undefined | google.maps.Size>(undefined);
   const mapCenter = useRecoilValue(MapCenterState);
+  const setSpotList = useSetRecoilState(SelectedSpotList);
 
-  // const axiosConfig = {
-  //   baseURL: "http://localhost:4000/api"
-  // }
-  // const client = api(aspida(axios, axiosConfig));
-  // (async () => {
-  //   const res = await client.$get()
-  // })()
+  // useEffect(() => {
+  //   const axiosConfig = {
+  //     baseURL: "http://localhost:4000/api"
+  //   }
+  //   const client = api(aspida(axios, axiosConfig));
+  //   (async () => {
+  //     const res = await client.$get()
+  //     setSpotList(res)
+  //   })();
+  // }, [setSpotList])
 
   const createOffsetSize = () => {
     return setSize(new window.google.maps.Size(0, -45));

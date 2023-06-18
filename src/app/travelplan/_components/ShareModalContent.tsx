@@ -1,12 +1,14 @@
 import { usePathname } from "next/navigation";
 import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex } from "@mantine/core";
-import { IconPaperclip, IconCopy, IconCheck } from "@tabler/icons-react";
+import { IconPaperclip, IconCopy, IconCheck, IconQrcode } from "@tabler/icons-react";
+import { useQRCode } from "next-qrcode";
 
 export const ShareModalContent = () => {
   //TODO: 本番環境になったら変える
   const baseURL = "http://localhost:3000";
   const pathname = usePathname();
   const currentURL = `${baseURL}${pathname}`;
+  const { SVG } = useQRCode();
 
   return (
     <>
@@ -38,6 +40,25 @@ export const ShareModalContent = () => {
           )}
         </CopyButton>
       </Box>
+
+      <Flex align="center" gap="md" mt={24}>
+        <ActionIcon color="cyan" size="lg" radius="md" variant="light">
+          <IconQrcode size="1.5rem" />
+        </ActionIcon>
+        <Text fw={600}>QRコードから読み取る</Text>
+      </Flex>
+
+      <Flex justify="center">
+        <SVG
+          text={currentURL}
+          options={{
+            level: "M",
+            margin: 3,
+            scale: 4,
+            width: 250,
+          }}
+        />
+      </Flex>
     </>
   );
 };

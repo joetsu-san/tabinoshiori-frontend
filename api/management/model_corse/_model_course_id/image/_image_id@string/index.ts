@@ -10,4 +10,8 @@ export type Methods = {
       files: (File | ReadStream)[];
     };
   };
+
+  delete: {
+    status: 200;
+  };
 };

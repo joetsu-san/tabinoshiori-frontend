@@ -18,7 +18,9 @@ export const LoginModal = () => {
       </Modal>
 
       <Group position="center">
-        <Button onClick={open}>Login</Button>
+        <Button color="cyan" onClick={open}>
+          ログイン
+        </Button>
       </Group>
     </>
   );

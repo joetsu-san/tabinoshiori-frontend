@@ -7,8 +7,6 @@ import { useState } from 'react';
 import { Container, Input, Box, Card, Image, Group, Text, Title, SimpleGrid, Stack,ActionIcon, Grid, Space } from "@mantine/core";
 import { Tabs } from '@mantine/core';
 
-import { BookmarkTab } from "../components/BookmarkTab";
-
 const bookmarkdatas: Bookmarkdata[] = [
   {
     title: "上越市立歴史博物館",

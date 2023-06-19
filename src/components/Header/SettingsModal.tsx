@@ -13,7 +13,7 @@ export const SettingsModal = () => {
       </Modal>
 
       <Group position="center">
-        <ActionIcon variant="light" onClick={open}>
+        <ActionIcon color="cyan" variant="light" onClick={open}>
           <IconSettings size="1rem" />
         </ActionIcon>
       </Group>

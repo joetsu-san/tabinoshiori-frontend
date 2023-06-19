@@ -13,7 +13,8 @@ export const Header = () => {
           <Image src="/next.svg" alt="Next.js Logo" width={100} height={37} priority />
 
           {/* TODO: ログインしているかしていないかで条件分岐させる */}
-          {isLoggedIn ? <SettingsModal /> : <LoginModal />}
+          {isLoggedIn ? <SettingsModal /> : <SettingsModal />}
+          {/* {isLoggedIn ? <SettingsModal /> : <LoginModal />} */}
         </Group>
       </MantineHeader>
     </Box>

@@ -45,7 +45,7 @@ const Bookmark = () => {
 
   return (
     <>
-    <Tabs value={activeTab} onTabChange={setActiveTab}>
+    <Tabs value={activeTab} onTabChange={setActiveTab} color="cyan" >
       <Tabs.List grow position="center">
         <Tabs.Tab value="first">観光地</Tabs.Tab>
         <Tabs.Tab value="second">モデルコース</Tabs.Tab>
@@ -77,7 +77,7 @@ const Bookmark = () => {
                   </ActionIcon>
                   </Grid>
                   <Grid my={3} ml={0.1}>
-                  <IconMapPin size="1.2rem" strokeWidth={2} color={'#4047bf'}/>
+                  <IconMapPin size="1.2rem" strokeWidth={1.5} color={"#555555"}/>
                   <Text fw={500} size={14} color={"#555555"}>
                     {bookmarkdata.address}
                   </Text>

@@ -1,7 +1,7 @@
 import { travelPlanTourismSpotCountState, travelPlanTourismSpotListState } from "@/atoms";
 import { Timeline, Text, Button } from "@mantine/core";
 import { useRecoilState } from "recoil";
-import { TravelPlanSpot } from "../../../api/@types";
+import { TravelPlanSpot } from "../../../../api/@types";
 import DndListHandle from "@/components/DndListHandle";
 import { useListState } from "@mantine/hooks";
 import { relative } from "path";

@@ -7,10 +7,10 @@ export type CreateUserDto = {
 
 export type User = {
   id: string;
-  name: string;
+  username: string;
   birthday: string;
   genderId: number;
-  createAt: string;
+  createdAt: string;
   isDeleted: boolean;
 };
 
@@ -43,14 +43,33 @@ export type TravelPlanOverview = {
   visitedAt: string;
 };
 
-export type TravelPlanSpot = {
+export type OfficialSpotStatus = {
+  id: number;
+  title: string;
+};
+
+export type Image = {
   id: string;
-  tourismSpots: OfficialSpotDetail;
-  travelPlanId: string;
+  src: string;
+};
+
+export type TravelPlanSpotInfo = {
+  id: string;
+  title: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  ruby: string;
+  officialSpotStatus: OfficialSpotStatus;
+  officialSpotImages: Image[];
+};
+
+export type TravelPlanSpot = {
+  travelPlanSpotInfo: TravelPlanSpotInfo;
   comment: string;
   sortIndex: number;
-  minuteToNext: number;
-  startTime: string;
+  minuteSincePrevious: number;
 };
 
 export type TravelPlanDetail = {
@@ -59,7 +78,7 @@ export type TravelPlanDetail = {
   authorId: string;
   description: string;
   visitedAt: string;
-  travelPlanSpot: TravelPlanSpot[];
+  travelPlanSpots: TravelPlanSpot[];
 };
 
 export type UpdateTravelPlanDto = {
@@ -94,7 +113,7 @@ export type ModelCourseOverview = {
   id: string;
   title: string;
   description: string;
-  requiredMinute: string;
+  requiredMinute: number;
 };
 
 export type ModelCourseBookmark = {
@@ -119,95 +138,92 @@ export type CreateOfficialSpotDto = {
   latitude: number;
   longitude: number;
   officialSpotStatusId: number;
+  officialSpotImages: string[];
 };
 
 export type OfficialSpotOverview = {
   id: string;
   title: string;
-  ruby: string;
   description: string;
   address: string;
   latitude: number;
   longitude: number;
-  officialSpotStatus: "open" | "close";
-};
-
-export type OfficialSpotImages = {
-  id: string;
-  src: string;
+  ruby: string;
+  officialSpotStatus: OfficialSpotStatus;
 };
 
 export type OfficialSpotDetail = {
   id: string;
   title: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  ruby: string;
+  officialSpotStatus: OfficialSpotStatus;
+  officialSpotImages: Image[];
+};
+
+export type UpdateOfficialSpotDto = {
+  title: string;
   ruby: string;
   description: string;
   address: string;
   latitude: number;
   longitude: number;
-  officialSpotStatus: "open" | "close";
-  officialSpotImages: OfficialSpotImages[];
-};
-
-export type UpdateOfficialSpotDto = {
-  title?: string | undefined;
-  ruby?: string | undefined;
-  description?: string | undefined;
-  address?: string | undefined;
-  latitude?: number | undefined;
-  longitude?: number | undefined;
-  officialSpotStatusId?: number | undefined;
+  officialSpotStatusId: number;
 };
 
 export type CreateModelCourseSpotDto = {
   officialSpotId: string;
   modelCourseId: string;
-  sortIndex: string;
-  minuteToNext: string;
+  sortIndex: number;
+  minuteSincePrevious: number;
 };
 
 export type CreateModelCourseDto = {
   title: string;
   description: string;
-  requiredMinute: string;
+  requiredMinute: number;
+  modelCourseImages: string[];
   modelCourseSpot: CreateModelCourseSpotDto[];
 };
 
 export type ModelCourseSpot = {
-  officialSpotId: string;
-  modelCourseId: string;
-  sortIndex: string;
-  minuteToNext: string;
+  officialSpotInfo: OfficialSpotDetail;
+  sortIndex: number;
+  minuteSincePrevious: number;
 };
 
 export type ModelCourseDetail = {
   id: string;
   title: string;
   description: string;
-  requiredMinute: string;
-  modelCourseSpot: ModelCourseSpot[];
+  requiredMinute: number;
+  modelCourseSpots: ModelCourseSpot[];
+  modelCourseImages: Image[];
 };
 
 export type UpdateModelCourseDto = {
-  title?: string | undefined;
-  description?: string | undefined;
-  requiredMinute?: string | undefined;
-  modelCourseSpot?: CreateModelCourseSpotDto[] | undefined;
+  title: string;
+  description: string;
+  requiredMinute: number;
+  modelCourseSpot: CreateModelCourseSpotDto[];
 };
 
-export type CreateAdministoratorDto = {
+export type CreateAdministratorDto = {
   username: string;
   email: string;
   password: string;
 };
 
-export type Administorator = {
+export type Administrator = {
   id: string;
   username: string;
   email: string;
 };
 
-export type UpdateAdministoratorDto = {
+export type UpdateAdministratorDto = {
   username?: string | undefined;
   email?: string | undefined;
   password?: string | undefined;
@@ -219,7 +235,7 @@ export type CreateOfficialSpotBookmarkDto = {
 };
 
 export type OfficialSpotBookmark = {
-  officialSpot: OfficialSpotDetail;
+  officialSpotDetail: OfficialSpotDetail;
   sortIndex: number;
 };
 

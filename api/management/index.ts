@@ -1,14 +1,14 @@
 /* eslint-disable */
-import type * as Types from '../@types'
+import type * as Types from "../@types";
 
 export type Methods = {
   post: {
-    status: 200
-    reqBody: Types.CreateAdministoratorDto
-  }
+    status: 200;
+    reqBody: Types.CreateAdministratorDto;
+  };
 
   get: {
-    status: 200
-    resBody: Types.Administorator[]
-  }
-}
+    status: 200;
+    resBody: Types.Administrator[];
+  };
+};

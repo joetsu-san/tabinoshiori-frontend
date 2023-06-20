@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Button, ButtonProps, Center } from "@mantine/core";
+import { Modal, Group, Button, ButtonProps, Center, Image } from "@mantine/core";
 
 export function GoogleButton(props: ButtonProps) {
   return <Button variant="default" color="gray" {...props} />;
@@ -13,7 +13,9 @@ export const LoginModal = () => {
         {/* TODO: 中身の実装 */}
         {/* ログインしてない時のモーダルコンテンツ */}
         <Center h={100}>
-          <GoogleButton>Google Login</GoogleButton>
+          <GoogleButton leftIcon={<Image src="/google-icon.svg" alt="google logo" height={20}></Image>}>
+            Login with Google
+          </GoogleButton>
         </Center>
       </Modal>
 

@@ -4,7 +4,7 @@
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import React from "react";
 import { useState } from 'react';
-import { Container, Input, Box, Card, Image, Group, Text, Title, SimpleGrid, Stack,ActionIcon, Grid, Space } from "@mantine/core";
+import { Container, Input, Box, Card, Image, Group, Text, Title, SimpleGrid, Stack,ActionIcon, Grid, Space, Flex, Button } from "@mantine/core";
 import { Tabs } from '@mantine/core';
 
 const bookmarkdatas: Bookmarkdata[] = [
@@ -63,22 +63,24 @@ const Bookmark = () => {
             ]}
           >
             {bookmarkdatas.map((bookmarkdata, index) => (
-              <Card shadow="sm" key={index}>
+              <Card shadow="xs" key={index}>
                 <Card.Section>
                   <Image src={bookmarkdata.image} fit="cover" alt="サンプル画像" height={160} />
                 </Card.Section>
                 <Stack spacing="xs">
-                  <Grid>
-                  <Text fw={600} size={17} mt={18} ml={8}>
-                    {bookmarkdata.title}
-                  </Text>
-                  <ActionIcon onClick={() => toggleLiked(index)} mt={17}>
-                  <IconHeart size="1.2rem" color={liked[index] ? "red":"#9999"} stroke={1.5}/>
-                  </ActionIcon>
-                  </Grid>
-                  <Grid my={3} ml={0.1}>
+                  <Flex gap="xs" justify="space-between" align="flex-start" direction="row" wrap="wrap">
+                    <Text fw={600} size={18} mt={15} ml={2}>
+                      {bookmarkdata.title}
+                    </Text>
+                    
+                    <ActionIcon onClick={() => toggleLiked(index)} mt={14}>
+                      <IconHeart size="1.8rem" color={liked[index] ? "red":"#9999"} stroke={1.5}/>
+                    </ActionIcon>
+                  </Flex>
+                  
+                  <Grid  ml={0.1}>
                   <IconMapPin size="1.2rem" strokeWidth={1.5} color={"#555555"}/>
-                  <Text fw={500} size={14} color={"#555555"}>
+                  <Text fw={500} size={14} color={"#555555"} mb={10} ml={3}>
                     {bookmarkdata.address}
                   </Text>
                   </Grid>

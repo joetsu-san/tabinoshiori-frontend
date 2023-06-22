@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Title, Box, NavLink, Center } from "@mantine/core";
 import { IconCalendar, IconTimeline, IconMap, IconChevronRight, IconUser } from "@tabler/icons-react";
 
@@ -31,12 +32,14 @@ const CompleteRegister = () => {
           icon={<IconCalendar size="1.5rem" stroke={1.5} />}
           rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         />
-        <NavLink
-          py={10}
-          label="プロフィールを確認する"
-          icon={<IconUser size="1.5rem" stroke={1.5} />}
-          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
-        />
+        <Link href="/profile">
+          <NavLink
+            py={10}
+            label="プロフィールを確認する"
+            icon={<IconUser size="1.5rem" stroke={1.5} />}
+            rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+          />
+        </Link>
       </Box>
     </>
   );

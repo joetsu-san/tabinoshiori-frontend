@@ -1,16 +1,35 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { DatePickerInput } from "@mantine/dates";
-import { Center, Select, Button } from "@mantine/core";
+import { Center, Select, Button, Title, Box, Group, Text } from "@mantine/core";
 
 const Register = () => {
   const [value, setValue] = useState<Date | null>(null);
+
+  //年
+  const year = Array(130)
+    .fill(0)
+    .map((_, index) => `${2030 - index}`);
+  //月
+  const month = Array(12)
+    .fill(0)
+    .map((_, index) => `${index + 1}`);
+  //日
+  const day = Array(31)
+    .fill(0)
+    .map((_, index) => `${index + 1}`);
+
   return (
     <>
-      <Center h={100}>
+      <Center>
+        <Title order={3} my={10}>
+          ユーザー登録
+        </Title>
+      </Center>
+      <Box mx={"10%"}>
+        <Text>性別</Text>
         <Select
-          label="性別"
           placeholder="性別を選択してください"
           data={[
             { value: "male", label: "男性" },
@@ -18,24 +37,30 @@ const Register = () => {
             { value: "other", label: "その他" },
           ]}
           required
-          miw={250}
+          mb={40}
         />
-      </Center>
-      <Center h={100}>
-        <DatePickerInput
-          label="生年月日"
-          placeholder="生年月日を選択してください"
-          value={value}
-          onChange={setValue}
-          miw={250}
-          required
-        />
-      </Center>
-      <Center>
-        <Button component="a" href="/register/complete" color="dark">
-          登録
-        </Button>
-      </Center>
+        <Text>生年月日</Text>
+        <Group mb={20}>
+          <Select
+            data={year}
+            placeholder="年"
+            dropdownComponent="div"
+            style={{ width: "5rem" }}
+            rightSection={false}
+            size="xs"
+          />
+          <Text mx={-10}>年</Text>
+          <Select data={month} placeholder="月" dropdownComponent="div" style={{ width: "4rem" }} size="xs" />
+          <Text mx={-10}>月</Text>
+          <Select data={day} placeholder="日" dropdownComponent="div" style={{ width: "4rem" }} size="xs" />
+          <Text mx={-10}>日</Text>
+        </Group>
+        <Group position="center">
+          <Link href="/register/complete">
+            <Button color="dark">登録</Button>
+          </Link>
+        </Group>
+      </Box>
     </>
   );
 };

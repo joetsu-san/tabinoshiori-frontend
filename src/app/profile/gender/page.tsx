@@ -1,12 +1,13 @@
 "use client";
 
-import { Title, Center, Select, Button } from "@mantine/core";
+import Link from "next/link";
+import { Box, Group, Select, Button } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 
 const Gender = () => {
   return (
     <>
-      <Center h={100}>
+      <Box mx={"20%"}>
         <Select
           label="性別"
           placeholder="性別を選択してください"
@@ -16,15 +17,17 @@ const Gender = () => {
             { value: "other", label: "その他" },
           ]}
           required
-          size="md"
-          maw={500}
+          my={30}
         />
-      </Center>
-      <Center>
-        <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
-          保存
-        </Button>
-      </Center>
+        <Group position="apart">
+          <Link href="/profile">
+            <Button color="dark">キャンセル</Button>
+          </Link>
+          <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
+            保存
+          </Button>
+        </Group>
+      </Box>
     </>
   );
 };

@@ -1,19 +1,10 @@
 import React from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { MapCenterState, SelectedSpotList, SpotInfoWindowState } from "@/atoms/SpotAtoms";
+import { useSetRecoilState } from "recoil";
+import { SpotInfoWindowState } from "@/atoms/SpotAtoms";
 
-import { Marker, InfoWindow } from "@react-google-maps/api";
+import { InfoWindow } from "@react-google-maps/api";
 
-import { Card, Image, Text, Badge, Button, Group, Flex, Input } from "@mantine/core";
-import { IconAt } from "@tabler/icons-react";
-
-type PositionItem = {
-  id: string;
-  label: string;
-  lat: number;
-  lng: number;
-};
-
+// スポット情報
 type OfficialSpotOverview = {
   id: string;
   title: string;
@@ -36,6 +27,10 @@ type Props = {
   infoOption: any;
 };
 
+/**
+ * InfoWindowコンポーネント
+ * @returns InfoWindow
+ */
 export const SpotInfoWindow: React.FC<Props> = ({ spot, infoOption }) => {
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
 

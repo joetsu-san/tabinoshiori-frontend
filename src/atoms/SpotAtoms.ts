@@ -1,4 +1,7 @@
-import { atom } from "recoil";
+import axios from "axios";
+import { atom, selector } from "recoil";
+import aspida from "@aspida/axios";
+import api from "../../api/official_spot/$api";
 
 const positionData: OfficialSpotOverview[] = [
   {
@@ -39,6 +42,25 @@ export const SpotList = atom({
   default: <OfficialSpotOverview[]>positionData,
 });
 
+// export const SpotList = atom({
+//   key: "SpotList",
+//   default: selector({
+//     key: 'savedTodoListState',
+//     get: async ({get}) => {
+//       try {
+//         const axiosConfig = {
+//           baseURL: "http://localhost:4000/api"
+//         }
+//         const client = api(aspida(axios, axiosConfig));
+//         const res = await client.$get()
+//         return res;
+//       } catch (error) {
+//         throw error;
+//       }
+//     },
+//   }),
+// });
+
 // infoWindow　表示用
 export const SpotInfoWindowState = atom({
   key: "SpotInfoState",
@@ -46,10 +68,6 @@ export const SpotInfoWindowState = atom({
 });
 
 // マップ中心座標
-// export const MapCenterState = atom({
-//   key: "MapCenterState",
-//   default: <MapCenter>{ lat: 35.69731, lng: 139.7747 },
-// });
 export const MapCenterState = atom({
   key: "MapCenterState",
   default: <MapCenter>{

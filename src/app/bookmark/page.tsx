@@ -3,9 +3,25 @@
 // import { Card, Image, Text, Badge, Button, Group, ActionIcon } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import React from "react";
-import { useState } from 'react';
-import { Container, Input, Box, Card, Image, Group, Text, Title, SimpleGrid, Stack,ActionIcon, Grid, Space, Flex, Button } from "@mantine/core";
-import { Tabs } from '@mantine/core';
+import { useState } from "react";
+import {
+  Container,
+  Input,
+  Box,
+  Card,
+  Image,
+  Group,
+  Text,
+  Title,
+  SimpleGrid,
+  Stack,
+  ActionIcon,
+  Grid,
+  Space,
+  Flex,
+  Button,
+} from "@mantine/core";
+import { Tabs } from "@mantine/core";
 
 const bookmarkdatas: Bookmarkdata[] = [
   {
@@ -33,72 +49,67 @@ type Bookmarkdata = {
   description: string;
 };
 
-
 const Bookmark = () => {
-
   const [liked, setLiked] = useState<boolean[]>(bookmarkdatas.map((_) => true));
   const toggleLiked = (index: number) => {
-    setLiked(liked.map((bool, i) => i === index ? !bool : bool))
+    setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
 
-  const [activeTab, setActiveTab] = useState<string | null>('first');
-
+  const [activeTab, setActiveTab] = useState<string | null>("first");
   return (
     <>
-    <Tabs value={activeTab} onTabChange={setActiveTab} color="cyan" >
-      <Tabs.List grow position="center">
-        <Tabs.Tab value="first">観光地</Tabs.Tab>
-        <Tabs.Tab value="second">モデルコース</Tabs.Tab>
-      </Tabs.List>
-      <Container size="xl" mt={30}>
-        <Tabs.Panel value="first">
-        <Box>
-          <SimpleGrid
-            cols={3}
-            mt={20}
-            spacing="md"
-            breakpoints={[
-              { maxWidth: "48rem", cols: 2, spacing: "sm" },
-              { maxWidth: "36rem", cols: 1, spacing: "sm" },
-            ]}
-          >
-            {bookmarkdatas.map((bookmarkdata, index) => (
-              <Card shadow="xs" key={index}>
-                <Card.Section>
-                  <Image src={bookmarkdata.image} fit="cover" alt="サンプル画像" height={160} />
-                </Card.Section>
-                <Stack spacing="xs">
-                  <Flex gap="xs" justify="space-between" align="flex-start" direction="row" wrap="wrap">
-                    <Text fw={600} size={18} mt={15} ml={2}>
-                      {bookmarkdata.title}
-                    </Text>
-                    
-                    <ActionIcon onClick={() => toggleLiked(index)} mt={14}>
-                      <IconHeart size="1.8rem" color={liked[index] ? "red":"#9999"} stroke={1.5}/>
-                    </ActionIcon>
-                  </Flex>
-                  
-                  <Grid  ml={0.1}>
-                  <IconMapPin size="1.2rem" strokeWidth={1.5} color={"#555555"}/>
-                  <Text fw={500} size={14} color={"#555555"} mb={10} ml={3}>
-                    {bookmarkdata.address}
-                  </Text>
-                  </Grid>
-                  <Text size={12} lineClamp={3}>{bookmarkdata.description}</Text>
-                </Stack>
-                
-              </Card>
-            ))}
-          </SimpleGrid>
-        </Box>
-        </Tabs.Panel>
-        <Tabs.Panel value="second">
-          モデルコース一覧
-        </Tabs.Panel>
-      </Container>
-    </Tabs>
+      <Tabs value={activeTab} onTabChange={setActiveTab} color="cyan">
+        <Tabs.List grow position="center">
+          <Tabs.Tab value="first">観光地</Tabs.Tab>
+          <Tabs.Tab value="second">モデルコース</Tabs.Tab>
+        </Tabs.List>
+        <Container size="xl" mt={30}>
+          <Tabs.Panel value="first">
+            <Box>
+              <SimpleGrid
+                cols={3}
+                mt={20}
+                spacing="md"
+                breakpoints={[
+                  { maxWidth: "48rem", cols: 2, spacing: "sm" },
+                  { maxWidth: "36rem", cols: 1, spacing: "sm" },
+                ]}
+              >
+                {bookmarkdatas.map((bookmarkdata, index) => (
+                  <Card shadow="xs" key={index}>
+                    <Card.Section>
+                      <Image src={bookmarkdata.image} fit="cover" alt="サンプル画像" height={160} />
+                    </Card.Section>
+                    <Stack spacing="xs">
+                      <Flex gap="xs" justify="space-between" align="flex-start" direction="row" wrap="wrap">
+                        <Text fw={600} size={18} mt={15} ml={2}>
+                          {bookmarkdata.title}
+                        </Text>
 
+                        <ActionIcon onClick={() => toggleLiked(index)} mt={14}>
+                          <IconHeart size="1.8rem" color={liked[index] ? "red" : "#9999"} stroke={1.5} />
+                        </ActionIcon>
+                      </Flex>
+
+                      <Grid ml={0.1}>
+                        <IconMapPin size="1.2rem" strokeWidth={1.5} color={"#555555"} />
+                        <Text fw={500} size={14} color={"#555555"} mb={10} ml={3}>
+                          {bookmarkdata.address}
+                        </Text>
+                      </Grid>
+                      <Text size={12} lineClamp={3}>
+                        {bookmarkdata.description}
+                      </Text>
+                    </Stack>
+                  </Card>
+                ))}
+              </SimpleGrid>
+            </Box>
+          </Tabs.Panel>
+          <Tabs.Panel value="second">モデルコース一覧</Tabs.Panel>
+        </Container>
+      </Tabs>
     </>
-  )
+  );
 };
 export default Bookmark;

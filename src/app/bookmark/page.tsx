@@ -4,23 +4,7 @@
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import React from "react";
 import { useState } from "react";
-import {
-  Container,
-  Input,
-  Box,
-  Card,
-  Image,
-  Group,
-  Text,
-  Title,
-  SimpleGrid,
-  Stack,
-  ActionIcon,
-  Grid,
-  Space,
-  Flex,
-  Button,
-} from "@mantine/core";
+import { Container, Box, Card, Image, Text, SimpleGrid, Stack, ActionIcon, Grid, Flex } from "@mantine/core";
 import { Tabs } from "@mantine/core";
 
 const bookmarkdatas: Bookmarkdata[] = [

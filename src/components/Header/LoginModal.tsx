@@ -20,7 +20,7 @@ export const LoginModal = () => {
       </Modal>
 
       <Group position="center">
-        <Button color="cyan" onClick={open}>
+        <Button color="cyan" onClick={open} size="xs" compact fz={"0.1rem"}>
           ログイン
         </Button>
       </Group>

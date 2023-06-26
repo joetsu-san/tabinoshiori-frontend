@@ -1,17 +1,10 @@
 import React from "react";
-import { Marker, InfoWindow } from "@react-google-maps/api";
+import { Marker } from "@react-google-maps/api";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { SelectedSpotList, SpotInfoWindowState } from "@/atoms/SpotAtoms";
+import { SpotList, SpotInfoWindowState } from "@/atoms/SpotAtoms";
 import { SpotInfoWindow } from "./SpotInfoWindow";
 
 // スポット情報
-type PositionItem = {
-  id: string;
-  label: string;
-  lat: number;
-  lng: number;
-};
-
 type OfficialSpotOverview = {
   id: string;
   title: string;
@@ -25,7 +18,7 @@ type OfficialSpotOverview = {
 
 export const SpotMarker = (props: any) => {
   const [spotInfoWindow, setSpotInfoWindow] = useRecoilState(SpotInfoWindowState);
-  const spotList = useRecoilValue(SelectedSpotList);
+  const spotList = useRecoilValue(SpotList);
 
   const infoOption = {
     pixelOffset: props.offsetSize,

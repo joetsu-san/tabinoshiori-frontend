@@ -105,3 +105,72 @@ export const modelcourselist = [
       "https://images.unsplash.com/photo-1582721478779-0ae163c05a60?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
   },
 ];
+
+export const modelcoursedetail = {
+  id: "00000000-0000-0000-0000-000000000000",
+  title: "モデルコースのタイトル",
+  description: "モデルコースの説明",
+  requiredMinute: 1,
+  modelCourseSpots: [
+    {
+      officialSpotId: "00000000-0000-0000-0000-000000000000",
+      modelCourseId: "00000000-0000-0000-0000-000000000000",
+      sortIndex: 0,
+      minuteSincePrevious: 1,
+      officialSpotTitle: "皇居",
+      officialSpotRuby: "こうきょ",
+      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
+      address: "東京都千代田区千代田1番1号",
+      latitude: 35.6838504,
+      longitude: 139.7434664,
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+      description: "店舗１で〇〇〇〇を食べる",
+      stayMinutes: 15,
+    },
+    {
+      officialSpotId: "10000000-0000-0000-0000-000000000000",
+      modelCourseId: "00000000-0000-0000-0000-000000000000",
+      sortIndex: 0,
+      minuteSincePrevious: 1,
+      officialSpotTitle: "皇居",
+      officialSpotRuby: "こうきょ",
+      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
+      address: "東京都千代田区千代田1番1号",
+      latitude: 35.69397,
+      longitude: 139.7762,
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+      description: "店舗１で〇〇〇〇を食べる",
+      stayMinutes: 15,
+    },
+    {
+      officialSpotId: "20000000-0000-0000-0000-000000000000",
+      modelCourseId: "00000000-0000-0000-0000-000000000000",
+      sortIndex: 0,
+      minuteSincePrevious: 1,
+      officialSpotTitle: "皇居",
+      officialSpotRuby: "こうきょ",
+      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
+      address: "東京都千代田区千代田1番1号",
+      latitude: 37.147887,
+      longitude: 138.2337322,
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+      description: "店舗１で〇〇〇〇を食べる",
+      stayMinutes: 15,
+    },
+  ],
+};

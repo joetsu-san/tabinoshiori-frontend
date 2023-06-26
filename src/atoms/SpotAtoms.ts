@@ -49,7 +49,7 @@ export const SpotList = atom({
 //     get: async ({get}) => {
 //       try {
 //         const axiosConfig = {
-//           baseURL: "http://localhost:4000/api"
+//           baseURL: "http://localhost:4000"
 //         }
 //         const client = api(aspida(axios, axiosConfig));
 //         const res = await client.$get()

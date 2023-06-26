@@ -6,8 +6,8 @@ import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
 
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { SpotList, MapCenterState, MapHeight } from "@/atoms/SpotAtoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { SpotList, MapCenterState, MapHeight, SpotInfoWindowState } from "@/atoms/SpotAtoms";
 
 import axios from "axios";
 import aspida from "@aspida/axios";
@@ -23,8 +23,8 @@ const center = {
 
 const TourismSpot = () => {
   const [size, setSize] = useState<undefined | google.maps.Size>(undefined);
-  const mapCenter = useRecoilValue(MapCenterState);
-  const setSpotList = useSetRecoilState(SpotList);
+  const [mapCenter, setMapCenter] = useRecoilState(MapCenterState);
+  const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
   const mapHeight = useRecoilValue(MapHeight);
 
   // マップサイズ
@@ -32,6 +32,13 @@ const TourismSpot = () => {
     height: "100%",
     width: "100%",
   };
+
+  useEffect(() => {
+    return () => {
+      setMapCenter(center);
+      setSpotInfoWindow(undefined);
+    };
+  }, [setMapCenter, setSpotInfoWindow]);
 
   // useEffect(() => {
   //   const axiosConfig = {
@@ -56,7 +63,7 @@ const TourismSpot = () => {
           top: "0",
           width: "100%",
           height: `${mapHeight}vh`,
-          zIndex: "999",
+          zIndex: "100",
           transitionProperty: "height",
           transitionDuration: "0.3s",
         }}

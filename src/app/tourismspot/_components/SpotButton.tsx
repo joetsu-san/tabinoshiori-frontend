@@ -24,7 +24,8 @@ type OfficialSpotOverview = {
 };
 
 export const SpotButton = (props: any) => {
-  const spotList = useRecoilValue(SpotList);
+  const spotList = useRecoilValue(SpotList); // 観光地データマスター
+  const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
 
   const [open, setOpen] = useState(false);
@@ -42,7 +43,6 @@ export const SpotButton = (props: any) => {
   };
 
   const toggleOpen = () => {
-    toggle();
     if (!open) {
       setMapHeight(0);
       setOpen(true);
@@ -50,6 +50,7 @@ export const SpotButton = (props: any) => {
       setMapHeight(40);
       setOpen(false);
     }
+    toggle();
   };
 
   // 検索 Debounce
@@ -57,14 +58,15 @@ export const SpotButton = (props: any) => {
   const debouncedInputText = useDebounce(inputText, 500);
   const handleChange = (event: any) => setInputText(event.target.value);
   useEffect(() => {
-    console.log(`「${debouncedInputText}」 に対するAPIコール`);
+    console.log(`「${debouncedInputText}」`);
     // 観光地検索処理
     if (debouncedInputText != "") {
-      console.log("検索処理");
+      const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
+      setTempSpotList(temp);
     } else {
-      console.log("何もしない");
+      setTempSpotList(spotList);
     }
-  }, [debouncedInputText]);
+  }, [debouncedInputText, setTempSpotList, spotList]);
 
   return (
     <div
@@ -88,16 +90,7 @@ export const SpotButton = (props: any) => {
         }}
       >
         <button
-          onClick={() => {
-            if (!open) {
-              setMapHeight(0);
-              setOpen(true);
-            } else {
-              setMapHeight(40);
-              setOpen(false);
-            }
-            toggle();
-          }}
+          onClick={toggleOpen}
           style={{
             display: "block",
             position: "absolute",
@@ -122,7 +115,7 @@ export const SpotButton = (props: any) => {
           padding: "10px 20px",
         }}
       >
-        {spotList.map((val, i) => {
+        {tempSpotList.map((val, i) => {
           return (
             <Card shadow="sm" padding="sm" radius="md" withBorder key={i} onClick={() => showInfoWindow(val)}>
               <Card.Section>

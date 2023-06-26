@@ -3,6 +3,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Group, Box, NavLink, Button, Text, Divider, Select } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { ActionIcon } from "@mantine/core";
+import { BirthdayInput } from "./BirthdayInput";
+import { GenderInput } from "./GenderInput";
 import {
   IconSettings,
   IconChevronRight,
@@ -12,54 +14,50 @@ import {
   IconLogout,
   IconX,
   IconCheck,
+  IconGenderMale,
+  IconGenderFemale,
 } from "@tabler/icons-react";
-//年
-const year = Array(130)
-  .fill(0)
-  .map((_, index) => `${2030 - index}`);
-//月
-const month = Array(12)
-  .fill(0)
-  .map((_, index) => `${index + 1}`);
-//日
-const day = Array(31)
-  .fill(0)
-  .map((_, index) => `${index + 1}`);
+import { useState } from "react";
 
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const [defaultGender, setGender] = useState<string | undefined>(undefined);
+
+  const [defaultYear, setYear] = useState<string | undefined>(undefined);
+  const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
+  const [defaultDay, setDay] = useState<string | undefined>(undefined);
+
   // 性別変更モーダル
   const openGenderModal = () =>
     modals.open({
-      title: "性別変更",
-      padding: "20px",
+      padding: "0px",
       centered: true,
       radius: 10,
       withCloseButton: false,
       closeOnClickOutside: false,
       children: (
         <>
-          <Select
-            label="性別"
-            placeholder="性別を選択してください"
-            data={[
-              { value: "male", label: "男性" },
-              { value: "female", label: "女性" },
-              { value: "other", label: "その他" },
-            ]}
-            required
-            mt={10}
-            mb={"100px"}
-          />
-          <Group position="apart">
-            <Button color="dark" onClick={openSettingModal}>
-              キャンセル
+          <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
+            <Button variant="subtle" color="dark" onClick={() => modals.closeAll()} w={"20%"}>
+              <IconX></IconX>
             </Button>
-            <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
-              保存
-            </Button>
+            <Box w={"75%"}>
+              <Text ml={"26%"}>性別変更</Text>
+            </Box>
           </Group>
+          <Divider></Divider>
+          <Box p={"20px"}>
+            <GenderInput defaultGender={defaultGender} />
+            <Group position="apart">
+              <Button color="dark" onClick={openSettingModal}>
+                キャンセル
+              </Button>
+              <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
+                保存
+              </Button>
+            </Group>
+          </Box>
         </>
       ),
     });
@@ -67,57 +65,65 @@ export const SettingsModal = () => {
   // 生年月日変更モーダル
   const openBirthdayModal = () =>
     modals.open({
-      title: "生年月日変更",
-      padding: "20px",
+      padding: "0px",
       centered: true,
       radius: 10,
       withCloseButton: false,
       closeOnClickOutside: false,
       children: (
         <>
-          <Group mb={80}>
-            <Select
-              data={year}
-              placeholder="年"
-              dropdownComponent="div"
-              style={{ width: "5rem" }}
-              rightSection={false}
-              size="xs"
-            />
-            <Text mx={-10}>年</Text>
-            <Select size="xs" data={month} placeholder="月" dropdownComponent="div" style={{ width: "4rem" }} />
-            <Text mx={-10}>月</Text>
-            <Select size="xs" data={day} placeholder="日" dropdownComponent="div" style={{ width: "4rem" }} />
-            <Text mx={-10}>日</Text>
-          </Group>
-          <Group position="apart">
-            <Button color="dark" onClick={openSettingModal}>
-              キャンセル
+          <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
+            <Button variant="subtle" color="dark" onClick={() => modals.closeAll()} w={"20%"}>
+              <IconX></IconX>
             </Button>
-            <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
-              保存
-            </Button>
+            <Box w={"75%"}>
+              <Text ml={"18%"}>生年月日変更</Text>
+            </Box>
           </Group>
+          <Divider></Divider>
+          <Box p={"20px"}>
+            <BirthdayInput defaultYear={defaultYear} defaultMonth={defaultMonth} defaultDay={defaultDay} />
+            <Group position="apart">
+              <Button color="dark" onClick={openSettingModal}>
+                キャンセル
+              </Button>
+              <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
+                保存
+              </Button>
+            </Group>
+          </Box>
         </>
       ),
     });
+
   //ログアウトモーダル
   const openLogoutModal = () =>
     modals.open({
-      padding: "20px",
+      padding: "0px",
       centered: true,
       radius: 10,
       withCloseButton: false,
       closeOnClickOutside: false,
       children: (
         <>
-          <Text my={20}>ログアウトしますか？</Text>
-          <Group position="apart">
-            <Button onClick={openSettingModal} color="dark">
-              キャンセル
+          <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
+            <Button variant="subtle" color="dark" onClick={() => modals.closeAll()} w={"20%"}>
+              <IconX></IconX>
             </Button>
-            <Button color="red">ログアウト</Button>
+            <Box w={"75%"}>
+              <Text ml={"18%"}>ログアウト</Text>
+            </Box>
           </Group>
+          <Divider></Divider>
+          <Box p={"20px"}>
+            <Text my={20}>ログアウトしますか？</Text>
+            <Group position="apart">
+              <Button onClick={openSettingModal} color="dark">
+                キャンセル
+              </Button>
+              <Button color="red">ログアウト</Button>
+            </Group>
+          </Box>
         </>
       ),
     });
@@ -131,17 +137,7 @@ export const SettingsModal = () => {
       closeOnClickOutside: false,
       children: (
         <>
-          <Group
-            position="apart"
-            sx={{ height: "100%" }}
-            pt={10}
-            pb={10}
-            style={
-              {
-                /* backgroundColor:"#D4D0D0" */
-              }
-            }
-          >
+          <Group position="apart" sx={{ height: "100%" }} pt={10} pb={10}>
             <Button variant="subtle" color="dark" onClick={() => modals.closeAll()}>
               <IconX></IconX>
             </Button>
@@ -170,6 +166,12 @@ export const SettingsModal = () => {
             <NavLink
               label="性別"
               description="男性"
+              icon={
+                <>
+                  <IconGenderMale height={"1.5rem"} width={"0.75rem"} />
+                  <IconGenderFemale height={"1.5rem"} width={"0.75rem"} />
+                </>
+              }
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
               onClick={openGenderModal}
             />
@@ -196,7 +198,6 @@ export const SettingsModal = () => {
 
   return (
     <>
-      {/* <Modal title="プロフィール" opened={opened} onClose={close} centered> */}
       <Group position="center">
         <ActionIcon color="cyan" variant="light" onClick={openSettingModal}>
           <IconSettings size="1rem" />

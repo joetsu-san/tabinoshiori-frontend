@@ -13,8 +13,7 @@ export const Header = () => {
           <Image src="/logo.svg" alt="上越旅のしおり ロゴ" width={130} height={37} priority />
 
           {/* TODO: ログインしているかしていないかで条件分岐させる */}
-          {isLoggedIn ? <SettingsModal /> : <SettingsModal />}
-          {/* {isLoggedIn ? <SettingsModal /> : <LoginModal />} */}
+          {isLoggedIn ? <SettingsModal /> : <LoginModal />}
         </Group>
       </MantineHeader>
     </Box>

@@ -1,33 +1,23 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { DatePickerInput } from "@mantine/dates";
-import { Button, Box, Group } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { Box, Title } from "@mantine/core";
+import { BirthdayInput } from "../../../components/Header/BirthdayInput";
+import { SaveCancelButton } from "../_components/SaveCancelButton";
 
 const BirthDay = () => {
-  const [value, setValue] = useState<Date | null>(null);
+  const [year, setValue] = useState<string | undefined>(undefined);
+  const [month, setMonth] = useState<string | undefined>(undefined);
+  const [day, setDay] = useState<string | undefined>(undefined);
+
   return (
     <>
-      <Box mx={"20%"}>
-        <DatePickerInput
-          label="生年月日"
-          placeholder="生年月日を選択してください"
-          value={value}
-          onChange={setValue}
-          required
-          my={30}
-          dropdownType="modal"
-        />
-        <Group position="apart">
-          <Link href="/profile">
-            <Button color="dark">キャンセル</Button>
-          </Link>
-          <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
-            保存
-          </Button>
-        </Group>
+      <Box mx={"10%"}>
+        <Title order={3} my={20}>
+          生年月日変更
+        </Title>
+        <BirthdayInput defaultYear={year} defaultMonth={month} defaultDay={day} />
+        <SaveCancelButton />
       </Box>
     </>
   );

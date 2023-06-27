@@ -1,12 +1,81 @@
 "use client";
 import type { NextPage } from "next";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Button, Textarea, Text } from "@mantine/core";
-import { IconShare } from "@tabler/icons-react";
-// import { TimeLineWrapper } from "./_components/TimeLineWrapper";
-import { ShareModalContent } from "./[id]/_components/ShareModalContent";
+import { IconWriting } from "@tabler/icons-react";
+import { TravelPlanCard } from "./_component/TravelplanCard";
+import { Button } from "@mantine/core";
+import { TravelPlanDetail } from "../../../api/@types";
 
 const Page: NextPage = () => {
+  const travelPlans: TravelPlanDetail[] = [
+    {
+      id: "1",
+      title: "旅のタイトル",
+      authorId: "bfwiuqbfwq",
+      description: "旅の説明",
+      visitedAt: "",
+      travelPlanSpots: [
+        {
+          travelPlanSpotInfo: {
+            id: "1",
+            title: "上越妙高駅",
+            description: "string",
+            address: "string",
+            latitude: 31,
+            longitude: 30,
+            ruby: "じょうえつみょうこうえき",
+            officialSpotStatus: {
+              id: 1,
+              title: "open",
+            },
+            officialSpotImages: [
+              {
+                id: "1",
+                src: "https://picsum.photos/200/300",
+              },
+            ],
+          },
+          comment: "string",
+          sortIndex: 1,
+          minuteSincePrevious: 1,
+        },
+      ],
+    },
+    {
+      id: "2",
+      title:
+        "タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトル",
+      authorId: "bfwiuqbfwq",
+      description: "説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明",
+      visitedAt: "",
+      travelPlanSpots: [
+        {
+          travelPlanSpotInfo: {
+            id: "1",
+            title: "上越妙高駅",
+            description: "string",
+            address: "string",
+            latitude: 31,
+            longitude: 30,
+            ruby: "じょうえつみょうこうえき",
+            officialSpotStatus: {
+              id: 1,
+              title: "open",
+            },
+            officialSpotImages: [
+              {
+                id: "1",
+                src: "https://picsum.photos/200/300",
+              },
+            ],
+          },
+          comment: "string",
+          sortIndex: 1,
+          minuteSincePrevious: 1,
+        },
+      ],
+    },
+  ];
+
   return (
     <main
       style={{
@@ -15,7 +84,15 @@ const Page: NextPage = () => {
         alignItems: "center",
         minHeight: "100vh",
       }}
-    ></main>
+    >
+      <Button color="cyan" variant="light" leftIcon={<IconWriting size="1rem" />} m={10}>
+        旅のしおりを作成する
+      </Button>
+
+      {travelPlans.map((travelplan) => (
+        <TravelPlanCard travelplan={travelplan} key={travelplan.id} />
+      ))}
+    </main>
   );
 };
 

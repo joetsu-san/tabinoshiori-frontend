@@ -1,10 +1,10 @@
 "use client";
 import { travelPlanTourismSpotCountState, travelPlanTourismSpotListState } from "@/atoms";
-import { Timeline, Text, Button } from "@mantine/core";
+import { Timeline, Text, Button, Modal, Select, Textarea, Skeleton } from "@mantine/core";
 import { useRecoilState } from "recoil";
 import { TravelPlanSpot } from "../../../../../api/@types";
 import DndListHandle from "@/components/DndListHandle";
-import { useListState } from "@mantine/hooks";
+import { useDisclosure, useListState } from "@mantine/hooks";
 import { relative } from "path";
 import { MappedTypeDescription } from "@syncedstore/core/types/doc";
 import { NextPage } from "next";
@@ -21,7 +21,7 @@ export const TimeLineWrapper: NextPage<Props> = (props) => {
   // const storeState = useSyncedStore(store);
   const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
   // const [travelPlanTourismSpotCount, setTravelPlanTourismSpotCount] = useRecoilState(travelPlanTourismSpotCountState);
-
+  const [opened, { open, close }] = useDisclosure(false);
   // const [state, handlers] = useListState(storeState.arrayData);
 
   const handleTourismSpotCount = () => {
@@ -61,12 +61,37 @@ export const TimeLineWrapper: NextPage<Props> = (props) => {
 
   return (
     <div>
-      {/* <DndListHandle storeState={storeState} state={state} handlers={handlers} /> */}
       <DndkitList />
-      <Button variant="light" onClick={handleTourismSpotCount}>
+      <Button onClick={open} color="cyan" variant="light">
         場所を追加
       </Button>
-      {/* </Timeline> */}
+      <Modal opened={opened} onClose={close} title="地点を追加する" centered>
+        <Skeleton width={50} height={50} />
+        <Select
+          data={[]} // label="Choose employee of the month"
+          // placeholder="Pick one"
+          // itemComponent={SelectItem}
+          // data={data}
+          // searchable
+          // maxDropdownHeight={400}
+          // nothingFound="Nobody here"
+          // filter={(value, item) =>
+          //   item.label.toLowerCase().includes(value.toLowerCase().trim()) ||
+          //   item.description.toLowerCase().includes(value.toLowerCase().trim())
+          // }
+        />
+        <Textarea></Textarea>
+        <Button
+          variant="light"
+          onClick={() => {
+            handleTourismSpotCount;
+            close;
+          }}
+          color="cyan"
+        >
+          場所を追加
+        </Button>
+      </Modal>
     </div>
   );
 };

@@ -4,8 +4,8 @@ import useAspidaSWR from "@aspida/swr";
 
 export const client = api(aspida());
 
-export const useAspidaSWRImutable = (param: any, query: any) => {
-  const { data, error } = useAspidaSWR(param, query, {
+export const useAspidaSWRImutable = (path: any, query: any) => {
+  const { data, error } = useAspidaSWR(path, query, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

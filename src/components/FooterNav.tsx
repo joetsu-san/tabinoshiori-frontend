@@ -74,13 +74,13 @@ export const FooterNav = () => {
                 <Tooltip.Floating placeholder="top" label="ログインしてください">
                   <Box style={{ display: "flex", flexDirection: "column", alignItems: "center", color: "#b4b4b4" }}>
                     {item.icon}
-                    {item.label}
+                    <Text>{item.label}</Text>
                   </Box>
                 </Tooltip.Floating>
               ) : (
                 <Link href={item.path} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                   {item.icon}
-                  {item.label}
+                  <Text>{item.label}</Text>
                 </Link>
               )}
             </Grid.Col>

@@ -5,25 +5,18 @@ import { useForm } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons-react";
 import Link from "next/link";
 
-// ダミーデータ
-const userData = {
-  id: "00000000-0000-0000-0000-000000000000",
-  username: "John Doe",
-  email: "jhon@example.com",
-};
-
-const AccountEdit = () => {
+const AccountRegister = () => {
   const formValue = useForm({
     initialValues: {
-      userName: userData.username,
-      email: userData.email,
+      userName: "",
+      email: "",
       password: "",
     },
   });
 
   return (
     <div>
-      <p>観光地編集</p>
+      <p>アカウント追加</p>
 
       <Link href={"/management/account"}>
         <Button variant="stable" leftIcon={<IconArrowBackUp />}>
@@ -38,9 +31,6 @@ const AccountEdit = () => {
             <TextInput placeholder="" label="email" {...formValue.getInputProps("email")} />
             <PasswordInput placeholder="" label="パスワード" {...formValue.getInputProps("password")} />
             <Button type="submit">登録</Button>
-            <Button type="button" color="red" onClick={() => console.log("削除")}>
-              削除
-            </Button>
           </Flex>
         </form>
       </Container>
@@ -48,4 +38,4 @@ const AccountEdit = () => {
   );
 };
 
-export default AccountEdit;
+export default AccountRegister;

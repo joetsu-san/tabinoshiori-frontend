@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Box, NavLink, Button, Text, Divider, Select } from "@mantine/core";
+import { Modal, Group, Box, NavLink, Button, Text, Divider, Image } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { ActionIcon } from "@mantine/core";
 import { BirthdayInput } from "./BirthdayInput";
@@ -199,9 +199,9 @@ export const SettingsModal = () => {
   return (
     <>
       <Group position="center">
-        <ActionIcon color="cyan" variant="light" onClick={openSettingModal}>
-          <IconSettings size="1rem" />
-        </ActionIcon>
+        <Button color="cyan" variant="light" onClick={openSettingModal} compact>
+          <Image src="/avatar.png" alt="avatar" height={"1rem"}></Image>
+        </Button>
       </Group>
     </>
   );

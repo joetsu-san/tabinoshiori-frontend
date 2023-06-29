@@ -66,6 +66,10 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
                 );
               })}
             </Timeline>
+
+            <Button type="button" color="red" onClick={() => console.log("削除")}>
+              削除
+            </Button>
           </Flex>
         </Container>
       </form>

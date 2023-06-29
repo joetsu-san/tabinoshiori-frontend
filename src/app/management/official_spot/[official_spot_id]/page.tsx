@@ -6,6 +6,18 @@ import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import { NextPage } from "next";
 import Link from "next/link";
 
+// ダミーデータ
+const spotData = {
+  id: "aaaa",
+  title: "秋葉原",
+  ruby: "あきはばら",
+  description: "",
+  address: "",
+  latitude: 35.69731,
+  longitude: 139.7747,
+  officialSpotStatus: "open",
+};
+
 type PageProps = {
   params: {
     official_spot_id: number;
@@ -15,12 +27,12 @@ type PageProps = {
 const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
   const formText = useForm({
     initialValues: {
-      title: "",
-      ruby: "",
-      description: "",
-      address: "",
-      latitude: "",
-      longitude: "",
+      title: spotData.title,
+      ruby: spotData.ruby,
+      description: spotData.description,
+      address: spotData.address,
+      latitude: spotData.latitude,
+      longitude: spotData.longitude,
     },
   });
 
@@ -34,7 +46,6 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
     <div>
       <p>観光地編集</p>
 
-      {/* <h1>{params.official_spot_id}</h1> */}
       <Link href={"/management/official_spot"}>
         <Button variant="stable" leftIcon={<IconArrowBackUp />}>
           戻る
@@ -69,6 +80,10 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
           </Flex>
         </Container>
       </form>
+
+      <Button type="button" color="red" onClick={() => console.log("削除")}>
+        削除
+      </Button>
     </div>
   );
 };

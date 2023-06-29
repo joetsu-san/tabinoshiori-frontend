@@ -50,10 +50,10 @@ export const SettingsModal = () => {
           <Box p={"20px"}>
             <GenderInput defaultGender={defaultGender} />
             <Group position="apart">
-              <Button color="dark" onClick={openSettingModal}>
+              <Button variant="light" color="gray" onClick={openSettingModal}>
                 キャンセル
               </Button>
-              <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
+              <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="cyan">
                 保存
               </Button>
             </Group>
@@ -84,10 +84,10 @@ export const SettingsModal = () => {
           <Box p={"20px"}>
             <BirthdayInput defaultYear={defaultYear} defaultMonth={defaultMonth} defaultDay={defaultDay} />
             <Group position="apart">
-              <Button color="dark" onClick={openSettingModal}>
+              <Button variant="light" color="gray" onClick={openSettingModal}>
                 キャンセル
               </Button>
-              <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
+              <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="cyan">
                 保存
               </Button>
             </Group>
@@ -118,7 +118,7 @@ export const SettingsModal = () => {
           <Box p={"20px"}>
             <Text my={20}>ログアウトしますか？</Text>
             <Group position="apart">
-              <Button onClick={openSettingModal} color="dark">
+              <Button onClick={openSettingModal} variant="light" color="gray">
                 キャンセル
               </Button>
               <Button color="red">ログアウト</Button>
@@ -215,7 +215,7 @@ export const LogoutModal = () => {
       <Modal opened={opened} onClose={close} centered title="ログアウトしますか？">
         <Text my={20}></Text>
         <Group position="apart">
-          <Button onClick={close} color="dark">
+          <Button onClick={close} variant="light" color="gray">
             キャンセル
           </Button>
           <Button color="red">ログアウト</Button>

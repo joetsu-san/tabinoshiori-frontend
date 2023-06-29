@@ -6,9 +6,11 @@ export const SaveCancelButton = () => {
   return (
     <Group position="apart">
       <Link href="/profile">
-        <Button color="dark">キャンセル</Button>
+        <Button variant="light" color="gray">
+          キャンセル
+        </Button>
       </Link>
-      <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="dark">
+      <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="cyan">
         保存
       </Button>
     </Group>

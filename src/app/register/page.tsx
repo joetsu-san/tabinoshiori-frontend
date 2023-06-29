@@ -22,7 +22,7 @@ const Register = () => {
         </Group>
         <Group position="center">
           <Link href="/register/complete">
-            <Button color="dark">登録</Button>
+            <Button color="cyan">登録</Button>
           </Link>
         </Group>
       </Box>

@@ -1,30 +1,24 @@
 "use client";
 
-import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
-import { SpotList } from "@/atoms/SpotAtoms";
 import {
   Button,
   Container,
   FileInput,
   Flex,
-  Image,
   Text,
   TextInput,
   Textarea,
-  NumberInput,
-  Card,
-  Input,
-  Grid,
   Timeline,
-  Group,
   ActionIcon,
+  Modal,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
 import { NextPage } from "next";
 import Link from "next/link";
-import { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useState } from "react";
+import { AddSpotModal } from "./_components/AddSpotModal";
 
 type PageProps = {
   params: {
@@ -34,7 +28,8 @@ type PageProps = {
 
 const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
   const [modelCourseForm, setModelCourseForm] = useState<any[]>([]);
-  const [addSpot, setAddSpot] = useState<any>(undefined);
+
+  const [opened, { open, close }] = useDisclosure(false);
 
   const formText = useForm({
     initialValues: {
@@ -42,119 +37,6 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
       description: "",
     },
   });
-
-  const addSpotModal = (dispatch: Dispatch<SetStateAction<any[]>>) => {
-    const overlay: CSSProperties = {
-      position: "fixed",
-      top: "0",
-      left: "0",
-      display: "grid",
-      placeContent: "center",
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-    };
-
-    const modal: CSSProperties = {
-      width: "80vh",
-      height: "80vh",
-      padding: "20px",
-      backgroundColor: "#ffffff",
-    };
-
-    const AddSpotModal = () => {
-      const spotList = useRecoilValue(SpotList); // 観光地データマスター
-      const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
-
-      const [selectedSpot, setSelectedSpot] = useState<any>({});
-
-      // 検索 Debounce
-      const [inputText, setInputText] = useState("");
-      const debouncedInputText = useDebounce(inputText, 500);
-      const handleChange = (event: any) => setInputText(event.target.value);
-      useEffect(() => {
-        console.log(`「${debouncedInputText}」`);
-        // 観光地検索処理
-        if (debouncedInputText != "") {
-          const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
-          setTempSpotList(temp);
-        } else {
-          setTempSpotList(spotList);
-        }
-      }, [debouncedInputText, setTempSpotList, spotList]);
-
-      const text = useForm({
-        initialValues: {
-          description: "",
-          stayMinutes: 1,
-        },
-      });
-
-      const selectSpot = (data: any) => {
-        const spotData = {
-          officialSpotId: data.id,
-          title: data.title,
-        };
-        setSelectedSpot(spotData);
-      };
-
-      const setSpot = (formValues: any) => {
-        const hoge = {
-          description: formValues.description,
-          stayMinutes: formValues.stayMinutes,
-          selectSpot: selectedSpot,
-        };
-        console.log(hoge);
-
-        dispatch([...modelCourseForm, hoge]);
-        setAddSpot(undefined);
-      };
-
-      return (
-        <div
-          style={overlay}
-          onClick={() => {
-            setAddSpot(undefined);
-          }}
-        >
-          <div style={modal} onClick={(e) => e.stopPropagation()}>
-            <form onSubmit={text.onSubmit((value) => setSpot(value))}>
-              <TextInput label="備考" {...text.getInputProps("description")} />
-              <NumberInput label="滞在時間" {...text.getInputProps("stayMinutes")} />
-              <div>
-                <Input placeholder="観光地検索" onChange={handleChange} />
-                <p>選択：{selectedSpot.title}</p>
-                <Grid>
-                  {tempSpotList.map((val, i) => {
-                    return (
-                      <Grid.Col key={i} md={6} lg={3}>
-                        <Card shadow="sm" padding="sm" radius="md" withBorder onClick={() => selectSpot(val)}>
-                          <Card.Section>
-                            <Image
-                              src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                              height={160}
-                              alt="Norway"
-                            />
-                          </Card.Section>
-
-                          <Text weight={500}>{val.title}</Text>
-                        </Card>
-                      </Grid.Col>
-                    );
-                  })}
-                </Grid>
-              </div>
-              <Button variant="filled" type="submit" leftIcon={<IconPlus />} onClick={addSpot}>
-                追加
-              </Button>
-            </form>
-          </div>
-        </div>
-      );
-    };
-
-    setAddSpot(<AddSpotModal />);
-  };
 
   // 送信時アクション
   const submitData = (value: any) => {
@@ -175,7 +57,7 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 
   return (
     <div>
-      <p style={{}}>モデルコース登録</p>
+      <p>モデルコース登録</p>
 
       <Link href={"/management/model_course"}>
         <Button variant="stable" leftIcon={<IconArrowBackUp />}>
@@ -188,6 +70,7 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
           <Flex direction={"column"} gap={20}>
             <TextInput placeholder="モデルコース名" label="モデルコース名" {...formText.getInputProps("title")} />
             <Textarea placeholder="説明文" label="モデルコースの説明" {...formText.getInputProps("description")} />
+            <FileInput placeholder="画像を選択" label="観光地画像" multiple {...formText.getInputProps("files")} />
 
             <Timeline active={modelCourseForm.length - 1}>
               {modelCourseForm.map((val, i) => {
@@ -208,12 +91,11 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
               })}
             </Timeline>
 
-            <Button
-              variant="filled"
-              type="button"
-              leftIcon={<IconPlus />}
-              onClick={() => addSpotModal(setModelCourseForm)}
-            >
+            <Modal opened={opened} onClose={close} title="観光地追加" size={"xl"}>
+              <AddSpotModal modelCourseList={modelCourseForm} dispatch={setModelCourseForm} closeAction={close} />
+            </Modal>
+
+            <Button variant="outline" type="button" leftIcon={<IconPlus />} onClick={open}>
               観光地追加
             </Button>
 
@@ -223,7 +105,6 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
           </Flex>
         </Container>
       </form>
-      {addSpot}
     </div>
   );
 };

@@ -5,9 +5,9 @@ export const GenderInput = ({ defaultGender }: { defaultGender?: string }) => {
     <Select
       placeholder="性別を選択してください"
       data={[
-        { value: "male", label: "男性" },
-        { value: "female", label: "女性" },
-        { value: "other", label: "その他" },
+        { value: "1", label: "男性" },
+        { value: "2", label: "女性" },
+        { value: "3", label: "その他" },
       ]}
       mt={10}
       mb={"80px"}

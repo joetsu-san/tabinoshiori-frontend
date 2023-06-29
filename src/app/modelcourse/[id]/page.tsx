@@ -121,14 +121,12 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
                       src={course.officialSpotImages[0].src}
                       alt="サンプルコースイメージ"
                     />
-                    <Group>
-                      <Text color="dimmed" size="sm">
-                        {course.description}
-                      </Text>
+                    <Stack spacing="xs">
+                      <Text size="sm">{course.description}</Text>
                       <Group spacing={10}>
                         <Text size="xs">滞在時間：{course.stayMinutes}分</Text>
                       </Group>
-                    </Group>
+                    </Stack>
                   </Flex>
                   <Badge variant="outline" w="fit-content" h="auto" m="25px 0 0 0" p={5}>
                     <Flex align="center">

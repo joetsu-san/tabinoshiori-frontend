@@ -35,7 +35,6 @@ export const SettingsModal = () => {
       centered: true,
       radius: 10,
       withCloseButton: false,
-      closeOnClickOutside: false,
       children: (
         <>
           <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
@@ -50,7 +49,14 @@ export const SettingsModal = () => {
           <Box p={"20px"}>
             <GenderInput defaultGender={defaultGender} />
             <Group position="apart">
-              <Button variant="light" color="gray" onClick={openSettingModal}>
+              <Button
+                variant="light"
+                color="gray"
+                onClick={() => {
+                  modals.closeAll();
+                  openSettingModal();
+                }}
+              >
                 キャンセル
               </Button>
               <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="cyan">
@@ -69,7 +75,6 @@ export const SettingsModal = () => {
       centered: true,
       radius: 10,
       withCloseButton: false,
-      closeOnClickOutside: false,
       children: (
         <>
           <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
@@ -84,7 +89,14 @@ export const SettingsModal = () => {
           <Box p={"20px"}>
             <BirthdayInput defaultYear={defaultYear} defaultMonth={defaultMonth} defaultDay={defaultDay} />
             <Group position="apart">
-              <Button variant="light" color="gray" onClick={openSettingModal}>
+              <Button
+                variant="light"
+                color="gray"
+                onClick={() => {
+                  modals.closeAll();
+                  openSettingModal();
+                }}
+              >
                 キャンセル
               </Button>
               <Button leftIcon={<IconCheck size="0.8rem" stroke={1.5} />} color="cyan">
@@ -103,7 +115,6 @@ export const SettingsModal = () => {
       centered: true,
       radius: 10,
       withCloseButton: false,
-      closeOnClickOutside: false,
       children: (
         <>
           <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
@@ -118,7 +129,14 @@ export const SettingsModal = () => {
           <Box p={"20px"}>
             <Text my={20}>ログアウトしますか？</Text>
             <Group position="apart">
-              <Button onClick={openSettingModal} variant="light" color="gray">
+              <Button
+                onClick={() => {
+                  modals.closeAll();
+                  openSettingModal();
+                }}
+                variant="light"
+                color="gray"
+              >
                 キャンセル
               </Button>
               <Button color="red">ログアウト</Button>
@@ -134,7 +152,6 @@ export const SettingsModal = () => {
       padding: "0px",
       centered: true,
       radius: 10,
-      closeOnClickOutside: false,
       children: (
         <>
           <Group position="apart" sx={{ height: "100%" }} pt={10} pb={10}>
@@ -173,14 +190,20 @@ export const SettingsModal = () => {
                 </>
               }
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
-              onClick={openGenderModal}
+              onClick={() => {
+                modals.closeAll();
+                openGenderModal();
+              }}
             />
             <NavLink
               label="生年月日"
               description="1999/01/01"
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
-              onClick={openBirthdayModal}
+              onClick={() => {
+                modals.closeAll();
+                openBirthdayModal();
+              }}
             />
             <NavLink
               label="ログアウト"
@@ -189,7 +212,10 @@ export const SettingsModal = () => {
               active={true}
               color="red"
               py={15}
-              onClick={openLogoutModal}
+              onClick={() => {
+                modals.closeAll();
+                openLogoutModal();
+              }}
             />
           </Box>
         </>

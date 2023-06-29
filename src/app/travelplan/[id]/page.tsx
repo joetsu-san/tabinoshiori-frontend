@@ -4,10 +4,12 @@ import { IconDeviceMobileMessage, IconPictureInPicture, IconScreenshot, IconShar
 import { TimeLineWrapper } from "./_components/TimeLineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
 
 const Page = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [openedIamgeModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
 
   const [title, setTitle] = useState("タイトル");
   const [description, setDescription] = useState("説明");
@@ -17,6 +19,8 @@ const Page = () => {
   const closeTitleInput = () => setIsTitleInput(false);
   const openDescriptionInput = () => setIsDescriptionInput(true);
   const closeDescriptionInput = () => setIsDescriptionInput(false);
+
+  const imageRef = useRef<HTMLDivElement>(null);
 
   return (
     <main
@@ -30,11 +34,15 @@ const Page = () => {
       <Modal opened={opened} onClose={close} title="旅のしおりを共有する" centered>
         <ShareModalContent />
       </Modal>
+      <Modal opened={openedIamgeModal} onClose={closeImageModal} title="画像化する" centered>
+        <GenerateImageModalContent imageRef={imageRef} />
+      </Modal>
+
       <Group position="center" m={10}>
         <Button color="cyan" variant="light" compact onClick={open} leftIcon={<IconShare size="1rem" />}>
           旅のしおりを共有する
         </Button>
-        <Button color="cyan" variant="light" compact leftIcon={<IconScreenshot size="1rem" />}>
+        <Button color="cyan" variant="light" compact onClick={openImageModal} leftIcon={<IconScreenshot size="1rem" />}>
           画像化する
         </Button>
       </Group>
@@ -76,7 +84,7 @@ const Page = () => {
           )}
         </Flex>
       </Flex>
-      <TimeLineWrapper />
+      <TimeLineWrapper ref={imageRef} />
     </main>
   );
 };

@@ -11,14 +11,15 @@ import { NextPage } from "next";
 import { useSyncedStore } from "@syncedstore/react";
 import { store } from "@/lib/store";
 import DndkitList from "./DndkitList";
+import { RefObject } from "react";
 // import { randomUUID } from "crypto";
 
 type Props = {
-  // storeState: MappedTypeDescription<{ arrayData: TravelPlanSpot[] }>;
+  ref: RefObject<HTMLDivElement>;
 };
 
-export const TimeLineWrapper: NextPage<Props> = (props) => {
-  // const storeState = useSyncedStore(store);
+export const TimeLineWrapper = (props: Props) => {
+  const { ref } = props;
   const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
   // const [travelPlanTourismSpotCount, setTravelPlanTourismSpotCount] = useRecoilState(travelPlanTourismSpotCountState);
   const [opened, { open, close }] = useDisclosure(false);
@@ -60,7 +61,7 @@ export const TimeLineWrapper: NextPage<Props> = (props) => {
   };
 
   return (
-    <div>
+    <div ref={ref}>
       <DndkitList />
       <Button onClick={open} color="cyan" variant="light">
         場所を追加

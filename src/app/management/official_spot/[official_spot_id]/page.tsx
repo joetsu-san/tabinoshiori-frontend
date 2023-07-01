@@ -44,16 +44,17 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
 
   return (
     <div>
-      <p>観光地編集</p>
+      <Container size={"lg"}>
+        <h2>観光地編集</h2>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Link href={"/management/official_spot"}>
+            <Button variant="stable" leftIcon={<IconArrowBackUp />}>
+              戻る
+            </Button>
+          </Link>
+        </Flex>
 
-      <Link href={"/management/official_spot"}>
-        <Button variant="stable" leftIcon={<IconArrowBackUp />}>
-          戻る
-        </Button>
-      </Link>
-
-      <form onSubmit={formText.onSubmit((value) => console.log(value))}>
-        <Container size={"lg"}>
+        <form onSubmit={formText.onSubmit((value) => console.log(value))}>
           <Flex direction={"column"} gap={20}>
             <TextInput placeholder="観光地名称" label="観光地名称" {...formText.getInputProps("title")} />
             <TextInput placeholder="ルビ" label="ルビ" {...formText.getInputProps("ruby")} />
@@ -66,11 +67,9 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
               登録
             </Button>
           </Flex>
-        </Container>
-      </form>
+        </form>
 
-      <form onSubmit={formFiles.onSubmit((value) => console.log(value))}>
-        <Container size={"lg"}>
+        <form onSubmit={formFiles.onSubmit((value) => console.log(value))}>
           <Flex direction={"column"} gap={20}>
             <FileInput placeholder="画像を選択" label="観光地画像" multiple {...formFiles.getInputProps("files")} />
 
@@ -78,12 +77,14 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
               登録
             </Button>
           </Flex>
-        </Container>
-      </form>
+        </form>
 
-      <Button type="button" color="red" onClick={() => console.log("削除")}>
-        削除
-      </Button>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Button type="button" color="red" onClick={() => console.log("削除")}>
+            削除
+          </Button>
+        </Flex>
+      </Container>
     </div>
   );
 };

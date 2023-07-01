@@ -1,27 +1,27 @@
 "use client";
 
-import { Card, Image, Text, Button, Group, Input, Grid, Container } from "@mantine/core";
+import { Card, Image, Text, Button, Group, Input, Grid, Container, Flex } from "@mantine/core";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
 const ModelCourse = () => {
   return (
     <div>
-      <p>モデルコース一覧</p>
-
-      <Link href={"/management"}>
-        <Button variant="stable" leftIcon={<IconArrowBackUp />}>
-          戻る
-        </Button>
-      </Link>
-
-      <Link href={"/management/model_course/register"}>
-        <Button variant="filled" leftIcon={<IconPlus />}>
-          モデルコース追加
-        </Button>
-      </Link>
-
       <Container size={"xl"}>
+        <h2>モデルコース一覧</h2>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Link href={"/management"}>
+            <Button variant="stable" leftIcon={<IconArrowBackUp />}>
+              戻る
+            </Button>
+          </Link>
+
+          <Link href={"/management/model_course/register"}>
+            <Button variant="filled" leftIcon={<IconPlus />}>
+              モデルコース追加
+            </Button>
+          </Link>
+        </Flex>
         <Grid>
           {modelcourselist.map((val, i) => {
             return (

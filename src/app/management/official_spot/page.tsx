@@ -1,33 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { Card, Image, Text, Button, Group, Input, Grid, Container } from "@mantine/core";
-import { useToggle } from "@mantine/hooks";
-import { IconAt, IconArrowBigDown, IconArrowBigUp, IconArrowBackUp, IconPlus } from "@tabler/icons-react";
-
-const buttonContainer = {
-  display: "flex",
-  flexDirection: "column",
-};
+import { Card, Image, Text, Button, Grid, Container, Flex } from "@mantine/core";
+import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 
 const OfficialSpot = () => {
   return (
     <div>
-      <p>観光地一覧</p>
-
-      <Link href={"/management"}>
-        <Button variant="stable" leftIcon={<IconArrowBackUp />}>
-          戻る
-        </Button>
-      </Link>
-
-      <Link href={"/management/official_spot/register"}>
-        <Button variant="filled" leftIcon={<IconPlus />}>
-          観光地追加
-        </Button>
-      </Link>
-
       <Container size={"xl"}>
+        <h2>観光地一覧</h2>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Link href={"/management"}>
+            <Button variant="stable" leftIcon={<IconArrowBackUp />}>
+              戻る
+            </Button>
+          </Link>
+
+          <Link href={"/management/official_spot/register"}>
+            <Button variant="filled" leftIcon={<IconPlus />}>
+              観光地追加
+            </Button>
+          </Link>
+        </Flex>
+
         <Grid>
           {positionData.map((val, i) => {
             return (

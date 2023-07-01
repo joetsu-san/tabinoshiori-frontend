@@ -38,16 +38,17 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 
   return (
     <div>
-      <p>モデルコース編集</p>
+      <Container size={"lg"}>
+        <h2>モデルコース編集</h2>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Link href={"/management/model_course"}>
+            <Button variant="stable" leftIcon={<IconArrowBackUp />}>
+              戻る
+            </Button>
+          </Link>
+        </Flex>
 
-      <Link href={"/management/model_course"}>
-        <Button variant="stable" leftIcon={<IconArrowBackUp />}>
-          戻る
-        </Button>
-      </Link>
-
-      <form onSubmit={formText.onSubmit((value) => updateModelCourse(value))}>
-        <Container size={"lg"}>
+        <form onSubmit={formText.onSubmit((value) => updateModelCourse(value))}>
           <Flex direction={"column"} gap={20}>
             <TextInput placeholder="モデルコース" label="モデルコース" {...formText.getInputProps("title")} />
             <Textarea placeholder="説明文" label="モデルコースの説明" {...formText.getInputProps("description")} />
@@ -71,8 +72,8 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
               削除
             </Button>
           </Flex>
-        </Container>
-      </form>
+        </form>
+      </Container>
     </div>
   );
 };

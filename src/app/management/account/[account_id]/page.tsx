@@ -23,15 +23,17 @@ const AccountEdit = () => {
 
   return (
     <div>
-      <p>観光地編集</p>
+      <Container size={"xl"}>
+        <h2>アカウント編集</h2>
 
-      <Link href={"/management/account"}>
-        <Button variant="stable" leftIcon={<IconArrowBackUp />}>
-          戻る
-        </Button>
-      </Link>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Link href={"/management/account"}>
+            <Button variant="stable" leftIcon={<IconArrowBackUp />}>
+              戻る
+            </Button>
+          </Link>
+        </Flex>
 
-      <Container>
         <form onSubmit={formValue.onSubmit((value) => console.log(value))}>
           <Flex direction={"column"} gap={20}>
             <TextInput placeholder="" label="ユーザー名" {...formValue.getInputProps("userName")} />

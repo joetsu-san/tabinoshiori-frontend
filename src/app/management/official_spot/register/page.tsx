@@ -22,14 +22,17 @@ const RegisterSpot = () => {
 
   return (
     <div>
-      <Link href={"/management/official_spot"}>
-        <Button variant="stable" leftIcon={<IconArrowBackUp />}>
-          戻る
-        </Button>
-      </Link>
+      <Container size={"lg"}>
+        <h2>観光地登録</h2>
+        <Flex direction={"row"} justify={"space-between"}>
+          <Link href={"/management/official_spot"}>
+            <Button variant="stable" leftIcon={<IconArrowBackUp />}>
+              戻る
+            </Button>
+          </Link>
+        </Flex>
 
-      <form onSubmit={form.onSubmit((value) => console.log(value))}>
-        <Container size={"lg"}>
+        <form onSubmit={form.onSubmit((value) => console.log(value))}>
           <Flex direction={"column"} gap={20}>
             <TextInput placeholder="観光地名称" label="観光地名称" {...form.getInputProps("title")} />
             <TextInput placeholder="ルビ" label="ルビ" {...form.getInputProps("ruby")} />
@@ -43,8 +46,8 @@ const RegisterSpot = () => {
               登録
             </Button>
           </Flex>
-        </Container>
-      </form>
+        </form>
+      </Container>
     </div>
   );
 };

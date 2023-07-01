@@ -7,11 +7,9 @@ import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { SpotList, MapCenterState, MapHeight, SpotInfoWindowState } from "@/atoms/SpotAtoms";
+import { MapCenterState, MapHeight, SpotInfoWindowState } from "@/atoms/SpotAtoms";
 
-import axios from "axios";
-import aspida from "@aspida/axios";
-import api from "../../../api/official_spot/$api";
+import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 
 const key = process.env.NEXT_PUBLIC_GOOGLEMAP_KEY as string;
 
@@ -26,6 +24,7 @@ const TourismSpot = () => {
   const [mapCenter, setMapCenter] = useRecoilState(MapCenterState);
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
   const mapHeight = useRecoilValue(MapHeight);
+  const { data, error } = useOfficialSpotList();
 
   // マップサイズ
   const containerStyle = {
@@ -39,6 +38,11 @@ const TourismSpot = () => {
       setSpotInfoWindow(undefined);
     };
   }, [setMapCenter, setSpotInfoWindow]);
+
+  useEffect(() => {
+    console.log(data);
+    console.log(error);
+  }, [data, error]);
 
   // useEffect(() => {
   //   const axiosConfig = {

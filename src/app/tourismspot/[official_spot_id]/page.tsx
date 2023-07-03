@@ -50,7 +50,7 @@ const OfficialSpotDetail = () => {
   const router = useParams();
   const spotId = router.official_spot_id;
 
-  const [liked, setLiked] = useState<boolean>(true);
+  const [liked, setLiked] = useState<boolean>(false);
 
   return (
     <div>
@@ -97,25 +97,21 @@ const OfficialSpotDetail = () => {
         <Text size={12}>{TourismDetailDatas[0].officialSpotDetail.description}</Text>
 
         <Card p={0} h={300} mt={10} pt={30}>
-          <Flex pb={10}>
+          <Flex align="center">
+            <IconMapPin size="1.1rem" strokeWidth={2} color={"#15aabf"} />
             <Text
               fw={600}
-              size={13}
-              px={15}
-              py={5}
+              size={15}
               style={{
                 color: "#15aabf",
-                border: "1px solid #15aabf",
-                display: "inline-block",
-                borderRadius: "5px",
               }}
             >
               住所
             </Text>
-            <Text fw={600} size={14} color={"#555555"} ml={10} mt={5}>
-              {TourismDetailDatas[0].officialSpotDetail.address}
-            </Text>
           </Flex>
+          <Text fw={500} size={14} color={"#555555"} mb={10}>
+            {TourismDetailDatas[0].officialSpotDetail.address}
+          </Text>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d203595.9883919925!2d138.1535143964451!3d37.12445829757502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5ff67612bb2da995%3A0x4f7fe4e9f38ac675!2z5paw5r2f55yM5LiK6LaK5biC!5e0!3m2!1sja!2sjp!4v1686749502221!5m2!1sja!2sjp"
             width="100%"

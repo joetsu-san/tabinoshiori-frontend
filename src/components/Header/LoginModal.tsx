@@ -4,7 +4,7 @@ import { sign } from "crypto";
 import { auth, firebaseSignIn } from "@/lib/firebase";
 import axios from "axios";
 import { client } from "@/lib/aspida";
-import { handlelogin } from "@/lib/handleLogin";
+import { createUser } from "@/lib/createUser";
 
 export const GoogleButton = (props: ButtonProps) => {
   const handleLogin = async () => {
@@ -13,8 +13,7 @@ export const GoogleButton = (props: ButtonProps) => {
     if (name == null) return;
     if (token == null) return;
 
-    const user = handlelogin(token, name);
-    console.log(user);
+    const user = createUser(token, name);
   };
 
   return <Button variant="default" color="gray" {...props} onClick={handleLogin} />;

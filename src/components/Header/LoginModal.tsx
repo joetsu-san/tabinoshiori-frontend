@@ -3,22 +3,22 @@ import { Modal, Group, Button, ButtonProps, Center, Image } from "@mantine/core"
 import { sign } from "crypto";
 import { auth, firebaseSignIn } from "@/lib/firebase";
 import axios from "axios";
+import { client, requestConfig } from "@/lib/aspida";
 
 export const GoogleButton = (props: ButtonProps) => {
   const handleLogin = async () => {
     const [token, displayName] = await firebaseSignIn();
     const name = auth.currentUser?.displayName;
-    await axios.post(
-      "/user",
-      {
+    if (name == null) return;
+
+    const user = await client.user.$post({
+      config: { headers: { Authorization: `Bearer ${token}` } },
+      body: {
         name: name,
+        birthday: "0000-00-00",
+        genderId: 1,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    });
   };
 
   return <Button variant="default" color="gray" {...props} onClick={handleLogin} />;

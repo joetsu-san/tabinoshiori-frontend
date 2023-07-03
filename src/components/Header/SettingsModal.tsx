@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Group, Box, NavLink, Button, Text, Divider, Image } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { ActionIcon } from "@mantine/core";
 import { BirthdayInput } from "./BirthdayInput";
 import { GenderInput } from "./GenderInput";
 import {
@@ -27,6 +26,13 @@ export const SettingsModal = () => {
   const [defaultYear, setYear] = useState<string | undefined>(undefined);
   const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
   const [defaultDay, setDay] = useState<string | undefined>(undefined);
+
+  const userInfo = {
+    username: "田中太郎",
+    gender: "男",
+    birthday: "0000-00-00",
+    avatarImage: "https://~~",
+  };
 
   // 性別変更モーダル
   const openGenderModal = () =>
@@ -182,7 +188,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="性別"
-              description="男性"
+              description={userInfo.gender}
               icon={
                 <>
                   <IconGenderMale height={"1.5rem"} width={"0.75rem"} />
@@ -197,7 +203,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="生年月日"
-              description="1999/01/01"
+              description={userInfo.birthday}
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
               onClick={() => {

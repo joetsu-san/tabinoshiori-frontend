@@ -1,12 +1,10 @@
 "use client";
 
-// import { Card, Image, Text, Badge, Button, Group, ActionIcon } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import React from "react";
 import { useState } from "react";
 import { Container, Box, Card, Image, Text, SimpleGrid, Stack, ActionIcon, Grid, Flex } from "@mantine/core";
 import { Tabs } from "@mantine/core";
-// import Link from "next/link";
 
 const bookmarkdatas: Bookmarkdata[] = [
   {
@@ -94,8 +92,6 @@ const Bookmark = () => {
                       <Text size={12} lineClamp={3}>
                         {bookmarkdata.description}
                       </Text>
-
-                      {/* <Link href={`/tourismspot/${encodeURIComponent(bookmarkdata.id)}`}>more</Link> */}
                     </Stack>
                   </Card>
                 ))}

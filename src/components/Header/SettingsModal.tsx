@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Box, NavLink, Button, Text, Divider, Image } from "@mantine/core";
+import { Modal, Group, Box, NavLink, Button, Text, Divider, Image, Avatar } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { BirthdayInput } from "./BirthdayInput";
 import { GenderInput } from "./GenderInput";
@@ -16,10 +16,15 @@ import {
   IconGenderMale,
   IconGenderFemale,
 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { firebaseSignOut } from "@/lib/firebase";
+import { useRecoilValue } from "recoil";
+import { firebaseUserState } from "@/atoms";
+import { useRouter } from "next/navigation";
 
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const router = useRouter();
 
   const [defaultGender, setGender] = useState<string | undefined>(undefined);
 
@@ -27,11 +32,12 @@ export const SettingsModal = () => {
   const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
   const [defaultDay, setDay] = useState<string | undefined>(undefined);
 
-  const userInfo = {
-    username: "田中太郎",
-    gender: "男",
-    birthday: "0000-00-00",
-    avatarImage: "https://~~",
+  const userInfo = useRecoilValue(firebaseUserState);
+
+  const handleLogout = () => {
+    firebaseSignOut();
+    modals.closeAll();
+    router.push("/tourismspot");
   };
 
   // 性別変更モーダル
@@ -145,7 +151,9 @@ export const SettingsModal = () => {
               >
                 キャンセル
               </Button>
-              <Button color="red">ログアウト</Button>
+              <Button color="red" onClick={handleLogout}>
+                ログアウト
+              </Button>
             </Group>
           </Box>
         </>
@@ -188,7 +196,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="性別"
-              description={userInfo.gender}
+              // description={}
               icon={
                 <>
                   <IconGenderMale height={"1.5rem"} width={"0.75rem"} />
@@ -203,7 +211,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="生年月日"
-              description={userInfo.birthday}
+              // description={userInfo.birthday}
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
               onClick={() => {
@@ -231,9 +239,9 @@ export const SettingsModal = () => {
   return (
     <>
       <Group position="center">
-        <Button color="cyan" variant="light" onClick={openSettingModal} compact>
-          <Image src="/avatar.png" alt="avatar" height={"1rem"}></Image>
-        </Button>
+        {/* <Button onClick={openSettingModal}> */}
+        <Avatar src={userInfo?.photoURL} alt="avatar" onClick={openSettingModal} radius="xl"></Avatar>
+        {/* </Button> */}
       </Group>
     </>
   );
@@ -241,6 +249,11 @@ export const SettingsModal = () => {
 // ログアウト用modal
 export const LogoutModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
+
+  const handleLogout = () => {
+    console.log("ログアウト");
+    firebaseSignOut();
+  };
 
   return (
     <>
@@ -250,7 +263,9 @@ export const LogoutModal = () => {
           <Button onClick={close} variant="light" color="gray">
             キャンセル
           </Button>
-          <Button color="red">ログアウト</Button>
+          <Button color="red" onClick={handleLogout}>
+            ログアウト
+          </Button>
         </Group>
       </Modal>
 

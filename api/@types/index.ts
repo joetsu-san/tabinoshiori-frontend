@@ -15,9 +15,9 @@ export type User = {
 };
 
 export type UpdateUserDto = {
-  name?: string | undefined;
-  birthday?: string | undefined;
-  genderId?: number | undefined;
+  name: string;
+  birthday: string;
+  genderId: number;
 };
 
 export type CreatePrivateSpotDto = {
@@ -32,7 +32,12 @@ export type CreateTravelPlanDto = {
   title: string;
   description: string;
   visitedAt: string;
-  travelPlanSpot: CreatePrivateSpotDto[];
+  travelPlanSpots: CreatePrivateSpotDto[];
+};
+
+export type Image = {
+  id: string;
+  src: string;
 };
 
 export type TravelPlanOverview = {
@@ -41,6 +46,7 @@ export type TravelPlanOverview = {
   authorId: string;
   description: string;
   visitedAt: string;
+  officialSpotImages: Image[];
 };
 
 export type OfficialSpotStatus = {
@@ -48,13 +54,9 @@ export type OfficialSpotStatus = {
   title: string;
 };
 
-export type Image = {
-  id: string;
-  src: string;
-};
-
-export type TravelPlanSpotInfo = {
-  id: string;
+export type TravelPlanSpot = {
+  travelPlanSpotId: string;
+  tourismSpotId: string;
   title: string;
   description: string;
   address: string;
@@ -62,11 +64,6 @@ export type TravelPlanSpotInfo = {
   longitude: number;
   ruby: string;
   officialSpotStatus: OfficialSpotStatus;
-  officialSpotImages: Image[];
-};
-
-export type TravelPlanSpot = {
-  travelPlanSpotInfo: TravelPlanSpotInfo;
   comment: string;
   sortIndex: number;
   minuteSincePrevious: number;
@@ -78,6 +75,7 @@ export type TravelPlanDetail = {
   authorId: string;
   description: string;
   visitedAt: string;
+  officialSpotImages: Image[];
   travelPlanSpots: TravelPlanSpot[];
 };
 
@@ -85,6 +83,21 @@ export type UpdateTravelPlanDto = {
   title: string;
   description: string;
   visitedAt: string;
+};
+
+export type CreateTravelPlanSpotDto = {
+  tourismSpotId: string;
+  comment: string;
+  sortIndex: number;
+  minuteSincePrevious: number;
+};
+
+export type UpdateTravelPlanSpotDto = {
+  id: string;
+  tourismSpotId: string;
+  comment: string;
+  sortIndex: number;
+  minuteSincePrevious: number;
 };
 
 export type PrivateSpot = {
@@ -97,11 +110,11 @@ export type PrivateSpot = {
 };
 
 export type UpdatePrivateSpotDto = {
-  title?: string | undefined;
-  description?: string | undefined;
-  address?: string | undefined;
-  latitude?: number | undefined;
-  longitude?: number | undefined;
+  title: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type CreateModelCourseBookmarkDto = {
@@ -114,6 +127,7 @@ export type ModelCourseOverview = {
   title: string;
   description: string;
   requiredMinute: number;
+  modelCourseImages: Image[];
 };
 
 export type ModelCourseBookmark = {
@@ -122,8 +136,8 @@ export type ModelCourseBookmark = {
 };
 
 export type UpdateModelCourseBookmarkDto = {
-  modelCourseId?: string | undefined;
-  sortIndex?: number | undefined;
+  modelCourseId: string;
+  sortIndex: number;
 };
 
 export type DeleteModelCourseBookmarkDto = {
@@ -141,25 +155,14 @@ export type CreateOfficialSpotDto = {
   officialSpotImages: string[];
 };
 
-export type OfficialSpotOverview = {
+export type OfficialSpot = {
   id: string;
   title: string;
+  ruby: string;
   description: string;
   address: string;
   latitude: number;
   longitude: number;
-  ruby: string;
-  officialSpotStatus: OfficialSpotStatus;
-};
-
-export type OfficialSpotDetail = {
-  id: string;
-  title: string;
-  description: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  ruby: string;
   officialSpotStatus: OfficialSpotStatus;
   officialSpotImages: Image[];
 };
@@ -176,8 +179,9 @@ export type UpdateOfficialSpotDto = {
 
 export type CreateModelCourseSpotDto = {
   officialSpotId: string;
-  modelCourseId: string;
+  comment: string;
   sortIndex: number;
+  stayMinute: number;
   minuteSincePrevious: number;
 };
 
@@ -190,8 +194,19 @@ export type CreateModelCourseDto = {
 };
 
 export type ModelCourseSpot = {
-  officialSpotInfo: OfficialSpotDetail;
+  modelCourseSpotId: string;
+  officialSpotId: string;
+  title: string;
+  ruby: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  officialSpotStatus: OfficialSpotStatus;
+  officialSpotImages: Image[];
+  comment: string;
   sortIndex: number;
+  stayMinute: number;
   minuteSincePrevious: number;
 };
 
@@ -200,15 +215,23 @@ export type ModelCourseDetail = {
   title: string;
   description: string;
   requiredMinute: number;
-  modelCourseSpots: ModelCourseSpot[];
   modelCourseImages: Image[];
+  modelCourseSpots: ModelCourseSpot[];
 };
 
 export type UpdateModelCourseDto = {
   title: string;
   description: string;
   requiredMinute: number;
-  modelCourseSpot: CreateModelCourseSpotDto[];
+  modelCourseImages: string[];
+};
+
+export type UpdateModelCourseSpotDto = {
+  officialSpotId: string;
+  comment: string;
+  sortIndex: number;
+  stayMinute: number;
+  minuteSincePrevious: number;
 };
 
 export type CreateAdministratorDto = {
@@ -224,9 +247,22 @@ export type Administrator = {
 };
 
 export type UpdateAdministratorDto = {
-  username?: string | undefined;
-  email?: string | undefined;
-  password?: string | undefined;
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type LoginAdministratorDto = {
+  email: string;
+  password: string;
+};
+
+export type AdministratorSession = {
+  sessionId: string;
+};
+
+export type LogoutAdministratorDto = {
+  administratorId: string;
 };
 
 export type CreateOfficialSpotBookmarkDto = {
@@ -235,13 +271,13 @@ export type CreateOfficialSpotBookmarkDto = {
 };
 
 export type OfficialSpotBookmark = {
-  officialSpotDetail: OfficialSpotDetail;
+  officialSpotDetail: OfficialSpot;
   sortIndex: number;
 };
 
 export type UpdateOfficialSpotBookmarkDto = {
-  tourismSpotId?: string | undefined;
-  sortIndex?: number | undefined;
+  tourismSpotId: string;
+  sortIndex: number;
 };
 
 export type DeleteOfficialSpotBookmarkDto = {

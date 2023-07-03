@@ -4,21 +4,17 @@ import { sign } from "crypto";
 import { auth, firebaseSignIn } from "@/lib/firebase";
 import axios from "axios";
 import { client } from "@/lib/aspida";
+import { handlelogin } from "@/lib/handleLogin";
 
 export const GoogleButton = (props: ButtonProps) => {
   const handleLogin = async () => {
     const [token, displayName] = await firebaseSignIn();
     const name = auth.currentUser?.displayName;
     if (name == null) return;
+    if (token == null) return;
 
-    const user = await client.user.$post({
-      config: { headers: { Authorization: `Bearer ${token}` } },
-      body: {
-        name: name,
-        birthday: "0000-00-00",
-        genderId: 1,
-      },
-    });
+    const user = handlelogin(token, name);
+    console.log(user);
   };
 
   return <Button variant="default" color="gray" {...props} onClick={handleLogin} />;

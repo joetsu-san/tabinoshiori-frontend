@@ -2,10 +2,13 @@ import { Header as MantineHeader, Group, Box } from "@mantine/core";
 import Image from "next/image";
 import { LoginModal } from "./LoginModal";
 import { SettingsModal } from "./SettingsModal";
+import { useRecoilValue } from "recoil";
+import { firebaseUserIdState } from "@/atoms";
+import { useEffect } from "react";
 
 export const Header = () => {
-  // TODO: ログインしてるかどうか。後で変える
-  const isLoggedIn = false;
+  const isLoggedIn = useRecoilValue(firebaseUserIdState) != null;
+
   return (
     <Box>
       <MantineHeader height={60} px="md">

@@ -2,8 +2,9 @@
 import type * as Types from "../../@types";
 
 export type Methods = {
-  get: {
+  post: {
     status: 200;
-    resBody: Types.OfficialSpot;
+    resBody: Types.AdministratorSession;
+    reqBody: Types.LoginAdministratorDto;
   };
 };

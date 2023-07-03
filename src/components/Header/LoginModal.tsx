@@ -1,9 +1,28 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Group, Button, ButtonProps, Center, Image } from "@mantine/core";
+import { sign } from "crypto";
+import { auth, firebaseSignIn } from "@/lib/firebase";
+import axios from "axios";
 
-export function GoogleButton(props: ButtonProps) {
-  return <Button variant="default" color="gray" {...props} />;
-}
+export const GoogleButton = (props: ButtonProps) => {
+  const handleLogin = async () => {
+    const [token, displayName] = await firebaseSignIn();
+    const name = auth.currentUser?.displayName;
+    await axios.post(
+      "/user",
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  };
+
+  return <Button variant="default" color="gray" {...props} onClick={handleLogin} />;
+};
 
 export const LoginModal = () => {
   const [opened, { open, close }] = useDisclosure(false);

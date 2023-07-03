@@ -1,7 +1,7 @@
 import { client } from "@/lib/aspida";
 
-export const handlelogin = async (token: string, name: string) => {
-  const user = await client.user.$post({
+export const createUser = async (token: string, name: string) => {
+  const user = await client.user.login.$post({
     config: { headers: { Authorization: `Bearer ${token}` } },
     body: {
       name: name,

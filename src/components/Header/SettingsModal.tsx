@@ -239,9 +239,7 @@ export const SettingsModal = () => {
   return (
     <>
       <Group position="center">
-        {/* <Button onClick={openSettingModal}> */}
         <Avatar src={userInfo?.photoURL} alt="avatar" onClick={openSettingModal} radius="xl"></Avatar>
-        {/* </Button> */}
       </Group>
     </>
   );

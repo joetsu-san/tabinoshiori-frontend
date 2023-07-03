@@ -1,6 +1,5 @@
 "use client";
 
-// import { Card, Image, Text, Badge, Button, Group, ActionIcon } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import React from "react";
 import { useState } from "react";
@@ -9,6 +8,7 @@ import { Tabs } from "@mantine/core";
 
 const bookmarkdatas: Bookmarkdata[] = [
   {
+    id: "1",
     title: "上越市立歴史博物館",
     image:
       "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
@@ -17,6 +17,7 @@ const bookmarkdatas: Bookmarkdata[] = [
       "昭和47年に開館した上越市立総合博物館は、平成30年7月21日（土）、高田城址公園（高田城跡）という立地を生かし、上越市立歴史博物館として再スタートしました。「越後の都」をテーマに、安土桃山時代以降の地域を歴史を解説する常設展示室を整備しました。春日山城・福島城・高田城の三城の変遷やその時代背景、そしてその後の地域の発展の様子を学ぶことができます。内堀や本丸土塁に臨む１階ラウンジや三重櫓から妙高山・米山までを一望する屋上デッキへ無料でご入館いただけます。新装したカフェコーナー・ミュージアムショップも、高田城址公園（高田城跡）の散策や街歩き、上越市内歴史探訪への出発点やお休みどころとしてご利用いただけます。",
   },
   {
+    id: "2",
     title: "上越科学館",
     image:
       "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
@@ -27,6 +28,7 @@ const bookmarkdatas: Bookmarkdata[] = [
 ];
 
 type Bookmarkdata = {
+  id: string;
   title: string;
   image: string;
   address: string;
@@ -53,6 +55,7 @@ const Bookmark = () => {
               <SimpleGrid
                 cols={3}
                 mt={20}
+                pb={100}
                 spacing="md"
                 breakpoints={[
                   { maxWidth: "48rem", cols: 2, spacing: "sm" },
@@ -71,7 +74,12 @@ const Bookmark = () => {
                         </Text>
 
                         <ActionIcon onClick={() => toggleLiked(index)} mt={14}>
-                          <IconHeart size="1.8rem" color={liked[index] ? "red" : "#9999"} stroke={1.5} />
+                          <IconHeart
+                            size="1.8rem"
+                            color={liked[index] ? "red" : "#9999"}
+                            style={{ fill: liked[index] ? "red" : "#9999" }}
+                            stroke={1.5}
+                          />
                         </ActionIcon>
                       </Flex>
 

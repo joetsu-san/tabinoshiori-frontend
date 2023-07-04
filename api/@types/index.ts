@@ -1,8 +1,12 @@
 /* eslint-disable */
 export type CreateUserDto = {
-  name: string;
+  username: string;
   birthday: string;
   genderId: number;
+};
+
+export type CreateOrLoginDto = {
+  username: string;
 };
 
 export type User = {

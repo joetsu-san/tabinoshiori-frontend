@@ -2,12 +2,8 @@
 import type * as Types from "../../@types";
 
 export type Methods = {
-  put: {
+  post: {
     status: 200;
-    reqBody: Types.UpdateUserDto;
-  };
-
-  delete: {
-    status: 200;
+    reqBody: Types.CreateOrLoginDto;
   };
 };

@@ -20,15 +20,14 @@ import type { Methods as Methods17 } from "./official_spot";
 import type { Methods as Methods18 } from "./official_spot/_official_spot_id@string";
 import type { Methods as Methods19 } from "./user";
 import type { Methods as Methods20 } from "./user/_user_id@string";
-import type { Methods as Methods21 } from "./user/login";
-import type { Methods as Methods22 } from "./user/model_course_bookmark";
-import type { Methods as Methods23 } from "./user/official_spot_bookmark";
-import type { Methods as Methods24 } from "./user/private_spot";
-import type { Methods as Methods25 } from "./user/private_spot/_private_spot_id@string";
-import type { Methods as Methods26 } from "./user/travel_plan";
-import type { Methods as Methods27 } from "./user/travel_plan/_travel_plan_id@string";
-import type { Methods as Methods28 } from "./user/travel_plan/_travel_plan_id@string/spot";
-import type { Methods as Methods29 } from "./user/travel_plan/_travel_plan_id@string/spot/_travel_plan_spot_id@string";
+import type { Methods as Methods21 } from "./user/model_course_bookmark";
+import type { Methods as Methods22 } from "./user/official_spot_bookmark";
+import type { Methods as Methods23 } from "./user/private_spot";
+import type { Methods as Methods24 } from "./user/private_spot/_private_spot_id@string";
+import type { Methods as Methods25 } from "./user/travel_plan";
+import type { Methods as Methods26 } from "./user/travel_plan/_travel_plan_id@string";
+import type { Methods as Methods27 } from "./user/travel_plan/_travel_plan_id@string/spot";
+import type { Methods as Methods28 } from "./user/travel_plan/_travel_plan_id@string/spot/_travel_plan_spot_id@string";
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const prefix = (baseURL === undefined ? "" : baseURL).replace(/\/$/, "");
@@ -42,11 +41,10 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const PATH7 = "/model_course";
   const PATH8 = "/official_spot";
   const PATH9 = "/user";
-  const PATH10 = "/user/login";
-  const PATH11 = "/user/model_course_bookmark";
-  const PATH12 = "/user/official_spot_bookmark";
-  const PATH13 = "/user/private_spot";
-  const PATH14 = "/user/travel_plan";
+  const PATH10 = "/user/model_course_bookmark";
+  const PATH11 = "/user/official_spot_bookmark";
+  const PATH12 = "/user/private_spot";
+  const PATH13 = "/user/travel_plan";
   const GET = "GET";
   const POST = "POST";
   const PUT = "PUT";
@@ -336,6 +334,23 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
         const prefix1 = `${PATH9}/${val1}`;
 
         return {
+          /**
+           * @returns 該当する主キーを持つユーザー情報
+           */
+          get: (option?: { config?: T | undefined } | undefined) =>
+            fetch<Methods20["get"]["resBody"], BasicHeaders, Methods20["get"]["status"]>(
+              prefix,
+              prefix1,
+              GET,
+              option
+            ).json(),
+          /**
+           * @returns 該当する主キーを持つユーザー情報
+           */
+          $get: (option?: { config?: T | undefined } | undefined) =>
+            fetch<Methods20["get"]["resBody"], BasicHeaders, Methods20["get"]["status"]>(prefix, prefix1, GET, option)
+              .json()
+              .then((r) => r.body),
           put: (option: { body: Methods20["put"]["reqBody"]; config?: T | undefined }) =>
             fetch<void, BasicHeaders, Methods20["put"]["status"]>(prefix, prefix1, PUT, option).send(),
           $put: (option: { body: Methods20["put"]["reqBody"]; config?: T | undefined }) =>
@@ -351,16 +366,39 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
           $path: () => `${prefix}${prefix1}`,
         };
       },
-      login: {
-        post: (option?: { config?: T | undefined } | undefined) =>
+      model_course_bookmark: {
+        post: (option: { body: Methods21["post"]["reqBody"]; config?: T | undefined }) =>
           fetch<void, BasicHeaders, Methods21["post"]["status"]>(prefix, PATH10, POST, option).send(),
-        $post: (option?: { config?: T | undefined } | undefined) =>
+        $post: (option: { body: Methods21["post"]["reqBody"]; config?: T | undefined }) =>
           fetch<void, BasicHeaders, Methods21["post"]["status"]>(prefix, PATH10, POST, option)
+            .send()
+            .then((r) => r.body),
+        get: (option?: { config?: T | undefined } | undefined) =>
+          fetch<Methods21["get"]["resBody"], BasicHeaders, Methods21["get"]["status"]>(
+            prefix,
+            PATH10,
+            GET,
+            option
+          ).json(),
+        $get: (option?: { config?: T | undefined } | undefined) =>
+          fetch<Methods21["get"]["resBody"], BasicHeaders, Methods21["get"]["status"]>(prefix, PATH10, GET, option)
+            .json()
+            .then((r) => r.body),
+        put: (option: { body: Methods21["put"]["reqBody"]; config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods21["put"]["status"]>(prefix, PATH10, PUT, option).send(),
+        $put: (option: { body: Methods21["put"]["reqBody"]; config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods21["put"]["status"]>(prefix, PATH10, PUT, option)
+            .send()
+            .then((r) => r.body),
+        delete: (option: { body: Methods21["delete"]["reqBody"]; config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods21["delete"]["status"]>(prefix, PATH10, DELETE, option).send(),
+        $delete: (option: { body: Methods21["delete"]["reqBody"]; config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods21["delete"]["status"]>(prefix, PATH10, DELETE, option)
             .send()
             .then((r) => r.body),
         $path: () => `${prefix}${PATH10}`,
       },
-      model_course_bookmark: {
+      official_spot_bookmark: {
         post: (option: { body: Methods22["post"]["reqBody"]; config?: T | undefined }) =>
           fetch<void, BasicHeaders, Methods22["post"]["status"]>(prefix, PATH11, POST, option).send(),
         $post: (option: { body: Methods22["post"]["reqBody"]; config?: T | undefined }) =>
@@ -392,7 +430,37 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
             .then((r) => r.body),
         $path: () => `${prefix}${PATH11}`,
       },
-      official_spot_bookmark: {
+      private_spot: {
+        _private_spot_id: (val2: string) => {
+          const prefix2 = `${PATH12}/${val2}`;
+
+          return {
+            get: (option?: { config?: T | undefined } | undefined) =>
+              fetch<Methods24["get"]["resBody"], BasicHeaders, Methods24["get"]["status"]>(
+                prefix,
+                prefix2,
+                GET,
+                option
+              ).json(),
+            $get: (option?: { config?: T | undefined } | undefined) =>
+              fetch<Methods24["get"]["resBody"], BasicHeaders, Methods24["get"]["status"]>(prefix, prefix2, GET, option)
+                .json()
+                .then((r) => r.body),
+            put: (option: { body: Methods24["put"]["reqBody"]; config?: T | undefined }) =>
+              fetch<void, BasicHeaders, Methods24["put"]["status"]>(prefix, prefix2, PUT, option).send(),
+            $put: (option: { body: Methods24["put"]["reqBody"]; config?: T | undefined }) =>
+              fetch<void, BasicHeaders, Methods24["put"]["status"]>(prefix, prefix2, PUT, option)
+                .send()
+                .then((r) => r.body),
+            delete: (option?: { config?: T | undefined } | undefined) =>
+              fetch<void, BasicHeaders, Methods24["delete"]["status"]>(prefix, prefix2, DELETE, option).send(),
+            $delete: (option?: { config?: T | undefined } | undefined) =>
+              fetch<void, BasicHeaders, Methods24["delete"]["status"]>(prefix, prefix2, DELETE, option)
+                .send()
+                .then((r) => r.body),
+            $path: () => `${prefix}${prefix2}`,
+          };
+        },
         post: (option: { body: Methods23["post"]["reqBody"]; config?: T | undefined }) =>
           fetch<void, BasicHeaders, Methods23["post"]["status"]>(prefix, PATH12, POST, option).send(),
         $post: (option: { body: Methods23["post"]["reqBody"]; config?: T | undefined }) =>
@@ -410,73 +478,11 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
           fetch<Methods23["get"]["resBody"], BasicHeaders, Methods23["get"]["status"]>(prefix, PATH12, GET, option)
             .json()
             .then((r) => r.body),
-        put: (option: { body: Methods23["put"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods23["put"]["status"]>(prefix, PATH12, PUT, option).send(),
-        $put: (option: { body: Methods23["put"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods23["put"]["status"]>(prefix, PATH12, PUT, option)
-            .send()
-            .then((r) => r.body),
-        delete: (option: { body: Methods23["delete"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods23["delete"]["status"]>(prefix, PATH12, DELETE, option).send(),
-        $delete: (option: { body: Methods23["delete"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods23["delete"]["status"]>(prefix, PATH12, DELETE, option)
-            .send()
-            .then((r) => r.body),
         $path: () => `${prefix}${PATH12}`,
-      },
-      private_spot: {
-        _private_spot_id: (val2: string) => {
-          const prefix2 = `${PATH13}/${val2}`;
-
-          return {
-            get: (option?: { config?: T | undefined } | undefined) =>
-              fetch<Methods25["get"]["resBody"], BasicHeaders, Methods25["get"]["status"]>(
-                prefix,
-                prefix2,
-                GET,
-                option
-              ).json(),
-            $get: (option?: { config?: T | undefined } | undefined) =>
-              fetch<Methods25["get"]["resBody"], BasicHeaders, Methods25["get"]["status"]>(prefix, prefix2, GET, option)
-                .json()
-                .then((r) => r.body),
-            put: (option: { body: Methods25["put"]["reqBody"]; config?: T | undefined }) =>
-              fetch<void, BasicHeaders, Methods25["put"]["status"]>(prefix, prefix2, PUT, option).send(),
-            $put: (option: { body: Methods25["put"]["reqBody"]; config?: T | undefined }) =>
-              fetch<void, BasicHeaders, Methods25["put"]["status"]>(prefix, prefix2, PUT, option)
-                .send()
-                .then((r) => r.body),
-            delete: (option?: { config?: T | undefined } | undefined) =>
-              fetch<void, BasicHeaders, Methods25["delete"]["status"]>(prefix, prefix2, DELETE, option).send(),
-            $delete: (option?: { config?: T | undefined } | undefined) =>
-              fetch<void, BasicHeaders, Methods25["delete"]["status"]>(prefix, prefix2, DELETE, option)
-                .send()
-                .then((r) => r.body),
-            $path: () => `${prefix}${prefix2}`,
-          };
-        },
-        post: (option: { body: Methods24["post"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods24["post"]["status"]>(prefix, PATH13, POST, option).send(),
-        $post: (option: { body: Methods24["post"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods24["post"]["status"]>(prefix, PATH13, POST, option)
-            .send()
-            .then((r) => r.body),
-        get: (option?: { config?: T | undefined } | undefined) =>
-          fetch<Methods24["get"]["resBody"], BasicHeaders, Methods24["get"]["status"]>(
-            prefix,
-            PATH13,
-            GET,
-            option
-          ).json(),
-        $get: (option?: { config?: T | undefined } | undefined) =>
-          fetch<Methods24["get"]["resBody"], BasicHeaders, Methods24["get"]["status"]>(prefix, PATH13, GET, option)
-            .json()
-            .then((r) => r.body),
-        $path: () => `${prefix}${PATH13}`,
       },
       travel_plan: {
         _travel_plan_id: (val2: string) => {
-          const prefix2 = `${PATH14}/${val2}`;
+          const prefix2 = `${PATH13}/${val2}`;
 
           return {
             spot: {
@@ -484,78 +490,78 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
                 const prefix4 = `${prefix2}${PATH5}/${val4}`;
 
                 return {
-                  put: (option: { body: Methods29["put"]["reqBody"]; config?: T | undefined }) =>
-                    fetch<void, BasicHeaders, Methods29["put"]["status"]>(prefix, prefix4, PUT, option).send(),
-                  $put: (option: { body: Methods29["put"]["reqBody"]; config?: T | undefined }) =>
-                    fetch<void, BasicHeaders, Methods29["put"]["status"]>(prefix, prefix4, PUT, option)
+                  put: (option: { body: Methods28["put"]["reqBody"]; config?: T | undefined }) =>
+                    fetch<void, BasicHeaders, Methods28["put"]["status"]>(prefix, prefix4, PUT, option).send(),
+                  $put: (option: { body: Methods28["put"]["reqBody"]; config?: T | undefined }) =>
+                    fetch<void, BasicHeaders, Methods28["put"]["status"]>(prefix, prefix4, PUT, option)
                       .send()
                       .then((r) => r.body),
                   delete: (option?: { config?: T | undefined } | undefined) =>
-                    fetch<void, BasicHeaders, Methods29["delete"]["status"]>(prefix, prefix4, DELETE, option).send(),
+                    fetch<void, BasicHeaders, Methods28["delete"]["status"]>(prefix, prefix4, DELETE, option).send(),
                   $delete: (option?: { config?: T | undefined } | undefined) =>
-                    fetch<void, BasicHeaders, Methods29["delete"]["status"]>(prefix, prefix4, DELETE, option)
+                    fetch<void, BasicHeaders, Methods28["delete"]["status"]>(prefix, prefix4, DELETE, option)
                       .send()
                       .then((r) => r.body),
                   $path: () => `${prefix}${prefix4}`,
                 };
               },
-              post: (option: { body: Methods28["post"]["reqBody"]; config?: T | undefined }) =>
-                fetch<void, BasicHeaders, Methods28["post"]["status"]>(
+              post: (option: { body: Methods27["post"]["reqBody"]; config?: T | undefined }) =>
+                fetch<void, BasicHeaders, Methods27["post"]["status"]>(
                   prefix,
                   `${prefix2}${PATH5}`,
                   POST,
                   option
                 ).send(),
-              $post: (option: { body: Methods28["post"]["reqBody"]; config?: T | undefined }) =>
-                fetch<void, BasicHeaders, Methods28["post"]["status"]>(prefix, `${prefix2}${PATH5}`, POST, option)
+              $post: (option: { body: Methods27["post"]["reqBody"]; config?: T | undefined }) =>
+                fetch<void, BasicHeaders, Methods27["post"]["status"]>(prefix, `${prefix2}${PATH5}`, POST, option)
                   .send()
                   .then((r) => r.body),
               $path: () => `${prefix}${prefix2}${PATH5}`,
             },
             get: (option?: { config?: T | undefined } | undefined) =>
-              fetch<Methods27["get"]["resBody"], BasicHeaders, Methods27["get"]["status"]>(
+              fetch<Methods26["get"]["resBody"], BasicHeaders, Methods26["get"]["status"]>(
                 prefix,
                 prefix2,
                 GET,
                 option
               ).json(),
             $get: (option?: { config?: T | undefined } | undefined) =>
-              fetch<Methods27["get"]["resBody"], BasicHeaders, Methods27["get"]["status"]>(prefix, prefix2, GET, option)
+              fetch<Methods26["get"]["resBody"], BasicHeaders, Methods26["get"]["status"]>(prefix, prefix2, GET, option)
                 .json()
                 .then((r) => r.body),
-            put: (option: { body: Methods27["put"]["reqBody"]; config?: T | undefined }) =>
-              fetch<void, BasicHeaders, Methods27["put"]["status"]>(prefix, prefix2, PUT, option).send(),
-            $put: (option: { body: Methods27["put"]["reqBody"]; config?: T | undefined }) =>
-              fetch<void, BasicHeaders, Methods27["put"]["status"]>(prefix, prefix2, PUT, option)
+            put: (option: { body: Methods26["put"]["reqBody"]; config?: T | undefined }) =>
+              fetch<void, BasicHeaders, Methods26["put"]["status"]>(prefix, prefix2, PUT, option).send(),
+            $put: (option: { body: Methods26["put"]["reqBody"]; config?: T | undefined }) =>
+              fetch<void, BasicHeaders, Methods26["put"]["status"]>(prefix, prefix2, PUT, option)
                 .send()
                 .then((r) => r.body),
             delete: (option?: { config?: T | undefined } | undefined) =>
-              fetch<void, BasicHeaders, Methods27["delete"]["status"]>(prefix, prefix2, DELETE, option).send(),
+              fetch<void, BasicHeaders, Methods26["delete"]["status"]>(prefix, prefix2, DELETE, option).send(),
             $delete: (option?: { config?: T | undefined } | undefined) =>
-              fetch<void, BasicHeaders, Methods27["delete"]["status"]>(prefix, prefix2, DELETE, option)
+              fetch<void, BasicHeaders, Methods26["delete"]["status"]>(prefix, prefix2, DELETE, option)
                 .send()
                 .then((r) => r.body),
             $path: () => `${prefix}${prefix2}`,
           };
         },
-        post: (option: { body: Methods26["post"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods26["post"]["status"]>(prefix, PATH14, POST, option).send(),
-        $post: (option: { body: Methods26["post"]["reqBody"]; config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods26["post"]["status"]>(prefix, PATH14, POST, option)
+        post: (option: { body: Methods25["post"]["reqBody"]; config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods25["post"]["status"]>(prefix, PATH13, POST, option).send(),
+        $post: (option: { body: Methods25["post"]["reqBody"]; config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods25["post"]["status"]>(prefix, PATH13, POST, option)
             .send()
             .then((r) => r.body),
         get: (option?: { config?: T | undefined } | undefined) =>
-          fetch<Methods26["get"]["resBody"], BasicHeaders, Methods26["get"]["status"]>(
+          fetch<Methods25["get"]["resBody"], BasicHeaders, Methods25["get"]["status"]>(
             prefix,
-            PATH14,
+            PATH13,
             GET,
             option
           ).json(),
         $get: (option?: { config?: T | undefined } | undefined) =>
-          fetch<Methods26["get"]["resBody"], BasicHeaders, Methods26["get"]["status"]>(prefix, PATH14, GET, option)
+          fetch<Methods25["get"]["resBody"], BasicHeaders, Methods25["get"]["status"]>(prefix, PATH13, GET, option)
             .json()
             .then((r) => r.body),
-        $path: () => `${prefix}${PATH14}`,
+        $path: () => `${prefix}${PATH13}`,
       },
       post: (option: { body: Methods19["post"]["reqBody"]; config?: T | undefined }) =>
         fetch<void, BasicHeaders, Methods19["post"]["status"]>(prefix, PATH9, POST, option).send(),

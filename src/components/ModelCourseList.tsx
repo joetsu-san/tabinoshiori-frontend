@@ -63,7 +63,7 @@ export const ModelCourseList = ({ modelcourselist }: ModelCourseListProps) => {
       ref={container}
     >
       {items.map((modelcourse, index) => (
-        <Card key={index} component={Link} href={"http://localhost:3000/modelcourse/" + modelcourse.id}>
+        <Card key={index} component={Link} href={"modelcourse/" + modelcourse.id}>
           <Card.Section>
             <Image src={modelcourse.image} fit="cover" alt="サンプル画像" height={160} />
           </Card.Section>

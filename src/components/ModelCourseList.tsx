@@ -16,7 +16,7 @@ type ModelCourseOverview = {
 type ModelCourseListProps = {
   modelcourselist: ModelCourseOverview[];
 };
-interface Item {
+type Item = {
   id: number;
   content: string;
 }

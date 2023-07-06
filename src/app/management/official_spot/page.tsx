@@ -1,15 +1,52 @@
 "use client";
 
 import Link from "next/link";
-import { Card, Image, Text, Button, Grid, Container, Flex } from "@mantine/core";
-import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
+import { Card, Image, Text, Button, Grid, Container, Flex, Input } from "@mantine/core";
+import { IconArrowBackUp, IconAt, IconPlus } from "@tabler/icons-react";
+import { client, useAspidaSWRImmutable } from "@/hooks/useAspidaSWRImmutable";
+import useAspidaSWR from "@aspida/swr";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
+import { OfficialSpot } from "../../../../api/@types";
 
-const OfficialSpot = () => {
+const OfficialSpotPage = () => {
+  // const {data, error} = useAspidaSWRImmutable(
+  //   client.official_spot , {}
+  // );
+  const { data, error } = useAspidaSWR(client.official_spot);
+
+  const [spotList, setSpotList] = useState<OfficialSpot[]>([]);
+
+  // 検索 Debounce
+  const [inputText, setInputText] = useState("");
+  const debouncedInputText = useDebounce(inputText, 500);
+  const handleChange = (event: any) => setInputText(event.target.value);
+
+  // 検索用
+  useEffect(() => {
+    console.log(`「${debouncedInputText}」`);
+    // 観光地検索処理
+    if (debouncedInputText != "") {
+      const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
+      setSpotList(temp);
+    } else {
+      if (data) setSpotList(data);
+    }
+  }, [debouncedInputText]);
+
+  // データ取得用
+  useEffect(() => {
+    if (data) setSpotList(data);
+  }, [data]);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <div>
-      <Container size={"xl"}>
+      <Container size={"xl"} mb={"6rem"}>
         <h2>観光地一覧</h2>
-        <Flex direction={"row"} justify={"space-between"}>
+        <Flex direction={"row"} justify={"space-between"} mb={20}>
           <Link href={"/management"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>
               戻る
@@ -23,8 +60,9 @@ const OfficialSpot = () => {
           </Link>
         </Flex>
 
+        <Input icon={<IconAt />} placeholder="観光地検索" onChange={handleChange} mb={20} />
         <Grid>
-          {positionData.map((val, i) => {
+          {spotList.map((val, i) => {
             return (
               <Grid.Col key={i} md={6} lg={3}>
                 <Link href={`/management/official_spot/${val.id}`}>
@@ -53,49 +91,4 @@ const OfficialSpot = () => {
   );
 };
 
-export default OfficialSpot;
-
-// スポット情報
-type OfficialSpotOverview = {
-  id: string;
-  title: string;
-  ruby: string;
-  description: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  officialSpotStatus: "open" | "close";
-};
-
-const positionData: OfficialSpotOverview[] = [
-  {
-    id: "aaaa",
-    title: "秋葉原",
-    ruby: "あきはばら",
-    description: "",
-    address: "",
-    latitude: 35.69731,
-    longitude: 139.7747,
-    officialSpotStatus: "open",
-  },
-  {
-    id: "bbbb",
-    title: "岩本町",
-    ruby: "いわもとちょう",
-    description: "",
-    address: "",
-    latitude: 35.69397,
-    longitude: 139.7762,
-    officialSpotStatus: "open",
-  },
-  {
-    id: "cccc",
-    title: "上越市",
-    ruby: "じょうえつし",
-    description: "",
-    address: "",
-    latitude: 37.147976,
-    longitude: 138.236285,
-    officialSpotStatus: "open",
-  },
-];
+export default OfficialSpotPage;

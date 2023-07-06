@@ -1,39 +1,25 @@
 "use client";
 
+import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
+import { client } from "@/hooks/useAspidaSWRImmutable";
+import useAspidaSWR from "@aspida/swr";
 import { Button, Card, Container, Flex } from "@mantine/core";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
-
-const accountList = [
-  {
-    id: "00000000-0000-0000-0000-000000000000",
-    username: "John Doe",
-    email: "jhon@example.com",
-  },
-  {
-    id: "00000000-0000-0000-0000-000000000000",
-    username: "John Doe",
-    email: "jhon@example.com",
-  },
-  {
-    id: "00000000-0000-0000-0000-000000000000",
-    username: "John Doe",
-    email: "jhon@example.com",
-  },
-  {
-    id: "00000000-0000-0000-0000-000000000000",
-    username: "John Doe",
-    email: "jhon@example.com",
-  },
-];
+import { useEffect, useState } from "react";
 
 const Account = () => {
+  const { data, error } = useAspidaSWR(client.management);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <div>
       <Container size={"xl"}>
         <h2>管理者アカウント一覧</h2>
 
-        <Flex direction={"row"} justify={"space-between"}>
+        <Flex direction={"row"} justify={"space-between"} mb={20}>
           <Link href={"/management"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>
               戻る
@@ -46,8 +32,8 @@ const Account = () => {
           </Link>
         </Flex>
 
-        <Flex direction={"column"} gap={20}>
-          {accountList.map((val, i) => {
+        <Flex direction={"column"} gap={20} mb={"6rem"}>
+          {data.map((val, i) => {
             return (
               <Link key={i} href={`/management/account/${val.id}`}>
                 <Card shadow="sm" padding="sm" radius="md" withBorder key={i}>

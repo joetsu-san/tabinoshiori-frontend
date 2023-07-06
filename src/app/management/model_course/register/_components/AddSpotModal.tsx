@@ -1,10 +1,13 @@
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
 import { SpotList } from "@/atoms/SpotAtoms";
-import { Button, Image, Text, TextInput, NumberInput, Card, Input, Grid } from "@mantine/core";
+import { client } from "@/hooks/useAspidaSWRImmutable";
+import useAspidaSWR from "@aspida/swr";
+import { Button, Image, Text, TextInput, NumberInput, Card, Input, Grid, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { OfficialSpot } from "../../../../../../api/@types";
 
 type ModalProps = {
   modelCourseList: any[];
@@ -13,25 +16,17 @@ type ModalProps = {
 };
 
 export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, closeAction }) => {
-  const spotList = useRecoilValue(SpotList); // 観光地データマスター
-  const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
+  // const spotList = useRecoilValue(SpotList); // 観光地データマスター
+  // const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
+
+  // const {data, error} = useAspidaSWRImmutable(
+  //   client.official_spot , {}
+  // );
+  const { data, error } = useAspidaSWR(client.official_spot);
+
+  const [spotList, setSpotList] = useState<OfficialSpot[]>([]);
 
   const [selectedSpot, setSelectedSpot] = useState<any>({});
-
-  // 検索 Debounce
-  const [inputText, setInputText] = useState("");
-  const debouncedInputText = useDebounce(inputText, 500);
-  const handleChange = (event: any) => setInputText(event.target.value);
-  useEffect(() => {
-    console.log(`「${debouncedInputText}」`);
-    // 観光地検索処理
-    if (debouncedInputText != "") {
-      const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
-      setTempSpotList(temp);
-    } else {
-      setTempSpotList(spotList);
-    }
-  }, [debouncedInputText, setTempSpotList, spotList]);
 
   const text = useForm({
     initialValues: {
@@ -39,6 +34,31 @@ export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, 
       stayMinutes: 1,
     },
   });
+
+  // 検索 Debounce
+  const [inputText, setInputText] = useState("");
+  const debouncedInputText = useDebounce(inputText, 500);
+  const handleChange = (event: any) => setInputText(event.target.value);
+
+  // 検索用
+  useEffect(() => {
+    console.log(`「${debouncedInputText}」`);
+    // 観光地検索処理
+    if (debouncedInputText != "") {
+      const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
+      setSpotList(temp);
+    } else {
+      if (data) setSpotList(data);
+    }
+  }, [debouncedInputText]);
+
+  // データ取得用
+  useEffect(() => {
+    if (data) setSpotList(data);
+  }, [data]);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
 
   const selectSpot = (data: any) => {
     const spotData = {
@@ -61,12 +81,12 @@ export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, 
   return (
     <form onSubmit={text.onSubmit((value) => setSpot(value))}>
       <TextInput label="備考" {...text.getInputProps("description")} />
-      <NumberInput label="滞在時間" {...text.getInputProps("stayMinutes")} />
+      <NumberInput label="滞在時間" mb={20} {...text.getInputProps("stayMinutes")} />
       <div>
-        <Input placeholder="観光地検索" onChange={handleChange} />
-        <p>選択：{selectedSpot.title}</p>
-        <Grid>
-          {tempSpotList.map((val, i) => {
+        <Input mb={20} placeholder="観光地検索" onChange={handleChange} />
+        <Text mb={20}>選択：{selectedSpot.title}</Text>
+        <Grid mb={20}>
+          {spotList.map((val, i) => {
             return (
               <Grid.Col key={i} md={6} lg={3}>
                 <Card shadow="sm" padding="sm" radius="md" withBorder onClick={() => selectSpot(val)}>
@@ -77,7 +97,6 @@ export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, 
                       alt="Norway"
                     />
                   </Card.Section>
-
                   <Text weight={500}>{val.title}</Text>
                 </Card>
               </Grid.Col>
@@ -85,9 +104,11 @@ export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, 
           })}
         </Grid>
       </div>
-      <Button variant="filled" type="submit" leftIcon={<IconPlus />}>
-        追加
-      </Button>
+      <Flex direction={"row"} justify={"center"}>
+        <Button variant="filled" type="submit" leftIcon={<IconPlus />}>
+          追加
+        </Button>
+      </Flex>
     </form>
   );
 };

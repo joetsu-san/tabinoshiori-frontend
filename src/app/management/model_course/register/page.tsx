@@ -12,13 +12,14 @@ import {
   ActionIcon,
   Modal,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import { AddSpotModal } from "./_components/AddSpotModal";
+import { z } from "zod";
 
 type PageProps = {
   params: {
@@ -31,11 +32,18 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 
   const [opened, { open, close }] = useDisclosure(false);
 
+  const schema = z.object({
+    title: z.string().min(1, { message: "モデルコースタイトルを入力してください" }),
+    description: z.string().min(1, { message: "モデルコース説明文を入力してください" }),
+    files: z.custom<FileList>(),
+  });
+
   const formText = useForm({
     initialValues: {
       title: "",
       description: "",
     },
+    validate: zodResolver(schema),
   });
 
   // 送信時アクション

@@ -1,46 +1,127 @@
 "use client";
 
-import { Button, Container, FileInput, Flex, Input, TextInput, Textarea } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import {
+  Button,
+  Container,
+  FileInput,
+  Flex,
+  Input,
+  Modal,
+  NumberInput,
+  Text,
+  TextInput,
+  Textarea,
+} from "@mantine/core";
+import { useForm, zodResolver } from "@mantine/form";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import { NextPage } from "next";
 import Link from "next/link";
+import useAspidaSWR from "@aspida/swr";
 
-// ダミーデータ
-const spotData = {
-  id: "aaaa",
-  title: "秋葉原",
-  ruby: "あきはばら",
-  description: "",
-  address: "",
-  latitude: 35.69731,
-  longitude: 139.7747,
-  officialSpotStatus: "open",
-};
+import { client, useAspidaSWRImmutable } from "@/hooks/useAspidaSWRImmutable";
+import { useEffect } from "react";
+import { z } from "zod";
+import { Buffer, File } from "buffer";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useDisclosure } from "@mantine/hooks";
 
 type PageProps = {
   params: {
-    official_spot_id: number;
+    official_spot_id: string;
   };
 };
 
 const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
-  const formText = useForm({
-    initialValues: {
-      title: spotData.title,
-      ruby: spotData.ruby,
-      description: spotData.description,
-      address: spotData.address,
-      latitude: spotData.latitude,
-      longitude: spotData.longitude,
-    },
+  const [opened, { open, close }] = useDisclosure(false);
+
+  // const {data, error} = useAspidaSWRImmutable(
+  //   client.official_spot._official_spot_id(params.official_spot_id) ,
+  //   {}
+  //   );
+
+  const { data, error } = useAspidaSWR(client.official_spot._official_spot_id(params.official_spot_id));
+
+  const router = useRouter();
+
+  const schema = z.object({
+    title: z.string().min(1, { message: "観光地名が入力されていません" }),
+    ruby: z.string().min(1, { message: "ルビが入力されていません" }),
+    description: z.string().min(1, { message: "説明文が入力されていません" }),
+    address: z.string().min(1, { message: "所在地が入力されていません" }),
+    latitude: z.number().min(1, { message: "緯度が入力されていません" }),
+    longitude: z.number().min(1, { message: "経度が入力されていません" }),
   });
 
-  const formFiles = useForm({
+  const formText = useForm({
     initialValues: {
-      files: [],
+      title: "",
+      ruby: "",
+      description: "",
+      address: "",
+      latitude: 0,
+      longitude: 0,
     },
+    validate: zodResolver(schema),
   });
+
+  const formFiles = useForm();
+
+  // テキストセット
+  useEffect(() => {
+    if (data) {
+      formText.setValues({
+        title: data.title,
+        ruby: data.ruby,
+        description: data.description,
+        address: data.address,
+        latitude: data.latitude,
+        longitude: data.longitude,
+      });
+    }
+  }, [data]);
+
+  // アップデート
+  const handleSubmit = async (value: any) => {
+    // await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}`,
+    //   {
+    //     "title": value.title,
+    //     "ruby": value.ruby,
+    //     "description": value.description,
+    //     "address": value.address,
+    //     "latitude": value.latitude,
+    //     "longitude": value.longitude,
+    //     "officialSpotStatusId": 1,
+    //   }
+    // )
+    // router.replace("/management/official_spot")
+    console.log("更新");
+  };
+
+  // 画像更新
+  const fileSubmit = async (value: { files: File[] }) => {
+    // const images = []
+    // for(let i = 0 ; i < value.files.length; i++) {
+    //   const f = value.files[i];
+    //   images.push(await f.arrayBuffer());
+    // }
+    // await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}/image`,
+    //   { "officialSpotImages": images }
+    // )
+    // router.replace("/management/official_spot")
+    console.log("画像更新");
+  };
+
+  // 削除
+  const deleteSubmit = async () => {
+    // await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/${params.official_spot_id}`)
+    // router.replace("/management/account")
+    console.log("削除");
+  };
+
+  // データ取得中
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
 
   return (
     <div>
@@ -54,33 +135,56 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
           </Link>
         </Flex>
 
-        <form onSubmit={formText.onSubmit((value) => console.log(value))}>
-          <Flex direction={"column"} gap={20}>
+        <form onSubmit={formText.onSubmit((value) => handleSubmit(value))}>
+          <Flex direction={"column"} gap={20} mb={30}>
             <TextInput placeholder="観光地名称" label="観光地名称" {...formText.getInputProps("title")} />
             <TextInput placeholder="ルビ" label="ルビ" {...formText.getInputProps("ruby")} />
             <Textarea placeholder="説明文" label="説明文" {...formText.getInputProps("description")} />
             <TextInput placeholder="所在地" label="所在地" {...formText.getInputProps("address")} />
-            <TextInput placeholder="緯度(latitude)" label="緯度(latitude)" {...formText.getInputProps("latitude")} />
-            <TextInput placeholder="経度(longitude)" label="経度(longitude)" {...formText.getInputProps("longitude")} />
+            <NumberInput
+              placeholder="緯度(latitude)"
+              label="緯度(latitude)"
+              precision={8}
+              {...formText.getInputProps("latitude")}
+            />
+            <NumberInput
+              placeholder="経度(longitude)"
+              label="経度(longitude)"
+              precision={8}
+              {...formText.getInputProps("longitude")}
+            />
 
             <Button variant="filled" type="submit">
-              登録
+              更新
             </Button>
           </Flex>
         </form>
 
-        <form onSubmit={formFiles.onSubmit((value) => console.log(value))}>
-          <Flex direction={"column"} gap={20}>
+        <form onSubmit={formFiles.onSubmit((value) => fileSubmit(value))}>
+          <Flex direction={"column"} gap={20} mb={40}>
             <FileInput placeholder="画像を選択" label="観光地画像" multiple {...formFiles.getInputProps("files")} />
-
             <Button variant="filled" type="submit">
-              登録
+              画像更新
             </Button>
           </Flex>
         </form>
 
-        <Flex direction={"row"} justify={"space-between"}>
-          <Button type="button" color="red" onClick={() => console.log("削除")}>
+        <Modal opened={opened} onClose={close} title="アカウント管理">
+          <Flex direction={"column"} justify={"center"}>
+            <Text>管理者アカウントを削除します</Text>
+            <Flex direction={"row"} justify={"space-around"}>
+              <Button onClick={close} variant="outline">
+                キャンセル
+              </Button>
+              <Button onClick={deleteSubmit} color="red">
+                OK
+              </Button>
+            </Flex>
+          </Flex>
+        </Modal>
+
+        <Flex direction={"row"} justify={"center"} mb={"6rem"}>
+          <Button type="button" color="red" onClick={open}>
             削除
           </Button>
         </Flex>

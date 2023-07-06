@@ -1,5 +1,7 @@
 "use client";
 
+import { client } from "@/hooks/useAspidaSWRImmutable";
+import useAspidaSWR from "@aspida/swr";
 import {
   ActionIcon,
   Button,
@@ -12,29 +14,66 @@ import {
   Timeline,
   Text,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { IconArrowBackUp, IconTrash } from "@tabler/icons-react";
+import axios from "axios";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { z } from "zod";
 
 type PageProps = {
   params: {
-    official_spot_id: number;
+    model_course_id: string;
   };
 };
 
 const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
-  const formText = useForm({
-    initialValues: {
-      title: modelcoursedetail.title,
-      description: modelcoursedetail.description,
-    },
+  const { data, error } = useAspidaSWR(client.model_course._model_course_id(params.model_course_id));
+
+  const router = useRouter();
+
+  const schema = z.object({
+    title: z.string().min(1, { message: "モデルコースタイトルを入力してください" }),
+    description: z.string().min(1, { message: "モデルコースの説明文を入力してください" }),
   });
 
-  // 更新アクション
-  const updateModelCourse = (val: any) => {
-    console.log(val);
+  const formText = useForm({
+    initialValues: {
+      title: "",
+      description: "",
+    },
+    validate: zodResolver(schema),
+  });
+
+  useEffect(() => {
+    if (data) {
+      formText.setValues({
+        title: data.title,
+        description: data.description,
+      });
+    }
+  }, [data]);
+
+  console.log(data);
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
+  // アップデート
+  const updateModelCourse = async (value: any) => {
+    // await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course_id/${params.model_course_id}`,
+    // {
+    //   "title": value.title,
+    //   "description": value.description,
+    //   "requiredMinute": value.requiredMinute,
+    // }
+    // )
+    // router.replace("/management/model_course_id")
+    console.log("更新");
   };
+
+  // "modelCourseImages": "data:image/jpeg;base64,..."
 
   return (
     <div>
@@ -56,13 +95,13 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
               更新
             </Button>
 
-            <Timeline active={modelcoursedetail.modelCourseSpots.length - 1}>
-              {modelcoursedetail.modelCourseSpots.map((val, i) => {
+            <Timeline active={data.modelCourseSpots.length - 1}>
+              {data.modelCourseSpots.map((val, i) => {
                 return (
                   <Timeline.Item key={i}>
-                    <Text weight={500}>{val.officialSpotTitle}</Text>
-                    <p>コメント：{val.description}</p>
-                    <p>滞在時間：{val.stayMinutes}分</p>
+                    <Text weight={500}>{val.title}</Text>
+                    <p>コメント：{val.comment}</p>
+                    <p>滞在時間：{val.stayMinute}分</p>
                   </Timeline.Item>
                 );
               })}

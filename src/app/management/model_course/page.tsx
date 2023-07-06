@@ -1,10 +1,17 @@
 "use client";
 
+import { client } from "@/hooks/useAspidaSWRImmutable";
+import useAspidaSWR from "@aspida/swr";
 import { Card, Image, Text, Button, Group, Input, Grid, Container, Flex } from "@mantine/core";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
 const ModelCourse = () => {
+  const { data, error } = useAspidaSWR(client.model_course);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <div>
       <Container size={"xl"}>
@@ -23,13 +30,19 @@ const ModelCourse = () => {
           </Link>
         </Flex>
         <Grid>
-          {modelcourselist.map((val, i) => {
+          {data.map((val, i) => {
             return (
               <Grid.Col key={i} md={6} lg={3}>
                 <Link href={`/management/model_course/${val.id}`}>
                   <Card shadow="sm" padding="sm" radius="md" withBorder key={i}>
                     <Card.Section>
-                      <Image src={val.image} height={160} alt="Norway" />
+                      <Image
+                        src={
+                          "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+                        }
+                        height={160}
+                        alt="Norway"
+                      />
                     </Card.Section>
 
                     <Text weight={500}>{val.title}</Text>

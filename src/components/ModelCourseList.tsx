@@ -1,17 +1,10 @@
 "use client";
 
+import { ModelCourseOverview } from "@/@types";
 import { Card, Image, Group, Text, SimpleGrid, Stack, Box } from "@mantine/core";
 import { IconClockFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-type ModelCourseOverview = {
-  id: string;
-  title: string;
-  description: string;
-  requiredMinute: string;
-  image: string;
-};
 
 type ModelCourseListProps = {
   modelcourselist: ModelCourseOverview[];
@@ -19,7 +12,7 @@ type ModelCourseListProps = {
 type Item = {
   id: number;
   content: string;
-}
+};
 
 export const ModelCourseList = ({ modelcourselist }: ModelCourseListProps) => {
   const [allItems, setAllItems] = useState<ModelCourseOverview[]>([]);
@@ -65,7 +58,7 @@ export const ModelCourseList = ({ modelcourselist }: ModelCourseListProps) => {
       {items.map((modelcourse, index) => (
         <Card key={index} component={Link} href={"modelcourse/" + modelcourse.id}>
           <Card.Section>
-            <Image src={modelcourse.image} fit="cover" alt="サンプル画像" height={160} />
+            <Image src={modelcourse.modelCourseImages[0].src} fit="cover" alt="サンプル画像" height={160} />
           </Card.Section>
           <Stack spacing="xs">
             <Text fw={500} size={18} mt={10}>

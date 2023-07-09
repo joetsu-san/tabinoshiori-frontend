@@ -23,19 +23,34 @@ export const firebaseUserIdState = atom<string | undefined>({
 
 type FirebaseUser = Pick<User, "photoURL" | "displayName" | "email">;
 
-export const firebaseUserState = atom<FirebaseUser | null>({
+export const firebaseUserState = atom<FirebaseUser | undefined>({
   key: "firebaseUserState",
   default: undefined,
   effects: [
     ({ setSelf }) => {
-      const user = auth.currentUser;
-      if (!user) return setSelf(null);
-      const data = {
-        photoURL: user.photoURL,
-        displayName: user?.displayName,
-        email: user?.email,
-      };
-      setSelf(data);
+      return onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          return;
+        }
+        const data = {
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+          email: user.email,
+        };
+        setSelf(data);
+      });
+    },
+  ],
+});
+
+export const firebaseTokenState = atom<string | undefined>({
+  key: "firebaseTokenState",
+  default: undefined,
+  effects: [
+    ({ setSelf }) => {
+      return onAuthStateChanged(auth, async (user) => {
+        setSelf(await user?.getIdToken());
+      });
     },
   ],
 });

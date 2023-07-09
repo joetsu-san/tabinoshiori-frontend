@@ -1,7 +1,6 @@
 import { firebaseTokenState } from "@/atoms";
 import { client } from "@/lib/aspida";
 import useAspidaSWR from "@aspida/swr";
-import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 
 export const useModelcourseBookmarkList = () => {

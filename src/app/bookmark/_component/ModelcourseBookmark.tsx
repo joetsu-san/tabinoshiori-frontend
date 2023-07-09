@@ -17,7 +17,6 @@ import { IconClockFilled, IconHeart } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useModelcourseBookmarkList } from "@/hooks/useModelcourseBookmarkList";
-import { data } from "@/mock/mockdata";
 
 export const ModelcourseBookmark = () => {
   const { data: modelcourselist, error } = useModelcourseBookmarkList();

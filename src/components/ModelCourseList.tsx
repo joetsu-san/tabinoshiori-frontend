@@ -2,24 +2,19 @@
 
 import { Card, Image, Group, Text, SimpleGrid, Stack } from "@mantine/core";
 import { IconClockFilled } from "@tabler/icons-react";
-
-type ModelCourseOverview = {
-  id: string;
-  title: string;
-  description: string;
-  requiredMinute: string;
-  image: string;
-};
+import { ModelCourseOverview } from "../../api/@types";
 
 type ModelCourseListProps = {
   modelcourselist: ModelCourseOverview[];
+  msg: boolean;
 };
 
-export const ModelCourseList = ({ modelcourselist }: ModelCourseListProps) => {
+export const ModelCourseList = ({ modelcourselist, msg }: ModelCourseListProps) => {
   return (
     <SimpleGrid
       cols={3}
       mt={20}
+      pb={msg ? 500 : 100}
       spacing="md"
       breakpoints={[
         { maxWidth: "48rem", cols: 2, spacing: "sm" },
@@ -29,7 +24,7 @@ export const ModelCourseList = ({ modelcourselist }: ModelCourseListProps) => {
       {modelcourselist.map((modelcourse, index) => (
         <Card key={index}>
           <Card.Section>
-            <Image src={modelcourse.image} fit="cover" alt="サンプル画像" height={160} />
+            <Image src={"" + modelcourse.modelCourseImages} fit="cover" alt="サンプル画像" height={160} />
           </Card.Section>
           <Stack spacing="xs">
             <Text fw={500} size={18} mt={10}>
@@ -43,6 +38,9 @@ export const ModelCourseList = ({ modelcourselist }: ModelCourseListProps) => {
           </Stack>
         </Card>
       ))}
+      <Text display={msg ? "block" : "none"} fw={500} size={15} mt={10} align="center">
+        お探しのモデルコースは見つかりませんでした
+      </Text>
     </SimpleGrid>
   );
 };

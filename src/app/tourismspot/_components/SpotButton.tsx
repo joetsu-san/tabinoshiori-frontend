@@ -1,32 +1,25 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { SpotList, SpotInfoWindowState, MapHeight } from "@/atoms/SpotAtoms";
 
 import { Card, Image, Text, Button, Group, Input } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
-import { IconAt, IconArrowBigDown, IconArrowBigUp } from "@tabler/icons-react";
+import { IconArrowBigDown, IconArrowBigUp, IconSearch } from "@tabler/icons-react";
 
 import { useDebounce } from "../_hooks/useDebounce";
 
 import { SpotInfoWindow } from "./SpotInfoWindow";
 import Link from "next/link";
-
-// スポット情報
-type OfficialSpotOverview = {
-  id: string;
-  title: string;
-  ruby: string;
-  description: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  officialSpotStatus: "open" | "close";
-};
+import { OfficialSpot } from "@/@types";
 
 export const SpotButton = (props: any) => {
   const spotList = useRecoilValue(SpotList); // 観光地データマスター
-  const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
+  const [tempSpotList, setTempSpotList] = useState<OfficialSpot[]>([]); // 検索後観光地データ
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
+
+  useEffect(() => {
+    setTempSpotList(spotList);
+  }, [spotList, setTempSpotList]);
 
   const [open, setOpen] = useState(false);
   const [mapHeight, setMapHeight] = useRecoilState(MapHeight);
@@ -36,7 +29,7 @@ export const SpotButton = (props: any) => {
     pixelOffset: props.offsetSize,
   };
 
-  const showInfoWindow = (spot: OfficialSpotOverview) => {
+  const showInfoWindow = (spot: OfficialSpot) => {
     setSpotInfoWindow(<SpotInfoWindow spot={spot} infoOption={infoOption} />);
     setMapHeight(40);
     setOpen(false);
@@ -104,7 +97,12 @@ export const SpotButton = (props: any) => {
         >
           {value}
         </button>
-        <Input icon={<IconAt />} placeholder="観光地検索" onChange={handleChange} />
+        <Input
+          placeholder="観光地検索"
+          radius={20}
+          icon={<IconSearch color="#eee" style={{ zIndex: 0 }} />}
+          onChange={handleChange}
+        />
       </div>
 
       <div
@@ -120,7 +118,7 @@ export const SpotButton = (props: any) => {
             <Card shadow="sm" padding="sm" radius="md" withBorder key={i} onClick={() => showInfoWindow(val)}>
               <Card.Section>
                 <Image
-                  src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+                  src={val.officialSpotImages.length === 0 ? "/dummyImage.svg" : val.officialSpotImages[0].src}
                   height={160}
                   alt="Norway"
                 />

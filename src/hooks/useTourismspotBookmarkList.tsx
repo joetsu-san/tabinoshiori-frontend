@@ -12,5 +12,6 @@ export const useTourismspotBookmarkList = () => {
     enabled: !!token,
   });
 
+  if (!data) return { data: [], error };
   return { data, error };
 };

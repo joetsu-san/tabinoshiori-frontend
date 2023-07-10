@@ -1,4 +1,4 @@
-import { OfficialSpot } from "../../../../../api/@types";
+import { OfficialSpot } from "@/@types";
 
 export function formatTourismForSelector(tourismspotlist: OfficialSpot[]) {
   const formattedData = tourismspotlist.map((spot) => {

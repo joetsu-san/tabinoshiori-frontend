@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { TravelPlanSpot } from "../api/@types";
+import { TravelPlanSpot } from "@/@types";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 

@@ -1,11 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-
+import React, { useState, useEffect } from "react";
+import { Card, Container, Image, Text, ActionIcon, Flex, Group, LoadingOverlay, Box } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
-import React, { use, useEffect } from "react";
-import { useState } from "react";
-import { Card, Container, Image, Text, ActionIcon, Flex, Group, Overlay, LoadingOverlay, Box } from "@mantine/core";
 import { useOfficialSpot } from "@/hooks/useOfficialSpot";
 
 const OfficialSpotDetail = () => {
@@ -20,10 +18,6 @@ const OfficialSpotDetail = () => {
     console.log(tourismDetailDatas);
     console.log(error);
   }, [tourismDetailDatas, error]);
-
-  // if (!router.isReady) {
-  //   return <></>;
-  // }
 
   if (!tourismDetailDatas)
     return (

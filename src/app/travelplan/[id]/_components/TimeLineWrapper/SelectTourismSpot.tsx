@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { forwardRef } from "react";
 import { Group, Avatar, Text, Select, Image, Skeleton } from "@mantine/core";
-import { formatTourismForSelector } from "../../_hooks/formatTourismForSelector";
+import { formatTourismForSelector } from "../../utils/formatTourismForSelector";
 import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";

@@ -15,13 +15,13 @@ export const travelPlanTourismSpotCountState = atom({
   effects: [],
 });
 
-type travelPlanTourismSpotInput = {
+type TravelPlanTourismSpotInput = {
   image: string;
   value: string;
   label: string;
 };
 
-export const travelPlanTourismSpotInputState = atom<travelPlanTourismSpotInput>({
+export const travelPlanTourismSpotInputState = atom<TravelPlanTourismSpotInput>({
   key: "travelPlanTourismSpotInputState",
   default: {
     image: "",

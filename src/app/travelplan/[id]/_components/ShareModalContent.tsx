@@ -1,5 +1,5 @@
 import { usePathname } from "next/navigation";
-import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex } from "@mantine/core";
+import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex, ScrollArea } from "@mantine/core";
 import { IconPaperclip, IconCopy, IconCheck, IconQrcode } from "@tabler/icons-react";
 import { useQRCode } from "next-qrcode";
 
@@ -18,7 +18,6 @@ export const ShareModalContent = () => {
         </ActionIcon>
         <Text fw={600}>URLをコピーする</Text>
       </Flex>
-
       <Box
         sx={(theme) => ({
           display: "flex",
@@ -29,7 +28,9 @@ export const ShareModalContent = () => {
           borderRadius: theme.radius.md,
         })}
       >
-        <Text fw={600}>{currentURL}</Text>
+        <ScrollArea w={300}>
+          <Text fw={600}>{currentURL}</Text>
+        </ScrollArea>
         <CopyButton value={currentURL} timeout={2000}>
           {({ copied, copy }) => (
             <Tooltip label={copied ? "コピー完了" : "コピー"} withArrow position="right">

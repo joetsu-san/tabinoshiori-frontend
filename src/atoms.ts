@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { TravelPlanSpot } from "../api/@types";
+import { TravelPlanSpot } from "@/@types";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -12,6 +12,22 @@ export const travelPlanTourismSpotListState = atom<TravelPlanSpot[]>({
 export const travelPlanTourismSpotCountState = atom({
   key: "totalTourismSpotCountState",
   default: 0,
+  effects: [],
+});
+
+type TravelPlanTourismSpotInput = {
+  image: string;
+  value: string;
+  label: string;
+};
+
+export const travelPlanTourismSpotInputState = atom<TravelPlanTourismSpotInput>({
+  key: "travelPlanTourismSpotInputState",
+  default: {
+    image: "",
+    value: "",
+    label: "",
+  },
   effects: [],
 });
 

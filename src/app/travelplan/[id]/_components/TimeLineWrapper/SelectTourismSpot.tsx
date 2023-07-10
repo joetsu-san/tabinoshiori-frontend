@@ -7,7 +7,6 @@ import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 
 type ItemProps = {
-  value: string;
   image: string;
   label: string;
   comment: string;

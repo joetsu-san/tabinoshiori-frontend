@@ -6,7 +6,7 @@ import { travelPlanTourismSpotListState, travelPlanTourismSpotInputState } from 
 import { Divider, Box, Button, Modal, Textarea, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFlag3, IconPlus } from "@tabler/icons-react";
-import { TravelPlanSpot } from "../../../../../../api/@types";
+import { TravelPlanSpot } from "@/@types";
 import DndkitList from "./DndkitList";
 import { SelectTourismSpot } from "./SelectTourismSpot";
 

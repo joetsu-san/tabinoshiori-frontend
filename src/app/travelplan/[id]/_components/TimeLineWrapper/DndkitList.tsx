@@ -6,7 +6,6 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-
 import { SortableItem } from "./SortableItem";
 import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotListState } from "@/atoms";

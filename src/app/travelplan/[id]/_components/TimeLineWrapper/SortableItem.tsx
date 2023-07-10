@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Card, Image, Modal, Text, Stack, createStyles, rem } from "@mantine/core";
 // import { useDisclosure } from "@mantine/hooks";
 import { IconGripVertical } from "@tabler/icons-react";
-import { TravelPlanSpot } from "../../../../../../api/@types";
+import { TravelPlanSpot } from "@/@types";
 
 type Props = {
   item: TravelPlanSpot;

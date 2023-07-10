@@ -20,8 +20,8 @@ import { useModelcourseBookmarkList } from "@/hooks/useModelcourseBookmarkList";
 
 export const ModelcourseBookmark = () => {
   const { data: modelcourselist, error } = useModelcourseBookmarkList();
-
   const [liked, setLiked] = useState<boolean[]>((modelcourselist ?? Array()).map((_) => true));
+
   const toggleLiked = (index: number) => {
     setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
@@ -48,7 +48,7 @@ export const ModelcourseBookmark = () => {
             { maxWidth: "36rem", cols: 1, spacing: "sm" },
           ]}
         >
-          {modelcourselist!.map((modelcourse, index) => (
+          {modelcourselist.map((modelcourse, index) => (
             <Card key={index} shadow="xs">
               <Card.Section>
                 <Image

@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { SpotList, SpotInfoWindowState, MapHeight } from "@/atoms/SpotAtoms";
 
-import { Card, Image, Text, Button, Group, Input } from "@mantine/core";
+import { Card, Image, Text, Button, Group, Input, Flex, rem, ActionIcon } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
-import { IconArrowBigDown, IconArrowBigUp, IconSearch } from "@tabler/icons-react";
+import { IconArrowBigDown, IconArrowBigUp, IconHeart, IconMapPin, IconSearch } from "@tabler/icons-react";
 
 import { useDebounce } from "../_hooks/useDebounce";
 
 import { SpotInfoWindow } from "./SpotInfoWindow";
 import Link from "next/link";
 import { OfficialSpot } from "@/@types";
+import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
+import { firebaseTokenState } from "@/atoms";
+import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
 
 export const SpotButton = (props: any) => {
   const spotList = useRecoilValue(SpotList); // 観光地データマスター
@@ -24,6 +28,10 @@ export const SpotButton = (props: any) => {
   const [open, setOpen] = useState(false);
   const [mapHeight, setMapHeight] = useRecoilState(MapHeight);
   const [value, toggle] = useToggle([<IconArrowBigUp key={1} />, <IconArrowBigDown key={2} />]);
+
+  const token = useRecoilValue(firebaseTokenState); // ユーザートークン
+  const { data: bookmarkList, error } = useTourismspotBookmarkList(); // ユーザーの観光地ブックマーク
+  const [liked, setLiked] = useState<boolean[]>([]);
 
   const infoOption = {
     pixelOffset: props.offsetSize,
@@ -60,6 +68,22 @@ export const SpotButton = (props: any) => {
       setTempSpotList(spotList);
     }
   }, [debouncedInputText, setTempSpotList, spotList]);
+
+  const handleBookmark = async (id: string) => {
+    await createTourismspotBookmark(id, token!);
+  };
+  const handleRemoveBookmark = async (id: string) => {
+    await deleteTourismspotBookmark(id, token!);
+  };
+
+  useEffect(() => {
+    if (spotList != null)
+      setLiked(spotList.map((spot) => bookmarkList?.some((v) => v.officialSpotDetail.id === spot.id)));
+  }, [bookmarkList, spotList]);
+
+  if (error) return <div>failed to load</div>;
+  if (!bookmarkList) return <div>loading...</div>;
+  if (!liked) return <div>loading...</div>;
 
   return (
     <div
@@ -126,14 +150,31 @@ export const SpotButton = (props: any) => {
 
               <Text weight={500}>{val.title}</Text>
 
-              <Text size="sm" color="dimmed">
-                観光地概要
-              </Text>
-
-              <Group position="apart">
-                <Button variant="light" color="pink" mt="md" radius="md" onClick={() => console.log("お気に入り")}>
-                  お気に入り
-                </Button>
+              <Group position="right">
+                <ActionIcon
+                  variant="light"
+                  size="lg"
+                  radius={50}
+                  mt={"1rem"}
+                  disabled={!token}
+                  onClick={() => {
+                    liked[i] ? handleRemoveBookmark(val.id) : handleBookmark(val.id);
+                    setLiked((prev) => {
+                      const temp = [...prev];
+                      temp[i] = !temp[i];
+                      return temp;
+                    });
+                  }}
+                >
+                  <IconHeart
+                    size="2rem"
+                    stroke={1.5}
+                    style={{
+                      fill: liked[i] ? "red" : "#9999",
+                    }}
+                    color={liked[i] ? "red" : "#9999"}
+                  />
+                </ActionIcon>
                 <Link href={`tourismspot/${i}`}>
                   <Button variant="light" color="blue" mt="md" radius="md">
                     詳細

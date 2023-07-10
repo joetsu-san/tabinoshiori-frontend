@@ -15,6 +15,22 @@ export const travelPlanTourismSpotCountState = atom({
   effects: [],
 });
 
+type travelPlanTourismSpotInput = {
+  image: string;
+  value: string;
+  label: string;
+};
+
+export const travelPlanTourismSpotInputState = atom<travelPlanTourismSpotInput>({
+  key: "travelPlanTourismSpotInputState",
+  default: {
+    image: "",
+    value: "",
+    label: "",
+  },
+  effects: [],
+});
+
 export const firebaseUserIdState = atom<string | undefined>({
   key: "firebaseUserIdState",
   default: undefined,

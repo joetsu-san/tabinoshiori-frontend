@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -7,12 +7,11 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import * as SortableItem from "./SortableItem";
+import { SortableItem } from "./SortableItem";
 import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotListState } from "@/atoms";
 
 const DndkitList = () => {
-  // const [items, setItems] = useState([1, 2, 3]);
   const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
 
   const sensors = useSensors(
@@ -41,9 +40,11 @@ const DndkitList = () => {
         items={travelPlanTourismSpotList.map((item) => item.sortIndex)}
         strategy={verticalListSortingStrategy}
       >
-        {travelPlanTourismSpotList.map((item) => (
-          <SortableItem.SortableItem key={item.travelPlanSpotInfo.id} item={item} sortIndex={item.sortIndex} />
-        ))}
+        <div style={{ width: "90vw" }}>
+          {travelPlanTourismSpotList.map((item) => (
+            <SortableItem key={item.travelPlanSpotId} item={item} sortIndex={item.sortIndex} />
+          ))}
+        </div>
       </SortableContext>
     </DndContext>
   );

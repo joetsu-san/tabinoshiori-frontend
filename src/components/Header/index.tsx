@@ -1,4 +1,4 @@
-import { Header as MantineHeader, Group, Box } from "@mantine/core";
+import { Header as MantineHeader, Group, Box, LoadingOverlay } from "@mantine/core";
 import Image from "next/image";
 import { LoginModal } from "./LoginModal";
 import { SettingsModal } from "./SettingsModal";
@@ -7,7 +7,15 @@ import { firebaseUserIdState } from "@/atoms";
 import { useEffect } from "react";
 
 export const Header = () => {
-  const isLoggedIn = useRecoilValue(firebaseUserIdState) != null;
+  const userId = useRecoilValue(firebaseUserIdState);
+  const isLoggedIn = userId != null;
+
+  // if (!userId)
+  //   return (
+  //     <Box h={"100vh"} maw={400} pos="relative">
+  //       <LoadingOverlay visible={true} zIndex={1}></LoadingOverlay>
+  //     </Box>
+  //   );
 
   return (
     <Box>
@@ -15,7 +23,6 @@ export const Header = () => {
         <Group position="apart" sx={{ height: "100%" }}>
           <Image src="/logo.svg" alt="上越旅のしおり ロゴ" width={130} height={37} priority />
 
-          {/* TODO: ログインしているかしていないかで条件分岐させる */}
           {isLoggedIn ? <SettingsModal /> : <LoginModal />}
         </Group>
       </MantineHeader>

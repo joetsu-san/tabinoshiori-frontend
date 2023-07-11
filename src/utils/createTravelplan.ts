@@ -1,4 +1,4 @@
-import { client } from "../aspida";
+import { client } from "@/lib/aspida";
 
 export const createTravelplan = async (token: string) => {
   const travelPlan = await client.user.travel_plan.$post({

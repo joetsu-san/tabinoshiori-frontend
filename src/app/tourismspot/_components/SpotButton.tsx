@@ -2,9 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { SpotList, SpotInfoWindowState, MapHeight } from "@/atoms/SpotAtoms";
 
-import { Card, Image, Text, Button, Group, Input, Flex, rem, ActionIcon } from "@mantine/core";
+import { Card, Image, Text, Button, Group, Input, Flex, rem, ActionIcon, Tooltip } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
-import { IconArrowBigDown, IconArrowBigUp, IconHeart, IconMapPin, IconSearch } from "@tabler/icons-react";
+import {
+  IconArrowBigDown,
+  IconArrowBigUp,
+  IconHeart,
+  IconHeartBroken,
+  IconMapPin,
+  IconSearch,
+} from "@tabler/icons-react";
 
 import { useDebounce } from "../_hooks/useDebounce";
 
@@ -73,8 +80,8 @@ export const SpotButton = (props: any) => {
   };
 
   useEffect(() => {
-    if (spotList != null)
-      setLiked(spotList.map((spot) => bookmarkList?.some((v) => v.officialSpotDetail.id === spot.id)));
+    if (spotList != null) setLiked(spotList.map((spot) => false));
+    // setLiked(spotList.map((spot) => bookmarkList?.some((v) => v.officialSpotDetail.id === spot.id)));
   }, [bookmarkList, spotList]);
 
   if (error) return <div>failed to load</div>;
@@ -137,40 +144,51 @@ export const SpotButton = (props: any) => {
           return (
             <Card shadow="sm" padding="sm" radius="md" withBorder key={i} onClick={() => showInfoWindow(val)}>
               <Card.Section>
-                <Image
-                  src={val.officialSpotImages.length === 0 ? "/dummyImage.svg" : val.officialSpotImages[0].src}
-                  height={160}
-                  alt="Norway"
-                />
+                <Image src={val.officialSpotImages[0]?.src || "/dummyImage.svg"} height={160} alt="Norway" />
               </Card.Section>
 
               <Text weight={500}>{val.title}</Text>
 
               <Group position="right">
-                <ActionIcon
-                  variant="light"
-                  size="lg"
-                  radius={50}
-                  mt={"1rem"}
-                  disabled={!token}
-                  onClick={() => {
-                    liked[i] ? handleRemoveBookmark(val.id) : handleBookmark(val.id);
-                    setLiked((prev) => {
-                      const temp = [...prev];
-                      temp[i] = !temp[i];
-                      return temp;
-                    });
-                  }}
-                >
-                  <IconHeart
-                    size="2rem"
-                    stroke={1.5}
-                    style={{
-                      fill: liked[i] ? "red" : "#9999",
+                {/* {token ? (
+                  <ActionIcon
+                    variant="light"
+                    size="lg"
+                    radius={50}
+                    mt={"1rem"}
+                    disabled={!token}
+                    onClick={() => {
+                      liked[i] ? handleRemoveBookmark(val.id) : handleBookmark(val.id);
+                      setLiked((prev) => {
+                        const temp = [...prev];
+                        temp[i] = !temp[i];
+                        return temp;
+                      });
                     }}
-                    color={liked[i] ? "red" : "#9999"}
-                  />
-                </ActionIcon>
+                  >
+                    <IconHeart
+                      size="2rem"
+                      stroke={1.5}
+                      style={{
+                        fill: liked[i] ? "red" : "#9999",
+                      }}
+                      color={liked[i] ? "red" : "#9999"}
+                    />
+                  </ActionIcon>
+                ) : (
+                  <Tooltip label="ログイン限定機能です">
+                    <ActionIcon variant="light" size="lg" radius={50} mt={"1rem"}>
+                      <IconHeartBroken
+                        size="2rem"
+                        stroke={1.5}
+                        style={{
+                          fill: "#9999",
+                        }}
+                        color={"#9999"}
+                      />
+                    </ActionIcon>
+                  </Tooltip>
+                )} */}
                 <Link href={`tourismspot/${val.id}`}>
                   <Button variant="light" color="blue" mt="md" radius="md">
                     詳細

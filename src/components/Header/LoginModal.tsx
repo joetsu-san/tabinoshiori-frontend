@@ -1,9 +1,6 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Group, Button, ButtonProps, Center, Image } from "@mantine/core";
-import { sign } from "crypto";
 import { auth, firebaseSignIn } from "@/lib/firebase";
-import axios from "axios";
-import { client } from "@/lib/aspida";
 import { createUser } from "@/utils/createUser";
 
 export const GoogleButton = (props: ButtonProps) => {

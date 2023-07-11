@@ -10,7 +10,7 @@
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
     "prepare": "husky install",
-    "apigen": "npx openapi2aspida -i https://joetsu-tabinoshiori-be.japaneast.cloudapp.azure.com/api-json"
+    "apigen": "npx rimraf ./api && npx openapi2aspida -i https://joetsu-tabinoshiori-be.japaneast.cloudapp.azure.com/api-json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

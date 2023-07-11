@@ -21,10 +21,6 @@ export const SpotButton = (props: any) => {
   const [tempSpotList, setTempSpotList] = useState<OfficialSpot[]>([]); // 検索後観光地データ
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
 
-  useEffect(() => {
-    setTempSpotList(spotList);
-  }, [spotList, setTempSpotList]);
-
   const [open, setOpen] = useState(false);
   const [mapHeight, setMapHeight] = useRecoilState(MapHeight);
   const [value, toggle] = useToggle([<IconArrowBigUp key={1} />, <IconArrowBigDown key={2} />]);
@@ -59,7 +55,7 @@ export const SpotButton = (props: any) => {
   const debouncedInputText = useDebounce(inputText, 500);
   const handleChange = (event: any) => setInputText(event.target.value);
   useEffect(() => {
-    console.log(`「${debouncedInputText}」`);
+    if (spotList == null) return;
     // 観光地検索処理
     if (debouncedInputText != "") {
       const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
@@ -175,7 +171,7 @@ export const SpotButton = (props: any) => {
                     color={liked[i] ? "red" : "#9999"}
                   />
                 </ActionIcon>
-                <Link href={`tourismspot/${i}`}>
+                <Link href={`tourismspot/${val.id}`}>
                   <Button variant="light" color="blue" mt="md" radius="md">
                     詳細
                   </Button>

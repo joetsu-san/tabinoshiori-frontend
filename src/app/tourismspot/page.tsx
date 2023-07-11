@@ -7,7 +7,7 @@ import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { MapCenterState, MapHeight, SpotInfoWindowState, SpotList } from "@/atoms/SpotAtoms";
+import { MapCenterState, MapHeight, SpotInfoWindowState } from "@/atoms/SpotAtoms";
 
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 import { Box, LoadingOverlay } from "@mantine/core";

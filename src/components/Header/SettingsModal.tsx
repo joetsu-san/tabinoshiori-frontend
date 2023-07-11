@@ -16,11 +16,12 @@ import {
   IconGenderMale,
   IconGenderFemale,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { firebaseSignOut } from "@/lib/firebase";
 import { useRecoilValue } from "recoil";
 import { firebaseUserState } from "@/atoms";
 import { useRouter } from "next/navigation";
+import { useUserData } from "@/hooks/useUserData";
 
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -31,6 +32,7 @@ export const SettingsModal = () => {
   const [defaultYear, setYear] = useState<string | undefined>(undefined);
   const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
   const [defaultDay, setDay] = useState<string | undefined>(undefined);
+  const { data, error } = useUserData();
 
   const userInfo = useRecoilValue(firebaseUserState);
 
@@ -211,7 +213,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="生年月日"
-              // description={userInfo.birthday}
+              // description={data[0].birthday}
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
               onClick={() => {

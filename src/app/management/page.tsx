@@ -1,16 +1,15 @@
 "use client";
 
 import { Button, Container, Flex } from "@mantine/core";
+import { NextPageContext } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirectLogin } from "./_functions/redirectLogin";
+import axios from "axios";
+import { useEffect } from "react";
+import useAspidaSWR from "@aspida/swr";
+import { client } from "@/hooks/useAspidaSWRImmutable";
 
-// const redirectLogin = () => {
-//   redirect("/login");
-// }
-
-const Management = () => {
-  // redirect("/management/login")
-
+const Management = (ctx?: NextPageContext) => {
   return (
     <div>
       <p>トップページ</p>

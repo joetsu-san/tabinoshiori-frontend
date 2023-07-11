@@ -11,11 +11,19 @@ import { OfficialSpot } from "../../../../../../api/@types";
 
 type ModalProps = {
   modelCourseList: any[];
-  dispatch: Dispatch<SetStateAction<any[]>>;
+  setModelCourseList: Dispatch<SetStateAction<any[]>>;
+  viewList: any[];
+  setViewList: Dispatch<SetStateAction<any[]>>;
   closeAction: () => void;
 };
 
-export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, closeAction }) => {
+export const AddSpotModal: React.FC<ModalProps> = ({
+  modelCourseList,
+  setModelCourseList,
+  viewList,
+  setViewList,
+  closeAction,
+}) => {
   // const spotList = useRecoilValue(SpotList); // 観光地データマスター
   // const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
 
@@ -30,7 +38,7 @@ export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, 
 
   const text = useForm({
     initialValues: {
-      description: "",
+      comment: "",
       stayMinutes: 1,
     },
   });
@@ -60,27 +68,42 @@ export const AddSpotModal: React.FC<ModalProps> = ({ modelCourseList, dispatch, 
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
+  // 観光スポット選択
   const selectSpot = (data: any) => {
     const spotData = {
       officialSpotId: data.id,
       title: data.title,
+      id: data.id,
     };
+    console.log("selectedSpot", spotData);
     setSelectedSpot(spotData);
   };
 
+  // 観光スポット追加
   const setSpot = (formValues: any) => {
-    const hoge = {
-      description: formValues.description,
+    const viewObj = {
+      title: selectedSpot.title,
+      comment: formValues.comment,
       stayMinutes: formValues.stayMinutes,
-      selectSpot: selectedSpot,
     };
-    dispatch([...modelCourseList, hoge]);
+
+    const tempObj = {
+      officialSpotId: selectedSpot.id,
+      comment: formValues.comment,
+      sortIndex: modelCourseList.length,
+      stayMinute: formValues.stayMinutes,
+      minuteSincePrevious: 1,
+    };
+
+    console.log("tempObj", tempObj);
+    setViewList([...viewList, viewObj]);
+    setModelCourseList([...modelCourseList, tempObj]);
     closeAction();
   };
 
   return (
     <form onSubmit={text.onSubmit((value) => setSpot(value))}>
-      <TextInput label="備考" {...text.getInputProps("description")} />
+      <TextInput label="備考" {...text.getInputProps("comment")} />
       <NumberInput label="滞在時間" mb={20} {...text.getInputProps("stayMinutes")} />
       <div>
         <Input mb={20} placeholder="観光地検索" onChange={handleChange} />

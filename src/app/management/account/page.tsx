@@ -6,13 +6,17 @@ import useAspidaSWR from "@aspida/swr";
 import { Button, Card, Container, Flex } from "@mantine/core";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 const Account = () => {
-  const { data, error } = useAspidaSWR(client.management);
+  const { data, error } = useAspidaSWR(client.management, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
+  console.log(data);
   if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (!Array.isArray(data)) return <div>loading...</div>;
 
   return (
     <div>

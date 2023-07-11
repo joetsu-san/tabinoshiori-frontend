@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import useAspidaSWR from "@aspida/swr";
 
@@ -25,6 +25,7 @@ import { Buffer, File } from "buffer";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
+import { redirectLogin } from "../../_functions/redirectLogin";
 
 type PageProps = {
   params: {
@@ -32,7 +33,8 @@ type PageProps = {
   };
 };
 
-const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
+const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext) => {
+  redirectLogin(ctx);
   const [opened, { open, close }] = useDisclosure(false);
 
   // const {data, error} = useAspidaSWRImmutable(
@@ -83,39 +85,45 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
 
   // アップデート
   const handleSubmit = async (value: any) => {
-    // await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}`,
-    //   {
-    //     "title": value.title,
-    //     "ruby": value.ruby,
-    //     "description": value.description,
-    //     "address": value.address,
-    //     "latitude": value.latitude,
-    //     "longitude": value.longitude,
-    //     "officialSpotStatusId": 1,
-    //   }
-    // )
-    // router.replace("/management/official_spot")
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}`,
+      {
+        title: value.title,
+        ruby: value.ruby,
+        description: value.description,
+        address: value.address,
+        latitude: value.latitude,
+        longitude: value.longitude,
+        officialSpotStatusId: 1,
+      },
+      { withCredentials: true }
+    );
+    router.replace("/management/official_spot");
     console.log("更新");
   };
 
   // 画像更新
-  const fileSubmit = async (value: { files: File[] }) => {
-    // const images = []
-    // for(let i = 0 ; i < value.files.length; i++) {
-    //   const f = value.files[i];
-    //   images.push(await f.arrayBuffer());
-    // }
-    // await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}/image`,
-    //   { "officialSpotImages": images }
-    // )
-    // router.replace("/management/official_spot")
+  const fileSubmit = async (value: any) => {
+    const images = [];
+    for (let i = 0; i < value.files.length; i++) {
+      const f = value.files[i];
+      images.push(await f.arrayBuffer());
+    }
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}/image`,
+      { officialSpotImages: images },
+      { withCredentials: true }
+    );
+    router.replace("/management/official_spot");
     console.log("画像更新");
   };
 
   // 削除
   const deleteSubmit = async () => {
-    // await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/${params.official_spot_id}`)
-    // router.replace("/management/account")
+    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}`, {
+      withCredentials: true,
+    });
+    router.replace("/management/official_spot");
     console.log("削除");
   };
 
@@ -169,15 +177,15 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }) => {
           </Flex>
         </form>
 
-        <Modal opened={opened} onClose={close} title="アカウント管理">
+        <Modal opened={opened} onClose={close} title="観光地管理">
           <Flex direction={"column"} justify={"center"}>
-            <Text>管理者アカウントを削除します</Text>
+            <Text>観光地を削除します</Text>
             <Flex direction={"row"} justify={"space-around"}>
               <Button onClick={close} variant="outline">
                 キャンセル
               </Button>
               <Button onClick={deleteSubmit} color="red">
-                OK
+                削除
               </Button>
             </Flex>
           </Flex>

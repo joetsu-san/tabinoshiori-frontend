@@ -13,8 +13,10 @@ import {
   Textarea,
   Timeline,
   Text,
+  Modal,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { IconArrowBackUp, IconTrash } from "@tabler/icons-react";
 import axios from "axios";
 import { NextPage } from "next";
@@ -30,6 +32,7 @@ type PageProps = {
 };
 
 const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
+  const [opened, { open, close }] = useDisclosure(false);
   const { data, error } = useAspidaSWR(client.model_course._model_course_id(params.model_course_id));
 
   const router = useRouter();
@@ -62,15 +65,26 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 
   // アップデート
   const updateModelCourse = async (value: any) => {
-    // await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course_id/${params.model_course_id}`,
-    // {
-    //   "title": value.title,
-    //   "description": value.description,
-    //   "requiredMinute": value.requiredMinute,
-    // }
-    // )
-    // router.replace("/management/model_course_id")
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course/${params.model_course_id}`,
+      {
+        title: value.title,
+        description: value.description,
+        requiredMinute: data.requiredMinute,
+      },
+      { withCredentials: true }
+    );
+    router.replace("/management/model_course");
     console.log("更新");
+  };
+
+  // 削除
+  const deleteSubmit = async () => {
+    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course/${params.model_course_id}`, {
+      withCredentials: true,
+    });
+    router.replace("/management/model_course");
+    console.log("削除");
   };
 
   // "modelCourseImages": "data:image/jpeg;base64,..."
@@ -107,83 +121,28 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
               })}
             </Timeline>
 
-            <Button type="button" color="red" onClick={() => console.log("削除")}>
+            <Button type="button" color="red" onClick={open}>
               削除
             </Button>
           </Flex>
         </form>
+
+        <Modal opened={opened} onClose={close} title="モデルコース管理">
+          <Flex direction={"column"} justify={"center"}>
+            <Text>モデルコースを削除します</Text>
+            <Flex direction={"row"} justify={"space-around"}>
+              <Button onClick={close} variant="outline">
+                キャンセル
+              </Button>
+              <Button onClick={deleteSubmit} color="red">
+                削除
+              </Button>
+            </Flex>
+          </Flex>
+        </Modal>
       </Container>
     </div>
   );
 };
 
 export default ModelCourseEdit;
-
-export const modelcoursedetail = {
-  id: "00000000-0000-0000-0000-000000000000",
-  title: "モデルコースのタイトル",
-  description: "モデルコースの説明",
-  requiredMinute: 1,
-  modelCourseSpots: [
-    {
-      officialSpotId: "00000000-0000-0000-0000-000000000000",
-      modelCourseId: "00000000-0000-0000-0000-000000000000",
-      sortIndex: 0,
-      minuteSincePrevious: 1,
-      officialSpotTitle: "皇居",
-      officialSpotRuby: "こうきょ",
-      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
-      address: "東京都千代田区千代田1番1号",
-      latitude: 35.6838504,
-      longitude: 139.7434664,
-      officialSpotImages: [
-        {
-          id: "00000000-0000-0000-0000-000000000000",
-          src: "https://example.com/image.jpg",
-        },
-      ],
-      description: "店舗１で〇〇〇〇を食べる",
-      stayMinutes: 15,
-    },
-    {
-      officialSpotId: "10000000-0000-0000-0000-000000000000",
-      modelCourseId: "00000000-0000-0000-0000-000000000000",
-      sortIndex: 0,
-      minuteSincePrevious: 1,
-      officialSpotTitle: "皇居",
-      officialSpotRuby: "こうきょ",
-      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
-      address: "東京都千代田区千代田1番1号",
-      latitude: 35.69397,
-      longitude: 139.7762,
-      officialSpotImages: [
-        {
-          id: "00000000-0000-0000-0000-000000000000",
-          src: "https://example.com/image.jpg",
-        },
-      ],
-      description: "店舗１で〇〇〇〇を食べる",
-      stayMinutes: 15,
-    },
-    {
-      officialSpotId: "20000000-0000-0000-0000-000000000000",
-      modelCourseId: "00000000-0000-0000-0000-000000000000",
-      sortIndex: 0,
-      minuteSincePrevious: 1,
-      officialSpotTitle: "皇居",
-      officialSpotRuby: "こうきょ",
-      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
-      address: "東京都千代田区千代田1番1号",
-      latitude: 37.147887,
-      longitude: 138.2337322,
-      officialSpotImages: [
-        {
-          id: "00000000-0000-0000-0000-000000000000",
-          src: "https://example.com/image.jpg",
-        },
-      ],
-      description: "店舗１で〇〇〇〇を食べる",
-      stayMinutes: 15,
-    },
-  ],
-};

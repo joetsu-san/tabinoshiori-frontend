@@ -20,8 +20,16 @@ import Link from "next/link";
 
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { NextPageContext } from "next";
+import { redirectLogin } from "../../_functions/redirectLogin";
 
-const RegisterSpot = () => {
+const RegisterSpot = (ctx: NextPageContext) => {
+  redirectLogin(ctx);
+  const router = useRouter();
+
+  // バリデーションスキーマ
   const schema = z.object({
     title: z.string().min(1, { message: "観光地名が入力されていません" }),
     ruby: z.string().min(1, { message: "ルビが入力されていません" }),
@@ -62,7 +70,11 @@ const RegisterSpot = () => {
       officialSpotStatusId: 1,
       officialSpotImages: images,
     };
-    console.log(postData);
+
+    await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot`, postData);
+    router.replace("/management/official_spot");
+
+    // console.log(postData);
   };
 
   return (
@@ -108,17 +120,3 @@ const RegisterSpot = () => {
 };
 
 export default RegisterSpot;
-
-/**
- * POST    /management/official_spot
- * {
-    "title": "皇居",
-    "ruby": "こうきょ",
-    "description": "明治天皇以降から現在までの天皇のおすまいです。",
-    "address": "東京都千代田区千代田1番1号",
-    "latitude": 35.6838504,
-    "longitude": 139.7434664,
-    "officialSpotStatusId": 1,
-    "officialSpotImages": "data:image/jpeg;base64,..."
-  }
- */

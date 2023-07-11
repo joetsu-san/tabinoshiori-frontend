@@ -8,8 +8,12 @@ import useAspidaSWR from "@aspida/swr";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
 import { OfficialSpot } from "../../../../api/@types";
+import { NextPageContext } from "next";
+import { redirectLogin } from "../_functions/redirectLogin";
 
-const OfficialSpotPage = () => {
+const OfficialSpotPage = (ctx: NextPageContext) => {
+  redirectLogin(ctx);
+
   // const {data, error} = useAspidaSWRImmutable(
   //   client.official_spot , {}
   // );
@@ -39,6 +43,7 @@ const OfficialSpotPage = () => {
     if (data) setSpotList(data);
   }, [data]);
 
+  // console.log(data)
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 

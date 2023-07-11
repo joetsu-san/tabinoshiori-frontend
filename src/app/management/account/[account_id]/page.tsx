@@ -61,11 +61,16 @@ const AccountEdit: NextPage<PageProps> = ({ params }) => {
 
   // アップデート
   const handleSubmit = async (value: FormType) => {
-    await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/management/${params.account_id}`, {
-      username: value.username,
-      email: value.email,
-      password: value.password,
-    });
+    console.log(value);
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/management/${params.account_id}`,
+      {
+        username: value.username,
+        email: value.email,
+        password: value.password,
+      },
+      { withCredentials: true }
+    );
     router.replace("/management/account");
   };
 

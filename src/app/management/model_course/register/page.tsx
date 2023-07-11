@@ -20,6 +20,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { AddSpotModal } from "./_components/AddSpotModal";
 import { z } from "zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type PageProps = {
   params: {
@@ -28,39 +30,64 @@ type PageProps = {
 };
 
 const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
-  const [modelCourseForm, setModelCourseForm] = useState<any[]>([]);
+  const [modelCourseList, setModelCourseList] = useState<any[]>([]);
+  const [viewList, setViewList] = useState<any[]>([]);
 
   const [opened, { open, close }] = useDisclosure(false);
+
+  const router = useRouter();
 
   const schema = z.object({
     title: z.string().min(1, { message: "モデルコースタイトルを入力してください" }),
     description: z.string().min(1, { message: "モデルコース説明文を入力してください" }),
-    files: z.custom<FileList>(),
   });
 
   const formText = useForm({
     initialValues: {
       title: "",
       description: "",
+      files: [],
     },
     validate: zodResolver(schema),
   });
 
   // 送信時アクション
-  const submitData = (value: any) => {
+  const submitData = async (value: any) => {
+    console.log(value);
+
+    let requireMinute = 0;
+    modelCourseList.forEach((val) => (requireMinute += parseInt(val.stayMinute)));
+
+    const images = [];
+    for (let i = 0; i < value.files.length; i++) {
+      const f = value.files[i];
+      images.push(Buffer.from(await f.arrayBuffer()).toString("base64"));
+    }
+
     const data = {
-      title: "",
-      description: "",
-      modelCourseSpot: modelCourseForm,
+      title: value.title,
+      description: value.description,
+      requiredMinute: requireMinute,
+      modelCourseImages: images,
+      modelCourseSpot: modelCourseList,
     };
+
     console.log(data);
+
+    await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course`, data);
+    router.replace("/management/model_course");
+
+    // console.log(data);
   };
 
   // 観光地削除アクション
   const deleteSpot = (index: number) => {
-    const tempList = [...modelCourseForm];
-    tempList.splice(index, 1);
-    setModelCourseForm(tempList);
+    const tempModelCourseList = [...modelCourseList];
+    const tempViewList = [...viewList];
+    tempModelCourseList.splice(index, 1);
+    tempViewList.splice(index, 1);
+    setModelCourseList(tempModelCourseList);
+    setViewList(tempViewList);
   };
 
   return (
@@ -81,14 +108,14 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
             <Textarea placeholder="説明文" label="モデルコースの説明" {...formText.getInputProps("description")} />
             <FileInput placeholder="画像を選択" label="観光地画像" multiple {...formText.getInputProps("files")} />
 
-            <Timeline active={modelCourseForm.length - 1}>
-              {modelCourseForm.map((val, i) => {
+            <Timeline active={viewList.length - 1}>
+              {viewList.map((val, i) => {
                 return (
                   <Timeline.Item key={i}>
                     <Flex direction={"row"} align={"center"} justify={"space-between"}>
                       <div>
-                        <Text weight={500}>{val.selectSpot.title}</Text>
-                        <p>コメント：{val.description}</p>
+                        <Text weight={500}>{val.title}</Text>
+                        <p>コメント：{val.comment}</p>
                         <p>滞在時間：{val.stayMinutes}分</p>
                       </div>
                       <ActionIcon variant="outline" onClick={() => deleteSpot(i)}>
@@ -100,10 +127,6 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
               })}
             </Timeline>
 
-            <Modal opened={opened} onClose={close} title="観光地追加" size={"xl"}>
-              <AddSpotModal modelCourseList={modelCourseForm} dispatch={setModelCourseForm} closeAction={close} />
-            </Modal>
-
             <Button variant="outline" type="button" leftIcon={<IconPlus />} onClick={open}>
               観光地追加
             </Button>
@@ -113,6 +136,16 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
             </Button>
           </Flex>
         </form>
+
+        <Modal opened={opened} onClose={close} title="観光地追加" size={"xl"}>
+          <AddSpotModal
+            modelCourseList={modelCourseList}
+            setModelCourseList={setModelCourseList}
+            viewList={viewList}
+            setViewList={setViewList}
+            closeAction={close}
+          />
+        </Modal>
       </Container>
     </div>
   );
@@ -120,7 +153,25 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 
 export default ModelCourseEdit;
 
-export const modelcoursedetail = {
+/**
+  {
+  "title": "モデルコースのタイトル",
+  "description": "モデルコースの説明",
+  "requiredMinute": 1,
+  "modelCourseImages": "data:image/jpeg;base64,...",
+  "modelCourseSpot": [
+    {
+      "officialSpotId": "00000000-0000-0000-0000-000000000000",
+      "comment": "00000000-0000-0000-0000-000000000000",
+      "sortIndex": 0,
+      "stayMinute": 1,
+      "minuteSincePrevious": 1
+    }
+  ]
+}
+ */
+
+const modelcoursedetail = {
   id: "00000000-0000-0000-0000-000000000000",
   title: "モデルコースのタイトル",
   description: "モデルコースの説明",

@@ -15,27 +15,78 @@ import {
   IconCheck,
   IconGenderMale,
   IconGenderFemale,
+  IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { firebaseSignOut } from "@/lib/firebase";
+import { auth, firebaseSignOut } from "@/lib/firebase";
 import { useRecoilValue } from "recoil";
 import { firebaseUserState } from "@/atoms";
 import { useRouter } from "next/navigation";
+import { useUserData } from "@/hooks/useUserData";
+import { firebaseUserIdState } from "@/atoms";
 
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
 
-  const [defaultGender, setGender] = useState<string | undefined>(undefined);
+  const [defaultGender, setGender] = useState<Number | undefined>(undefined);
 
   const [defaultYear, setYear] = useState<string | undefined>(undefined);
   const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
   const [defaultDay, setDay] = useState<string | undefined>(undefined);
+  const [defaultBirthday, setBirthday] = useState<string | undefined>(undefined);
 
   const userInfo = useRecoilValue(firebaseUserState);
 
+  const { data, error } = useUserData();
+
+  const firebaseUserId = useRecoilValue(firebaseUserIdState);
+
+  useEffect(() => {
+    if (firebaseUserId) {
+      const obj = returnUserObjectFromId(firebaseUserId);
+      if (obj) {
+        setGender(replaceGenderIdtoGender(obj[0]["genderId"]));
+        if (obj[0]["birthday"]) {
+          const birthday = obj[0]["birthday"].split("T")[0];
+          setYear(birthday.split("-")[0]);
+          setMonth(birthday.split("-")[1]);
+          setDay(birthday.split("-")[2]);
+          setBirthday(birthday);
+          console.log(birthday);
+        }
+      }
+    }
+  }, [data, error]);
+
+  const replaceGenderIdtoGender = (genderId: Number | undefined) => {
+    switch (genderId) {
+      case 1:
+        return "男性";
+      case 2:
+        return "女性";
+      case 3:
+        return "その他";
+      default:
+        return "未設定";
+    }
+  };
+
+  const returnUserObjectFromId = (userId: string) => {
+    if (data) {
+      return data.filter((obj) => obj.id === userId);
+    }
+    return null;
+  };
+
   const handleLogout = () => {
     firebaseSignOut();
+    modals.closeAll();
+    router.push("/tourismspot");
+  };
+
+  const handleDelete = () => {
+    // firebaseSignOut();
     modals.closeAll();
     router.push("/tourismspot");
   };
@@ -160,6 +211,46 @@ export const SettingsModal = () => {
       ),
     });
 
+  //アカウント削除モーダル
+  const openDeleteModal = () =>
+    modals.open({
+      padding: "0px",
+      centered: true,
+      radius: 10,
+      withCloseButton: false,
+      children: (
+        <>
+          <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
+            <Button variant="subtle" color="dark" onClick={() => modals.closeAll()} w={"20%"}>
+              <IconX></IconX>
+            </Button>
+            <Box w={"75%"}>
+              <Text ml={"18%"}>アカウント削除</Text>
+            </Box>
+          </Group>
+          <Divider></Divider>
+          <Box p={"20px"}>
+            <Text my={20}>アカウント削除してもよろしいですか？</Text>
+            <Group position="apart">
+              <Button
+                onClick={() => {
+                  modals.closeAll();
+                  openSettingModal();
+                }}
+                variant="light"
+                color="gray"
+              >
+                キャンセル
+              </Button>
+              <Button color="red" onClick={handleDelete}>
+                削除
+              </Button>
+            </Group>
+          </Box>
+        </>
+      ),
+    });
+
   const openSettingModal = () =>
     modals.open({
       withCloseButton: false,
@@ -188,15 +279,19 @@ export const SettingsModal = () => {
           {/* TODO: 中身の実装 */}
           {/* ログインしてる時のモーダルコンテンツ */}
           <Box sx={{ width: "100%" }}>
-            <NavLink label="ユーザー名" description="hogehoge" icon={<IconUser size="1.5rem" stroke={1.5} />} />
+            <NavLink
+              label="ユーザー名"
+              description={userInfo?.displayName}
+              icon={<IconUser size="1.5rem" stroke={1.5} />}
+            />
             <NavLink
               label="メールアドレス"
-              description="hoge@example.com"
+              description={userInfo?.email}
               icon={<IconMail size="1.5rem" stroke={1.5} />}
             />
             <NavLink
               label="性別"
-              // description={}
+              description={replaceGenderIdtoGender(defaultGender)}
               icon={
                 <>
                   <IconGenderMale height={"1.5rem"} width={"0.75rem"} />
@@ -211,7 +306,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="生年月日"
-              // description={userInfo.birthday}
+              description={defaultBirthday}
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
               onClick={() => {
@@ -229,6 +324,19 @@ export const SettingsModal = () => {
               onClick={() => {
                 modals.closeAll();
                 openLogoutModal();
+              }}
+            />
+            <NavLink
+              label="アカウント削除"
+              icon={<IconTrash size="1.5rem" stroke={1.5} />}
+              rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+              active={true}
+              color="red"
+              py={15}
+              variant="filled"
+              onClick={() => {
+                modals.closeAll();
+                openDeleteModal();
               }}
             />
           </Box>
@@ -272,6 +380,43 @@ export const LogoutModal = () => {
         icon={<IconLogout size="1.5rem" stroke={1.5} />}
         rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         active={true}
+        color="red"
+        py={15}
+        onClick={open}
+      />
+    </>
+  );
+};
+// ユーザー削除用modal
+export const Deletemodal = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const handleDelete = () => {
+    console.log("削除");
+    close();
+    // firebaseSignOut();
+  };
+
+  return (
+    <>
+      <Modal opened={opened} onClose={close} centered title="アカウント削除してもよろしいですか？">
+        <Text my={20}></Text>
+        <Group position="apart">
+          <Button onClick={close} variant="light" color="gray">
+            キャンセル
+          </Button>
+          <Button color="red" onClick={handleDelete}>
+            削除
+          </Button>
+        </Group>
+      </Modal>
+
+      <NavLink
+        label="アカウント削除"
+        icon={<IconTrash size="1.5rem" stroke={1.5} />}
+        rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        active={true}
+        variant="filled"
         color="red"
         py={15}
         onClick={open}

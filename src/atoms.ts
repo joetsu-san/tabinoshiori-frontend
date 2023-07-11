@@ -39,3 +39,15 @@ export const firebaseUserState = atom<FirebaseUser | null>({
     },
   ],
 });
+
+export const firebaseTokenState = atom<string | null>({
+  key: "firebaseTokenState",
+  default: null,
+  effects: [
+    ({ setSelf }) => {
+      const user = auth.currentUser;
+      if (!user) return setSelf(null);
+      user.getIdToken().then((token) => setSelf(token));
+    },
+  ],
+});

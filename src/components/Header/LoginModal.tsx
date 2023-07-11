@@ -8,7 +8,8 @@ import { createUser } from "@/lib/createUser";
 
 export const GoogleButton = (props: ButtonProps) => {
   const handleLogin = async () => {
-    const [token, displayName] = await firebaseSignIn();
+    await firebaseSignIn();
+    const token = await auth.currentUser?.getIdToken();
     const name = auth.currentUser?.displayName;
     if (name == null) return;
     if (token == null) return;

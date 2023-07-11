@@ -1,80 +1,18 @@
 "use client";
 import type { NextPage } from "next";
+import { useEffect } from "react";
 import { IconWriting } from "@tabler/icons-react";
 import { TravelPlanCard } from "./_component/TravelplanCard";
-import { Button } from "@mantine/core";
-import { TravelPlanDetail } from "@/@types";
+import { Button, Box, LoadingOverlay } from "@mantine/core";
+import { useTravelPlanList } from "@/hooks/useTravelPlanList";
 
 const Page: NextPage = () => {
-  const travelPlans: TravelPlanDetail[] = [
-    {
-      id: "1",
-      title: "旅のタイトル",
-      authorId: "bfwiuqbfwq",
-      description: "旅の説明",
-      visitedAt: "",
-      travelPlanSpots: [
-        {
-          travelPlanSpotInfo: {
-            id: "1",
-            title: "上越妙高駅",
-            description: "string",
-            address: "string",
-            latitude: 31,
-            longitude: 30,
-            ruby: "じょうえつみょうこうえき",
-            officialSpotStatus: {
-              id: 1,
-              title: "open",
-            },
-            officialSpotImages: [
-              {
-                id: "1",
-                src: "https://picsum.photos/200/300",
-              },
-            ],
-          },
-          comment: "string",
-          sortIndex: 1,
-          minuteSincePrevious: 1,
-        },
-      ],
-    },
-    {
-      id: "2",
-      title:
-        "タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトル",
-      authorId: "bfwiuqbfwq",
-      description: "説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明",
-      visitedAt: "",
-      travelPlanSpots: [
-        {
-          travelPlanSpotInfo: {
-            id: "1",
-            title: "上越妙高駅",
-            description: "string",
-            address: "string",
-            latitude: 31,
-            longitude: 30,
-            ruby: "じょうえつみょうこうえき",
-            officialSpotStatus: {
-              id: 1,
-              title: "open",
-            },
-            officialSpotImages: [
-              {
-                id: "1",
-                src: "https://picsum.photos/200/300",
-              },
-            ],
-          },
-          comment: "string",
-          sortIndex: 1,
-          minuteSincePrevious: 1,
-        },
-      ],
-    },
-  ];
+  const { data: travelplanList, error } = useTravelPlanList();
+
+  useEffect(() => {
+    console.log(travelplanList);
+    console.log(error);
+  }, [travelplanList, error]);
 
   return (
     <main
@@ -89,9 +27,13 @@ const Page: NextPage = () => {
         旅のしおりを作成する
       </Button>
 
-      {travelPlans.map((travelplan) => (
-        <TravelPlanCard travelplan={travelplan} key={travelplan.id} />
-      ))}
+      {!travelplanList ? (
+        <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
+          <LoadingOverlay visible={!travelplanList} zIndex={1}></LoadingOverlay>
+        </Box>
+      ) : (
+        travelplanList.map((travelplan) => <TravelPlanCard travelplan={travelplan} key={travelplan.id} />)
+      )}
     </main>
   );
 };

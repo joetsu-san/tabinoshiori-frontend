@@ -1,9 +1,10 @@
 import { useRef } from "react";
+import Link from "next/link";
 import Autoplay from "embla-carousel-autoplay";
 import { Carousel } from "@mantine/carousel";
 import { useMediaQuery } from "@mantine/hooks";
 import { createStyles, Paper, Text, Title, Button, useMantineTheme, rem } from "@mantine/core";
-import { modelcourselist } from "@/mock/mockdata";
+import { ModelCourseOverview } from "@/@types";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -34,38 +35,46 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type CardProps = {
-  image: string;
-  title: string;
-  requiredMinute: string;
+  modelcourse: ModelCourseOverview;
 };
 
-const Card = ({ image, title, requiredMinute }: CardProps) => {
+const Card = ({ modelcourse }: CardProps) => {
   const { classes } = useStyles();
 
   return (
-    <Paper shadow="md" p="xl" radius="md" sx={{ backgroundImage: `url(${image})` }} className={classes.card}>
+    <Paper
+      shadow="md"
+      p="xl"
+      radius="md"
+      sx={{ backgroundImage: `url(${modelcourse.modelCourseImages[0]?.src || "/dummyImage.svg"})` }}
+      className={classes.card}
+    >
       <div>
         <Text className={classes.requiredMinute} size="xs">
-          {requiredMinute}
+          {modelcourse.requiredMinute}分
         </Text>
         <Title order={3} className={classes.title}>
-          {title}
+          {modelcourse.title}
         </Title>
       </div>
-      <Button variant="white" color="dark">
+      <Button variant="white" color="dark" component={Link} href={"/modelcourse/" + modelcourse.id}>
         詳細を見る
       </Button>
     </Paper>
   );
 };
 
-export const CardsCarousel = () => {
+type CardsCarouselProps = {
+  data: ModelCourseOverview[];
+};
+
+export const CardsCarousel = ({ data }: CardsCarouselProps) => {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const theme = useMantineTheme();
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
-  const slides = modelcourselist.map((modelcourse) => (
+  const slides = data.map((modelcourse) => (
     <Carousel.Slide key={modelcourse.title}>
-      <Card {...modelcourse} />
+      <Card modelcourse={modelcourse} />
     </Carousel.Slide>
   ));
 

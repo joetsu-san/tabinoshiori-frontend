@@ -14,7 +14,6 @@ const ModelCourse = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [msg, setMsg] = useState(false);
   useEffect(() => {
-    console.log(data);
     console.log(error);
     setListData(data);
   }, [data, error]);
@@ -47,9 +46,6 @@ const ModelCourse = () => {
         <>
           <CardsCarousel />
           <Box>
-            <Title size={25} align="center" mt={30}>
-              モデルコース一覧
-            </Title>
             <Input
               placeholder="検索"
               radius={20}
@@ -67,7 +63,7 @@ const ModelCourse = () => {
               size="md"
               style={{ zIndex: 100 }}
             />
-            <ModelCourseList ser={searchValue} modelcourselist={listData} msg={msg ? true : false} />
+            <ModelCourseList ser={searchValue} modelcourselist={listData} msg={msg} />
           </Box>
         </>
       )}

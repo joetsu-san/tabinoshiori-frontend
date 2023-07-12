@@ -9,6 +9,7 @@ import { IconFlag3, IconPlus } from "@tabler/icons-react";
 import { TravelPlanSpot } from "@/@types";
 import DndkitList from "./DndkitList";
 import { SelectTourismSpot } from "./SelectTourismSpot";
+import { useCreateTravelPlanSpot } from "@/hooks/useCreateTravelPlanSpot";
 
 type Props = {
   ref: RefObject<HTMLDivElement>;
@@ -21,9 +22,20 @@ export const TimeLineWrapper = (props: Props) => {
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
   const [opened, { open, close }] = useDisclosure(false);
   const [comment, setComment] = useState<string>("");
+  const { createTravelPlanSpot } = useCreateTravelPlanSpot();
 
-  const handleTourismSpotCount = () => {
+  const handleTourismSpotCount = async () => {
     // TODO: トラベルプランpostの処理を書く
+    const tourismSpotId = travelPlanTourismSpotInput.value;
+    const sortIndex = travelPlanTourismSpotList.length + 1;
+    const minuteSincePrevious = 15;
+    const newTravelPlanSpot = await createTravelPlanSpot(id, {
+      tourismSpotId,
+      comment,
+      sortIndex,
+      minuteSincePrevious,
+    });
+    console.log("newTravelPlanSpot", newTravelPlanSpot);
 
     // MEMO: バックエンドからとってくるモックデータ。今はフロントだけでも追加できているように見えるようにtitle, src, commentに入力データを入れている
     const travelPlanSpot: TravelPlanSpot = {

@@ -1,67 +1,13 @@
-import axios from "axios";
-import { atom, selector } from "recoil";
-import aspida from "@aspida/axios";
-import api from "../../api/official_spot/$api";
-
-const positionData: OfficialSpotOverview[] = [
-  {
-    id: "aaaa",
-    title: "秋葉原",
-    ruby: "あきはばら",
-    description: "",
-    address: "",
-    latitude: 35.69731,
-    longitude: 139.7747,
-    officialSpotStatus: "open",
-  },
-  {
-    id: "bbbb",
-    title: "岩本町",
-    ruby: "いわもとちょう",
-    description: "",
-    address: "",
-    latitude: 35.69397,
-    longitude: 139.7762,
-    officialSpotStatus: "open",
-  },
-  {
-    id: "cccc",
-    title: "上越市",
-    ruby: "じょうえつし",
-    description: "",
-    address: "",
-    latitude: 37.147976,
-    longitude: 138.236285,
-    officialSpotStatus: "open",
-  },
-];
+import { atom } from "recoil";
+import { OfficialSpot } from "@/@types";
 
 // 観光地一覧
-export const SpotList = atom({
+export const SpotList = atom<OfficialSpot[]>({
   key: "SpotList",
-  default: <OfficialSpotOverview[]>positionData,
+  default: undefined,
 });
 
-// export const SpotList = atom({
-//   key: "SpotList",
-//   default: selector({
-//     key: 'savedTodoListState',
-//     get: async ({get}) => {
-//       try {
-//         const axiosConfig = {
-//           baseURL: "http://localhost:4000"
-//         }
-//         const client = api(aspida(axios, axiosConfig));
-//         const res = await client.$get()
-//         return res;
-//       } catch (error) {
-//         throw error;
-//       }
-//     },
-//   }),
-// });
-
-// infoWindow　表示用
+// infoWindow 表示用
 export const SpotInfoWindowState = atom({
   key: "SpotInfoState",
   default: <any>undefined,

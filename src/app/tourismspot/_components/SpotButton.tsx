@@ -1,42 +1,46 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { SpotList, SpotInfoWindowState, MapHeight } from "@/atoms/SpotAtoms";
 
-import { Card, Image, Text, Button, Group, Input } from "@mantine/core";
+import { Card, Image, Text, Button, Group, Input, Flex, rem, ActionIcon, Tooltip } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
-import { IconAt, IconArrowBigDown, IconArrowBigUp } from "@tabler/icons-react";
+import {
+  IconArrowBigDown,
+  IconArrowBigUp,
+  IconHeart,
+  IconHeartBroken,
+  IconMapPin,
+  IconSearch,
+} from "@tabler/icons-react";
 
 import { useDebounce } from "../_hooks/useDebounce";
 
 import { SpotInfoWindow } from "./SpotInfoWindow";
 import Link from "next/link";
-
-// スポット情報
-type OfficialSpotOverview = {
-  id: string;
-  title: string;
-  ruby: string;
-  description: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  officialSpotStatus: "open" | "close";
-};
+import { OfficialSpot } from "@/@types";
+import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
+import { firebaseTokenState } from "@/atoms";
+import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
 
 export const SpotButton = (props: any) => {
   const spotList = useRecoilValue(SpotList); // 観光地データマスター
-  const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
+  const [tempSpotList, setTempSpotList] = useState<OfficialSpot[]>([]); // 検索後観光地データ
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
 
   const [open, setOpen] = useState(false);
   const [mapHeight, setMapHeight] = useRecoilState(MapHeight);
   const [value, toggle] = useToggle([<IconArrowBigUp key={1} />, <IconArrowBigDown key={2} />]);
 
+  const token = useRecoilValue(firebaseTokenState); // ユーザートークン
+  const { data: bookmarkList, error } = useTourismspotBookmarkList(); // ユーザーの観光地ブックマーク
+  const [liked, setLiked] = useState<boolean[]>([]);
+
   const infoOption = {
     pixelOffset: props.offsetSize,
   };
 
-  const showInfoWindow = (spot: OfficialSpotOverview) => {
+  const showInfoWindow = (spot: OfficialSpot) => {
     setSpotInfoWindow(<SpotInfoWindow spot={spot} infoOption={infoOption} />);
     setMapHeight(40);
     setOpen(false);
@@ -58,7 +62,7 @@ export const SpotButton = (props: any) => {
   const debouncedInputText = useDebounce(inputText, 500);
   const handleChange = (event: any) => setInputText(event.target.value);
   useEffect(() => {
-    console.log(`「${debouncedInputText}」`);
+    if (spotList == null) return;
     // 観光地検索処理
     if (debouncedInputText != "") {
       const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
@@ -67,6 +71,22 @@ export const SpotButton = (props: any) => {
       setTempSpotList(spotList);
     }
   }, [debouncedInputText, setTempSpotList, spotList]);
+
+  const handleBookmark = async (id: string) => {
+    await createTourismspotBookmark(id, token!);
+  };
+  const handleRemoveBookmark = async (id: string) => {
+    await deleteTourismspotBookmark(id, token!);
+  };
+
+  useEffect(() => {
+    if (spotList != null) setLiked(spotList.map((spot) => false));
+    // setLiked(spotList.map((spot) => bookmarkList?.some((v) => v.officialSpotDetail.id === spot.id)));
+  }, [bookmarkList, spotList]);
+
+  if (error) return <div>failed to load</div>;
+  if (!bookmarkList) return <div>loading...</div>;
+  if (!liked) return <div>loading...</div>;
 
   return (
     <div
@@ -104,7 +124,12 @@ export const SpotButton = (props: any) => {
         >
           {value}
         </button>
-        <Input icon={<IconAt />} placeholder="観光地検索" onChange={handleChange} />
+        <Input
+          placeholder="観光地検索"
+          radius={20}
+          icon={<IconSearch color="#eee" style={{ zIndex: 0 }} />}
+          onChange={handleChange}
+        />
       </div>
 
       <div
@@ -119,24 +144,52 @@ export const SpotButton = (props: any) => {
           return (
             <Card shadow="sm" padding="sm" radius="md" withBorder key={i} onClick={() => showInfoWindow(val)}>
               <Card.Section>
-                <Image
-                  src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                  height={160}
-                  alt="Norway"
-                />
+                <Image src={val.officialSpotImages[0]?.src || "/dummyImage.svg"} height={160} alt="Norway" />
               </Card.Section>
 
               <Text weight={500}>{val.title}</Text>
 
-              <Text size="sm" color="dimmed">
-                観光地概要
-              </Text>
-
-              <Group position="apart">
-                <Button variant="light" color="pink" mt="md" radius="md" onClick={() => console.log("お気に入り")}>
-                  お気に入り
-                </Button>
-                <Link href={`tourismspot/${i}`}>
+              <Group position="right">
+                {/* {token ? (
+                  <ActionIcon
+                    variant="light"
+                    size="lg"
+                    radius={50}
+                    mt={"1rem"}
+                    disabled={!token}
+                    onClick={() => {
+                      liked[i] ? handleRemoveBookmark(val.id) : handleBookmark(val.id);
+                      setLiked((prev) => {
+                        const temp = [...prev];
+                        temp[i] = !temp[i];
+                        return temp;
+                      });
+                    }}
+                  >
+                    <IconHeart
+                      size="2rem"
+                      stroke={1.5}
+                      style={{
+                        fill: liked[i] ? "red" : "#9999",
+                      }}
+                      color={liked[i] ? "red" : "#9999"}
+                    />
+                  </ActionIcon>
+                ) : (
+                  <Tooltip label="ログイン限定機能です">
+                    <ActionIcon variant="light" size="lg" radius={50} mt={"1rem"}>
+                      <IconHeartBroken
+                        size="2rem"
+                        stroke={1.5}
+                        style={{
+                          fill: "#9999",
+                        }}
+                        color={"#9999"}
+                      />
+                    </ActionIcon>
+                  </Tooltip>
+                )} */}
+                <Link href={`tourismspot/${val.id}`}>
                   <Button variant="light" color="blue" mt="md" radius="md">
                     詳細
                   </Button>

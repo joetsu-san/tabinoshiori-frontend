@@ -1,54 +1,113 @@
 "use client";
 
 import { useParams } from "next/navigation";
-
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, Container, Image, Text, ActionIcon, Flex, Group, AspectRatio } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
-import React from "react";
-import { useState } from "react";
-import { Container, Box, Card, Image, Text, SimpleGrid, Stack, ActionIcon, Grid, Flex } from "@mantine/core";
-
-const bookmarkdata: Bookmarkdata = {
-  title: "上越市立歴史博物館",
-  image:
-    "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
-  address: "新潟県上越市本城町7-7",
-  description:
-    "昭和47年に開館した上越市立総合博物館は、平成30年7月21日（土）、高田城址公園（高田城跡）という立地を生かし、上越市立歴史博物館として再スタートしました。「越後の都」をテーマに、安土桃山時代以降の地域を歴史を解説する常設展示室を整備しました。春日山城・福島城・高田城の三城の変遷やその時代背景、そしてその後の地域の発展の様子を学ぶことができます。内堀や本丸土塁に臨む１階ラウンジや三重櫓から妙高山・米山までを一望する屋上デッキへ無料でご入館いただけます。新装したカフェコーナー・ミュージアムショップも、高田城址公園（高田城跡）の散策や街歩き、上越市内歴史探訪への出発点やお休みどころとしてご利用いただけます。",
-};
-type Bookmarkdata = {
-  title: string;
-  image: string;
-  address: string;
-  description: string;
-};
+import { useOfficialSpot } from "@/hooks/useOfficialSpot";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
+import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
+import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
 
 const OfficialSpotDetail = () => {
   const router = useParams();
   const spotId = router.official_spot_id;
+  const { data: tourismDetailDatas, error: tourismDetailDatasError } = useOfficialSpot(spotId);
+  const { data: tourismspotBookmark, error: tourismspotBookmarkError } = useTourismspotBookmarkList();
+  const [liked, setLiked] = useState<boolean>(false);
+  const token = useRecoilValue(firebaseTokenState);
 
-  const [liked, setLiked] = useState<boolean>(true);
+  const handleLike = useCallback(async () => {
+    if (liked) {
+      await deleteTourismspotBookmark(spotId, token!!);
+    } else {
+      await createTourismspotBookmark(spotId, token!!);
+    }
+    setLiked((prev) => !prev);
+  }, [liked, spotId, token]);
+
+  useEffect(() => {
+    setLiked(tourismspotBookmark?.some((bookmark) => bookmark.officialSpotDetail.id === spotId));
+  }, [spotId, tourismspotBookmark]);
+
+  if (!tourismDetailDatas) return <LoadingDisplay />;
 
   return (
     <div>
-      <Image src={bookmarkdata.image} fit="cover" alt="サンプル画像" height={300} />
-      <Container size="xl" mt={30}>
+      <Image
+        src={tourismDetailDatas.officialSpotImages[0]?.src || "/dummyImage.svg"}
+        fit="cover"
+        alt="観光地画像"
+        height={300}
+      />
+      <Container size="xl" mt={15} style={{ position: "relative" }} pb="6rem">
+        <Text size={10} pt="30">
+          {tourismDetailDatas.ruby}
+        </Text>
         <Flex gap="xs" justify="space-between" align="flex-start" direction="row" wrap="wrap">
-          <Text fw={600} size={18} mb={15}>
-            {bookmarkdata.title}
-          </Text>
-
-          <ActionIcon onClick={() => setLiked(!liked)} mb={15}>
-            <IconHeart size="1.8rem" color={liked ? "red" : "#9999"} stroke={1.5} />
+          <Group>
+            <Text fw={600} size={18} mb={10}>
+              {tourismDetailDatas.title}
+            </Text>
+          </Group>
+          <ActionIcon
+            disabled={!token}
+            onClick={handleLike}
+            mb={15}
+            variant="light"
+            size="xxl"
+            p={10}
+            radius={50}
+            style={{
+              position: "absolute",
+              top: "-2.5rem",
+              right: "1rem",
+              boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.1)",
+              border: "solid 1px #dddd",
+            }}
+          >
+            <IconHeart
+              size="2rem"
+              color={liked ? "red" : "#9999"}
+              stroke={1.5}
+              style={{ fill: liked ? "red" : "#9999" }}
+            />
           </ActionIcon>
         </Flex>
 
-        <Text fw={500} size={14} color={"#555555"} mb={15}>
-          {bookmarkdata.address}
-        </Text>
+        <Text size={12}>{tourismDetailDatas.description}</Text>
 
-        <Text size={12} lineClamp={3}>
-          {bookmarkdata.description}
-        </Text>
+        <Card p={0} h={300} mt={10} pt={30}>
+          <Flex align="center">
+            <IconMapPin size="1.1rem" strokeWidth={2} color={"#15aabf"} />
+            <Text
+              fw={600}
+              size={15}
+              style={{
+                color: "#15aabf",
+              }}
+            >
+              住所
+            </Text>
+          </Flex>
+          <Text fw={500} size={14} color={"#555555"} mb={10}>
+            {tourismDetailDatas.address}
+          </Text>
+          <AspectRatio ratio={16 / 16}>
+            <iframe
+              src={`https://maps.google.com/maps?output=embed&q=${tourismDetailDatas.title}&ll=${tourismDetailDatas.latitude},${tourismDetailDatas.longitude}&t=m&hl=ja&z=18`}
+              title="Google map"
+              width="100%"
+              height="100%"
+              style={{ border: 0, borderRadius: 5 }}
+              loading="lazy"
+              allowFullScreen
+            />
+          </AspectRatio>
+        </Card>
       </Container>
     </div>
   );

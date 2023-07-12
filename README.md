@@ -13,6 +13,11 @@ npm install
 npm run dev
 ```
 
+aspidaの型生成, 更新
+```
+npm run apigen
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## commit message

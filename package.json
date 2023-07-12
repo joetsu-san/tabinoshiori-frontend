@@ -9,7 +9,8 @@
     "lint": "next lint --dir src",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "apigen": "npx rimraf ./api && npx openapi2aspida -i https://joetsu-tabinoshiori-be.japaneast.cloudapp.azure.com/api-json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -21,6 +22,8 @@
     "@aspida/axios": "^1.12.0",
     "@aspida/fetch": "^1.12.0",
     "@aspida/swr": "^1.12.0",
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "^11.11.1",
     "@emotion/server": "^11.11.0",
     "@mantine/carousel": "^6.0.13",
@@ -51,6 +54,7 @@
     "embla-carousel-react": "^7.0.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
+    "firebase": "^9.23.0",
     "next": "13.4.4",
     "next-qrcode": "^2.4.1",
     "nookies": "^2.5.2",
@@ -65,9 +69,11 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "encoding": "^0.1.13",
     "eslint-config-prettier": "^8.8.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
+    "next-intercept-stdout": "^1.0.1",
     "prettier": "^2.8.8"
   }
 }

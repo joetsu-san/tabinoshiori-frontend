@@ -7,11 +7,10 @@ import { SpotMarker } from "./_components/SpotMarker";
 import { SpotButton } from "./_components/SpotButton";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { SpotList, MapCenterState, MapHeight, SpotInfoWindowState } from "@/atoms/SpotAtoms";
+import { MapCenterState, MapHeight, SpotInfoWindowState } from "@/atoms/SpotAtoms";
 
-import axios from "axios";
-import aspida from "@aspida/axios";
-import api from "../../../api/official_spot/$api";
+import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
+import { Box, LoadingOverlay } from "@mantine/core";
 
 const key = process.env.NEXT_PUBLIC_GOOGLEMAP_KEY as string;
 
@@ -27,6 +26,8 @@ const TourismSpot = () => {
   const setSpotInfoWindow = useSetRecoilState(SpotInfoWindowState);
   const mapHeight = useRecoilValue(MapHeight);
 
+  const { data, error } = useOfficialSpotList();
+
   // マップサイズ
   const containerStyle = {
     height: "100%",
@@ -40,20 +41,16 @@ const TourismSpot = () => {
     };
   }, [setMapCenter, setSpotInfoWindow]);
 
-  // useEffect(() => {
-  //   const axiosConfig = {
-  //     baseURL: "http://localhost:4000/api"
-  //   }
-  //   const client = api(aspida(axios, axiosConfig));
-  //   (async () => {
-  //     const res = await client.$get()
-  //     setSpotList(res)
-  //   })();
-  // }, [setSpotList])
-
   const createOffsetSize = () => {
     return setSize(new window.google.maps.Size(0, -45));
   };
+
+  if (!data)
+    return (
+      <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
+        <LoadingOverlay visible={true} zIndex={1}></LoadingOverlay>
+      </Box>
+    );
 
   return (
     <div>

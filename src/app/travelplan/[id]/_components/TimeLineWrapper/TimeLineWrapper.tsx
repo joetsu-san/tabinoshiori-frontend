@@ -1,43 +1,36 @@
 "use client";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { RefObject } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { travelPlanTourismSpotListState, travelPlanTourismSpotInputState, firebaseTokenState } from "@/atoms";
 import { Divider, Box, Button, Modal, Textarea, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFlag3, IconPlus } from "@tabler/icons-react";
-import { TravelPlanSpot } from "@/@types";
 import DndkitList from "./DndkitList";
 import { SelectTourismSpot } from "./SelectTourismSpot";
-import { updateTravelPlanOverview } from "@/utils/updateTravelPlanOverview";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { createTravelPlanSpot } from "@/utils/createTravelPlanSpot";
 
 type Props = {
   ref: RefObject<HTMLDivElement>;
+  collaborateId: string;
 };
 
 export const TimeLineWrapper = (props: Props) => {
-  const { ref } = props;
-  const commentRef = useRef<HTMLTextAreaElement>(null);
+  const { ref, collaborateId } = props;
   const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
   const [opened, { open, close }] = useDisclosure(false);
   const [comment, setComment] = useState<string>("");
-  const router = useSearchParams();
-  const travelPlanId = router.get("id");
+  const router = useParams();
 
   const token = useRecoilValue(firebaseTokenState);
 
-  useEffect(() => {
-    console.log(travelPlanId);
-  }, [travelPlanId]);
-
   const handleTourismSpotCount = async () => {
-    await createTravelPlanSpot(travelPlanId!, {
+    await createTravelPlanSpot(collaborateId!, {
       tourismSpotId: travelPlanTourismSpotInput.id,
-      comment: commentRef.current!.value,
-      sortIndex: travelPlanTourismSpotList[travelPlanTourismSpotList.length].sortIndex + 1,
+      comment: comment,
+      sortIndex: travelPlanTourismSpotList.length + 1,
       minuteSincePrevious: 5,
     });
     // setTravelPlanTourismSpotList([...travelPlanTourismSpotList, travelPlanSpot]);
@@ -70,7 +63,7 @@ export const TimeLineWrapper = (props: Props) => {
           <SelectTourismSpot />
           <Textarea
             value={comment}
-            ref={commentRef}
+            onChange={(e) => setComment(e.currentTarget.value)}
             placeholder="コメントを入力してください"
             label="コメント"
             size="md"

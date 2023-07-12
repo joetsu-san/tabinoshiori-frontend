@@ -1,31 +1,32 @@
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Group,
-  Image,
-  LoadingOverlay,
-  SimpleGrid,
-  Stack,
-  Tabs,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Button, Card, Container, Flex, Group, Image, SimpleGrid, Stack, Tabs, Text } from "@mantine/core";
 import { IconClockFilled, IconHeart } from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useModelcourseBookmarkList } from "@/hooks/useModelcourseBookmarkList";
 import { LoadingDisplay } from "@/components/LoadingDisplay";
+import { removeModelcourseBookmark } from "@/utils/removeModelcourseBookmark";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
+import { createModelcourseBookmark } from "@/utils/createModelcourseBookmark";
 
 export const ModelcourseBookmark = () => {
   const { data: modelcourselist, error, mutate } = useModelcourseBookmarkList();
   const [liked, setLiked] = useState<boolean[]>((modelcourselist ?? Array()).map((_) => true));
+  const token = useRecoilValue(firebaseTokenState);
 
   const toggleLiked = (index: number) => {
+    const modelCourseId = modelcourselist![index].modelCourse.id;
+    if (liked[index]) {
+      removeModelcourseBookmark(modelCourseId, token!!);
+    } else {
+      createModelcourseBookmark(modelCourseId, token!!);
+    }
     setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
+
+  useEffect(() => {
+    setLiked((modelcourselist ?? Array()).map((_) => true));
+  }, [modelcourselist]);
 
   useEffect(() => {
     mutate();
@@ -55,7 +56,7 @@ export const ModelcourseBookmark = () => {
             <Card key={index} shadow="xs">
               <Card.Section>
                 <Image
-                  src={modelcourse.modelCourse.modelCourseImages[0]?.src || "//dummyImage.svg"}
+                  src={modelcourse.modelCourse.modelCourseImages[0]?.src || "/dummyImage.svg"}
                   fit="cover"
                   alt="サンプル画像"
                   height={160}

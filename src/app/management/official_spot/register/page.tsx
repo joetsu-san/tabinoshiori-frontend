@@ -14,17 +14,14 @@ import {
   Flex,
   NumberInput,
 } from "@mantine/core";
-import { useToggle } from "@mantine/hooks";
-import { IconAt, IconArrowBigDown, IconArrowBigUp, IconArrowBackUp } from "@tabler/icons-react";
+import { IconArrowBackUp } from "@tabler/icons-react";
 import Link from "next/link";
-
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { NextPageContext } from "next";
+import { managementClient } from "../../_aspida/managementAspida";
 
-const RegisterSpot = (ctx: NextPageContext) => {
+const RegisterSpot = () => {
   const router = useRouter();
 
   // バリデーションスキーマ
@@ -69,7 +66,9 @@ const RegisterSpot = (ctx: NextPageContext) => {
       officialSpotImages: images,
     };
 
-    await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot`, postData);
+    await managementClient.management.official_spot.$post({
+      body: postData,
+    });
     router.replace("/management/official_spot");
   };
 

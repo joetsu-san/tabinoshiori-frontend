@@ -13,19 +13,19 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
+import { IconArrowBackUp } from "@tabler/icons-react";
 import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import useAspidaSWR from "@aspida/swr";
-
-import { client, useAspidaSWRImmutable } from "@/hooks/useAspidaSWRImmutable";
+import { client } from "@/hooks/useAspidaSWRImmutable";
 import { useEffect } from "react";
 import { z } from "zod";
-import { Buffer, File } from "buffer";
+import { File } from "buffer";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
-import { redirectLogin } from "../../_functions/redirectLogin";
+import { managementClient } from "../../_aspida/managementAspida";
+import { UpdateOfficialSpotDto } from "@/@types";
 
 type PageProps = {
   params: {
@@ -34,13 +34,7 @@ type PageProps = {
 };
 
 const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext) => {
-  // redirectLogin(ctx);
   const [opened, { open, close }] = useDisclosure(false);
-
-  // const {data, error} = useAspidaSWRImmutable(
-  //   client.official_spot._official_spot_id(params.official_spot_id) ,
-  //   {}
-  //   );
 
   const { data, error } = useAspidaSWR(client.official_spot._official_spot_id(params.official_spot_id));
 
@@ -85,26 +79,24 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
 
   // アップデート
   const handleSubmit = async (value: any) => {
-    await axios.put(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}`,
-      {
-        title: value.title,
-        ruby: value.ruby,
-        description: value.description,
-        address: value.address,
-        latitude: value.latitude,
-        longitude: value.longitude,
-        officialSpotStatusId: 1,
-      },
-      { withCredentials: true }
-    );
+    const officialSpotData: UpdateOfficialSpotDto = {
+      title: value.title,
+      ruby: value.ruby,
+      description: value.description,
+      address: value.address,
+      latitude: value.latitude,
+      longitude: value.longitude,
+      officialSpotStatusId: 1,
+    };
+    await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$put({
+      body: officialSpotData,
+    });
     router.replace("/management/official_spot");
-    console.log("更新");
   };
 
   // 画像更新
   const fileSubmit = async (value: any) => {
-    const images = [];
+    const images: File[] = [];
     for (let i = 0; i < value.files.length; i++) {
       const f = value.files[i];
       images.push(await f.arrayBuffer());
@@ -115,16 +107,12 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
       { withCredentials: true }
     );
     router.replace("/management/official_spot");
-    console.log("画像更新");
   };
 
   // 削除
   const deleteSubmit = async () => {
-    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}`, {
-      withCredentials: true,
-    });
+    await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$delete();
     router.replace("/management/official_spot");
-    console.log("削除");
   };
 
   // データ取得中
@@ -207,11 +195,3 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
 };
 
 export default OfficialSpotEdit;
-
-/**
- * POST    /management/official_spot
- * PUT     /management/official_spot/{official_spot_id}
- * DELETE  /management/official_spot/{official_spot_id}
- * PUT     /management/official_spot/{official_spot_id}/image
- * DELETE  /management/official_spot/{official_spot_id}/image/{image_id}
- */

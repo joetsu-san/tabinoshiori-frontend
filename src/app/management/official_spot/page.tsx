@@ -3,22 +3,16 @@
 import Link from "next/link";
 import { Card, Image, Text, Button, Grid, Container, Flex, Input } from "@mantine/core";
 import { IconArrowBackUp, IconAt, IconPlus } from "@tabler/icons-react";
-import { client, useAspidaSWRImmutable } from "@/hooks/useAspidaSWRImmutable";
+import { client } from "@/hooks/useAspidaSWRImmutable";
 import useAspidaSWR from "@aspida/swr";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
 import { OfficialSpot } from "../../../../api/@types";
-import { NextPageContext } from "next";
-import { redirectLogin } from "../_functions/redirectLogin";
 
-const OfficialSpotPage = (ctx: NextPageContext) => {
-  // redirectLogin(ctx);
-
-  // const {data, error} = useAspidaSWRImmutable(
-  //   client.official_spot , {}
-  // );
+const OfficialSpotPage = () => {
   const { data, error } = useAspidaSWR(client.official_spot);
 
+  // 観光地検索用配列
   const [spotList, setSpotList] = useState<OfficialSpot[]>([]);
 
   // 検索 Debounce
@@ -28,7 +22,6 @@ const OfficialSpotPage = (ctx: NextPageContext) => {
 
   // 検索用
   useEffect(() => {
-    console.log(`「${debouncedInputText}」`);
     // 観光地検索処理
     if (debouncedInputText != "") {
       const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
@@ -43,13 +36,12 @@ const OfficialSpotPage = (ctx: NextPageContext) => {
     if (data) setSpotList(data);
   }, [data]);
 
-  // console.log(data)
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
   return (
     <div>
-      <Container size={"xl"} mb={"6rem"}>
+      <Container size={"xl"} mb={"2rem"}>
         <Flex direction={"column"} align={"center"}>
           <Text size={"lg"} mt={20}>
             観光地一覧

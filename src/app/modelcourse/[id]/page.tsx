@@ -32,15 +32,12 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   const [like, setLike] = useState(false);
   const [actives, setActives] = useState(0);
   const keys = process.env.NEXT_PUBLIC_MAP_KEY;
-  const param = params.id;
-  console.log("ページ番号：" + param);
   const courseSize = 100;
   const containerStyle = {
     height: "100%",
     width: "100%",
   };
   useEffect(() => {
-    console.log(data);
     console.log(error);
   }, [data, error]);
 
@@ -96,12 +93,12 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
             <Flex align="center" justify="center" direction="row">
               <Card.Section>
                 <Image
-                  id={"" + data.id}
+                  id={data.id}
                   fit="cover"
                   radius={5}
                   width={100}
                   height={100}
-                  src={"" + data.modelCourseImages[0]}
+                  src={data.modelCourseImages[0]?.src || "/dummyImage.svg"}
                   alt="コース画像"
                 />
               </Card.Section>
@@ -113,7 +110,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
                 <Flex justify="center">
                   <Group>
                     <IconClockFilled size={17} style={{ margin: "0 -10px 0 0" }} />
-                    <Text size={13}>総時間：{data.requiredMinute}時間</Text>
+                    <Text size={13}>総時間：{data.requiredMinute}分</Text>
                   </Group>
                   <ActionIcon onClick={likes} m="0 0 0 auto">
                     <IconHeart color={like ? "red" : "gray"} style={{ fill: like ? "red" : "white" }} />
@@ -128,26 +125,26 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
               <Timeline active={actives} bulletSize={24} lineWidth={2}>
                 {data.modelCourseSpots.map((spot, index) => (
                   <Timeline.Item
-                    id={"" + index}
+                    id={spot.officialSpotId}
                     key={index}
                     bullet={
                       <Group>
                         <IconFlipFlops size={12} />
                       </Group>
                     }
-                    title={"" + spot.title}
+                    title={spot.title}
                     onClick={courseActive}
                   >
                     <Flex align="center" m="20px 0 0 0">
                       <Image
-                        id={"" + index}
+                        id={spot.officialSpotId}
                         key={index}
                         m="0 10px 0 0"
                         fit="cover"
                         width={courseSize}
                         height={courseSize}
                         radius={5}
-                        src={"" + spot.officialSpotImages[0]} //course.officialSpotImages[0].src
+                        src={spot.officialSpotImages[0]?.src || "/dummyImage.svg"}
                         alt="スポット画像"
                       />
                       <Stack spacing="xs">

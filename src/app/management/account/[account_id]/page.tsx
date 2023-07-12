@@ -9,20 +9,15 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
 import { z } from "zod";
+import { UpdateAdministratorDto } from "@/@types";
+import { managementClient } from "../../_aspida/managementAspida";
 
 type PageProps = {
   params: {
     account_id: string;
   };
-};
-
-type FormType = {
-  username: string;
-  email: string;
-  password: string;
 };
 
 const AccountEdit: NextPage<PageProps> = ({ params }) => {
@@ -60,30 +55,25 @@ const AccountEdit: NextPage<PageProps> = ({ params }) => {
   if (!data) return <div>loading...</div>;
 
   // アップデート
-  const handleSubmit = async (value: FormType) => {
-    console.log(value);
-    await axios.put(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/management/${params.account_id}`,
-      {
-        username: value.username,
-        email: value.email,
-        password: value.password,
-      },
-      { withCredentials: true }
-    );
-    router.replace("/management/account");
+  const handleSubmit = async (value: UpdateAdministratorDto) => {
+    await managementClient.management._administrator_id(params.account_id).$put({ body: value });
+    router.push("/management/account");
   };
 
   // 削除
   const deleteSubmit = async () => {
-    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/${params.account_id}`);
-    router.replace("/management/account");
+    await managementClient.management._administrator_id(params.account_id).$delete();
+    router.push("/management/account");
   };
 
   return (
     <div>
       <Container size={"xl"}>
-        <h2>アカウント編集</h2>
+        <Flex direction={"column"} align={"center"}>
+          <Text size={"lg"} mt={20}>
+            アカウント編集
+          </Text>
+        </Flex>
 
         <Flex direction={"row"} justify={"space-between"} mb={20}>
           <Link href={"/management/account"}>
@@ -93,7 +83,7 @@ const AccountEdit: NextPage<PageProps> = ({ params }) => {
           </Link>
         </Flex>
 
-        <form onSubmit={formValue.onSubmit((value: FormType) => handleSubmit(value))}>
+        <form onSubmit={formValue.onSubmit((value: UpdateAdministratorDto) => handleSubmit(value))}>
           <Flex direction={"column"} gap={20} mb={40}>
             <TextInput placeholder="" label="ユーザー名" withAsterisk {...formValue.getInputProps("username")} />
             <TextInput placeholder="" label="email" withAsterisk {...formValue.getInputProps("email")} />

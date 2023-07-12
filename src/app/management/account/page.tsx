@@ -1,6 +1,5 @@
 "use client";
 
-import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
 import { client } from "@/hooks/useAspidaSWRImmutable";
 import useAspidaSWR from "@aspida/swr";
 import { Button, Card, Container, Flex } from "@mantine/core";
@@ -8,13 +7,8 @@ import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
 const Account = () => {
-  const { data, error } = useAspidaSWR(client.management, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data, error } = useAspidaSWR(client.management);
 
-  console.log(data);
   if (error) return <div>failed to load</div>;
   if (!Array.isArray(data)) return <div>loading...</div>;
 

@@ -40,21 +40,17 @@ export const SettingsModal = () => {
 
   const { data, error } = useUserData();
 
-  const firebaseUserId = useRecoilValue(firebaseUserIdState);
-
   useEffect(() => {
-    if (firebaseUserId) {
-      const obj = returnUserObjectFromId(firebaseUserId);
-      if (obj) {
-        setGender(replaceGenderIdtoGender(obj[0]["genderId"]));
-        if (obj[0]["birthday"]) {
-          const birthday = obj[0]["birthday"].split("T")[0];
-          setYear(birthday.split("-")[0]);
-          setMonth(birthday.split("-")[1]);
-          setDay(birthday.split("-")[2]);
-          setBirthday(birthday);
-          console.log(birthday);
-        }
+    if (data) {
+      setGender(data.genderId);
+      if (data.birthday) {
+        const birthday = data.birthday.split("T")[0];
+        setBirthday(birthday);
+        setYear(parseInt(birthday.split("-")[0]).toString());
+        setMonth(parseInt(birthday.split("-")[1]).toString());
+        setDay(parseInt(birthday.split("-")[2]).toString());
+      } else {
+        setBirthday("未設定");
       }
     }
   }, [data, error]);
@@ -70,13 +66,6 @@ export const SettingsModal = () => {
       default:
         return "未設定";
     }
-  };
-
-  const returnUserObjectFromId = (userId: string) => {
-    if (data) {
-      return data.filter((obj) => obj.id === userId);
-    }
-    return null;
   };
 
   const handleLogout = () => {

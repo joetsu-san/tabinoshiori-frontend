@@ -20,11 +20,15 @@ import {
 import { IconClockFilled, IconFlipFlops, IconHeart, IconWalk } from "@tabler/icons-react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { MapCenterState } from "@/atoms/SpotAtoms";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useModelCourseDetail } from "@/hooks/useModelCourseDetail";
+import { firebaseTokenState } from "@/atoms";
+import { createModelcourseBookmark } from "@/utils/createModelcourseBookmark";
+import { removeModelcourseBookmark } from "@/utils/removeModelcourseBookmark";
 
 const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   //データ取得
+  const token = useRecoilValue(firebaseTokenState);
   const { data, error } = useModelCourseDetail(params);
   const [size, setSize] = useState<undefined | google.maps.Size>(undefined);
   const [mapCenter, setMapCenter] = useRecoilState(MapCenterState);
@@ -37,21 +41,29 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
     height: "100%",
     width: "100%",
   };
+
   useEffect(() => {
     console.log(error);
   }, [data, error]);
 
   const likes = () => {
+    if (like) {
+      removeModelcourseBookmark(params.id, token!!);
+    } else {
+      createModelcourseBookmark(params.id, token!!);
+    }
     setLike(!like);
   };
+
   const courseActive = (e: React.MouseEvent) => {
     if (!data) return;
+    const spotIndex = data.modelCourseSpots.findIndex((spot) => spot.officialSpotId === e.currentTarget.id);
     setZoom(15);
-    setActives(Number(e.currentTarget.id));
+    setActives(spotIndex);
     setMapCenter({
       ...mapCenter,
-      lat: data.modelCourseSpots[Number(e.currentTarget.id)].latitude,
-      lng: data.modelCourseSpots[Number(e.currentTarget.id)].longitude,
+      lat: data.modelCourseSpots[spotIndex].latitude,
+      lng: data.modelCourseSpots[spotIndex].longitude,
     });
   };
   const mapCourseCenter = () => {

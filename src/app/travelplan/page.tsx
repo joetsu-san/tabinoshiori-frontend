@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { IconWriting } from "@tabler/icons-react";
 import { TravelPlanCard } from "./_component/TravelplanCard";
 import { Button } from "@mantine/core";
-import { TravelPlanDetail } from "../../../api/@types";
+import { TravelPlanDetail } from "@/@types";
 
 const Page: NextPage = () => {
   const travelPlans: TravelPlanDetail[] = [

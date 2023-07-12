@@ -2,7 +2,7 @@ import { createStyles, rem, Text, Textarea, TextInput, Timeline } from "@mantine
 import { UseListStateHandlers } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IconGripVertical } from "@tabler/icons-react";
-import { TravelPlanSpot } from "../../api/@types";
+import { TravelPlanSpot } from "@/@types";
 import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotListState } from "@/atoms";
 import { NextPage } from "next";

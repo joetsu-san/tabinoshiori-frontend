@@ -24,7 +24,6 @@ import { firebaseUserState } from "@/atoms";
 import { useRouter } from "next/navigation";
 import { useUserData } from "@/hooks/useUserData";
 import { firebaseUserIdState } from "@/atoms";
-
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
@@ -296,6 +295,7 @@ export const SettingsModal = () => {
             <NavLink
               label="生年月日"
               description={defaultBirthday}
+              // description={data[0].birthday}
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
               onClick={() => {

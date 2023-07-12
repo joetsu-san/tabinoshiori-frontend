@@ -12,10 +12,11 @@ import { SelectTourismSpot } from "./SelectTourismSpot";
 
 type Props = {
   ref: RefObject<HTMLDivElement>;
+  id: string;
 };
 
 export const TimeLineWrapper = (props: Props) => {
-  const { ref } = props;
+  const { ref, id } = props;
   const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
   const [opened, { open, close }] = useDisclosure(false);

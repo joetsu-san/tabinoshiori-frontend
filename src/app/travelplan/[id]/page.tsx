@@ -6,6 +6,7 @@ import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
 import { useRef, useState } from "react";
 import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
+import { useTravelPlan } from "@/hooks/useTravelPlan";
 
 const Page = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -21,6 +22,10 @@ const Page = () => {
   const closeDescriptionInput = () => setIsDescriptionInput(false);
 
   const imageRef = useRef<HTMLDivElement>(null);
+
+  const router = useParams();
+  const id = router.id;
+  const { data: travelplan, error } = useTravelPlan(id);
 
   return (
     <main
@@ -52,7 +57,7 @@ const Page = () => {
           {isTitleInput ? (
             <>
               <Input
-                defaultValue={title}
+                defaultValue={travelplan ? travelplan.title : ""}
                 style={{ width: "100%" }}
                 onChange={(event) => setTitle(event.currentTarget.value)}
               />
@@ -63,7 +68,7 @@ const Page = () => {
           ) : (
             <>
               <Text fz="xl" fw={600}>
-                {title}
+                {travelplan?.title}
               </Text>
               <Button size="xs" color="gray" variant="light" compact onClick={openTitleInput}>
                 編集
@@ -76,7 +81,7 @@ const Page = () => {
           {isDescriptionInput ? (
             <>
               <Textarea
-                defaultValue={description}
+                defaultValue={travelplan ? travelplan.description : ""}
                 style={{ width: "100%" }}
                 size="xs"
                 autosize
@@ -88,7 +93,7 @@ const Page = () => {
             </>
           ) : (
             <>
-              <Text size="sm">{description}</Text>
+              <Text size="sm">{travelplan?.description}</Text>
               <Button size="xs" color="gray" variant="light" compact onClick={openDescriptionInput}>
                 編集
               </Button>
@@ -96,7 +101,7 @@ const Page = () => {
           )}
         </Flex>
       </Flex>
-      <TimeLineWrapper ref={imageRef} />
+      <TimeLineWrapper ref={imageRef} id={id} />
     </main>
   );
 };

@@ -52,7 +52,7 @@ export const ModelcourseBookmark = () => {
             <Card key={index} shadow="xs">
               <Card.Section>
                 <Image
-                  src={modelcourse.modelCourse.modelCourseImages[0].src}
+                  src={modelcourse.modelCourse.modelCourseImages[0]?.src || "//dummyImage.svg"}
                   fit="cover"
                   alt="サンプル画像"
                   height={160}

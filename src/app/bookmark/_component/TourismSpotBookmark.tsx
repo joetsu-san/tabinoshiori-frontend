@@ -51,7 +51,7 @@ export const TourismSpotBookmark = () => {
               <Card shadow="xs" key={index}>
                 <Card.Section>
                   <Image
-                    src={tourismspot.officialSpotDetail.officialSpotImages[0].src}
+                    src={tourismspot.officialSpotDetail.officialSpotImages[0]?.src || "/dummyImage.svg"}
                     fit="cover"
                     alt="サンプル画像"
                     height={160}

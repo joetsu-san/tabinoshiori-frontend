@@ -1,12 +1,10 @@
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
-import { SpotList } from "@/atoms/SpotAtoms";
 import { client } from "@/hooks/useAspidaSWRImmutable";
 import useAspidaSWR from "@aspida/swr";
 import { Button, Image, Text, TextInput, NumberInput, Card, Input, Grid, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 import { OfficialSpot } from "../../../../../../api/@types";
 
 type ModalProps = {
@@ -24,12 +22,6 @@ export const AddSpotModal: React.FC<ModalProps> = ({
   setViewList,
   closeAction,
 }) => {
-  // const spotList = useRecoilValue(SpotList); // 観光地データマスター
-  // const [tempSpotList, setTempSpotList] = useState(spotList); // 検索後観光地データ
-
-  // const {data, error} = useAspidaSWRImmutable(
-  //   client.official_spot , {}
-  // );
   const { data, error } = useAspidaSWR(client.official_spot);
 
   const [spotList, setSpotList] = useState<OfficialSpot[]>([]);
@@ -75,7 +67,6 @@ export const AddSpotModal: React.FC<ModalProps> = ({
       title: data.title,
       id: data.id,
     };
-    console.log("selectedSpot", spotData);
     setSelectedSpot(spotData);
   };
 
@@ -95,7 +86,6 @@ export const AddSpotModal: React.FC<ModalProps> = ({
       minuteSincePrevious: 1,
     };
 
-    console.log("tempObj", tempObj);
     setViewList([...viewList, viewObj]);
     setModelCourseList([...modelCourseList, tempObj]);
     closeAction();

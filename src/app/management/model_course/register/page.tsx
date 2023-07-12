@@ -20,8 +20,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { AddSpotModal } from "./_components/AddSpotModal";
 import { z } from "zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import { managementClient } from "../../_aspida/managementAspida";
 
 type PageProps = {
   params: {
@@ -53,8 +53,6 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 
   // 送信時アクション
   const submitData = async (value: any) => {
-    console.log(value);
-
     let requireMinute = 0;
     modelCourseList.forEach((val) => (requireMinute += parseInt(val.stayMinute)));
 
@@ -72,12 +70,10 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
       modelCourseSpot: modelCourseList,
     };
 
-    console.log(data);
-
-    await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course`, data);
+    await managementClient.management.model_course.$post({
+      body: data,
+    });
     router.replace("/management/model_course");
-
-    // console.log(data);
   };
 
   // 観光地削除アクション
@@ -157,90 +153,3 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
 };
 
 export default ModelCourseEdit;
-
-/**
-  {
-  "title": "モデルコースのタイトル",
-  "description": "モデルコースの説明",
-  "requiredMinute": 1,
-  "modelCourseImages": "data:image/jpeg;base64,...",
-  "modelCourseSpot": [
-    {
-      "officialSpotId": "00000000-0000-0000-0000-000000000000",
-      "comment": "00000000-0000-0000-0000-000000000000",
-      "sortIndex": 0,
-      "stayMinute": 1,
-      "minuteSincePrevious": 1
-    }
-  ]
-}
- */
-
-const modelcoursedetail = {
-  id: "00000000-0000-0000-0000-000000000000",
-  title: "モデルコースのタイトル",
-  description: "モデルコースの説明",
-  requiredMinute: 1,
-  modelCourseSpots: [
-    {
-      officialSpotId: "00000000-0000-0000-0000-000000000000",
-      modelCourseId: "00000000-0000-0000-0000-000000000000",
-      sortIndex: 0,
-      minuteSincePrevious: 1,
-      officialSpotTitle: "皇居",
-      officialSpotRuby: "こうきょ",
-      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
-      address: "東京都千代田区千代田1番1号",
-      latitude: 35.6838504,
-      longitude: 139.7434664,
-      officialSpotImages: [
-        {
-          id: "00000000-0000-0000-0000-000000000000",
-          src: "https://example.com/image.jpg",
-        },
-      ],
-      description: "店舗１で〇〇〇〇を食べる",
-      stayMinutes: 15,
-    },
-    {
-      officialSpotId: "10000000-0000-0000-0000-000000000000",
-      modelCourseId: "00000000-0000-0000-0000-000000000000",
-      sortIndex: 0,
-      minuteSincePrevious: 1,
-      officialSpotTitle: "皇居",
-      officialSpotRuby: "こうきょ",
-      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
-      address: "東京都千代田区千代田1番1号",
-      latitude: 35.69397,
-      longitude: 139.7762,
-      officialSpotImages: [
-        {
-          id: "00000000-0000-0000-0000-000000000000",
-          src: "https://example.com/image.jpg",
-        },
-      ],
-      description: "店舗１で〇〇〇〇を食べる",
-      stayMinutes: 15,
-    },
-    {
-      officialSpotId: "20000000-0000-0000-0000-000000000000",
-      modelCourseId: "00000000-0000-0000-0000-000000000000",
-      sortIndex: 0,
-      minuteSincePrevious: 1,
-      officialSpotTitle: "皇居",
-      officialSpotRuby: "こうきょ",
-      officialSpotDescription: "明治天皇以降から現在までの天皇のおすまいです。",
-      address: "東京都千代田区千代田1番1号",
-      latitude: 37.147887,
-      longitude: 138.2337322,
-      officialSpotImages: [
-        {
-          id: "00000000-0000-0000-0000-000000000000",
-          src: "https://example.com/image.jpg",
-        },
-      ],
-      description: "店舗１で〇〇〇〇を食べる",
-      stayMinutes: 15,
-    },
-  ],
-};

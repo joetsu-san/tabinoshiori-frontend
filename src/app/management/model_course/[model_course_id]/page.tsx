@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { z } from "zod";
+import { managementClient } from "../../_aspida/managementAspida";
 
 type PageProps = {
   params: {
@@ -59,35 +60,27 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
     }
   }, [data]);
 
-  console.log(data);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
   // アップデート
   const updateModelCourse = async (value: any) => {
-    await axios.put(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course/${params.model_course_id}`,
-      {
-        title: value.title,
-        description: value.description,
-        requiredMinute: data.requiredMinute,
-      },
-      { withCredentials: true }
-    );
+    const courseData = {
+      title: value.title,
+      description: value.description,
+      requiredMinute: data.requiredMinute,
+    };
+    await managementClient.management.model_course._model_course_id(params.model_course_id).$put({
+      body: courseData,
+    });
     router.replace("/management/model_course");
-    console.log("更新");
   };
 
   // 削除
   const deleteSubmit = async () => {
-    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/management/model_course/${params.model_course_id}`, {
-      withCredentials: true,
-    });
+    await managementClient.management.model_course._model_course_id(params.model_course_id).$delete();
     router.replace("/management/model_course");
-    console.log("削除");
   };
-
-  // "modelCourseImages": "data:image/jpeg;base64,..."
 
   return (
     <div>

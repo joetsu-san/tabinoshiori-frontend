@@ -1,30 +1,16 @@
 "use client";
 
-import { client } from "@/hooks/useAspidaSWRImmutable";
-import useAspidaSWR from "@aspida/swr";
-import {
-  ActionIcon,
-  Button,
-  Container,
-  FileInput,
-  Flex,
-  Input,
-  TextInput,
-  Textarea,
-  Timeline,
-  Text,
-  Modal,
-} from "@mantine/core";
+import { Button, Container, FileInput, Flex, Input, TextInput, Textarea, Timeline, Text, Modal } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { IconArrowBackUp, IconTrash } from "@tabler/icons-react";
-import axios from "axios";
+import { IconArrowBackUp } from "@tabler/icons-react";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { z } from "zod";
 import { managementClient } from "../../_aspida/managementAspida";
+import { useModelCourse } from "../../_hooks/useModelCourse";
 
 type PageProps = {
   params: {
@@ -34,7 +20,7 @@ type PageProps = {
 
 const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { data, error } = useAspidaSWR(client.model_course._model_course_id(params.model_course_id));
+  const { data, error } = useModelCourse(params.model_course_id);
 
   const router = useRouter();
 

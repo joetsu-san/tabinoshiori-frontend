@@ -1,7 +1,5 @@
 "use client";
 
-import { client } from "@/hooks/useAspidaSWRImmutable";
-import useAspidaSWR from "@aspida/swr";
 import { Button, Container, Flex, PasswordInput, TextInput, Modal, Text } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons-react";
@@ -13,6 +11,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { z } from "zod";
 import { UpdateAdministratorDto } from "@/@types";
 import { managementClient } from "../../_aspida/managementAspida";
+import { useAdminAccount } from "../../_hooks/useAdminAccount";
 
 type PageProps = {
   params: {
@@ -25,7 +24,7 @@ const AccountEdit: NextPage<PageProps> = ({ params }) => {
 
   const router = useRouter();
 
-  const { data, error } = useAspidaSWR(client.management._administrator_id(params.account_id));
+  const { data, error } = useAdminAccount(params.account_id);
 
   const schema = z.object({
     username: z.string().min(4, { message: "ユーザー名は4文字以上で入力してください" }),

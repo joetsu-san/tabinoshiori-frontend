@@ -3,14 +3,13 @@
 import Link from "next/link";
 import { Card, Image, Text, Button, Grid, Container, Flex, Input } from "@mantine/core";
 import { IconArrowBackUp, IconAt, IconPlus } from "@tabler/icons-react";
-import { client } from "@/hooks/useAspidaSWRImmutable";
-import useAspidaSWR from "@aspida/swr";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
 import { OfficialSpot } from "../../../../api/@types";
+import { useOfficialSpotList } from "../_hooks/useOfficialSpotList";
 
 const OfficialSpotPage = () => {
-  const { data, error } = useAspidaSWR(client.official_spot);
+  const { data, error } = useOfficialSpotList();
 
   // 観光地検索用配列
   const [spotList, setSpotList] = useState<OfficialSpot[]>([]);

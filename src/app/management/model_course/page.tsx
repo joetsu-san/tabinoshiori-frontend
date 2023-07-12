@@ -1,13 +1,12 @@
 "use client";
 
-import useAspidaSWR from "@aspida/swr";
 import { Card, Image, Text, Button, Grid, Container, Flex } from "@mantine/core";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
-import { managementClient } from "../_aspida/managementAspida";
+import { useModelCourseList } from "../_hooks/useModelCourseList";
 
 const ModelCourse = () => {
-  const { data, error } = useAspidaSWR(managementClient.model_course);
+  const { data, error } = useModelCourseList();
 
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;

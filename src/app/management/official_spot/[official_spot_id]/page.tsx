@@ -1,23 +1,10 @@
 "use client";
 
-import {
-  Button,
-  Container,
-  FileInput,
-  Flex,
-  Input,
-  Modal,
-  NumberInput,
-  Text,
-  TextInput,
-  Textarea,
-} from "@mantine/core";
+import { Button, Container, FileInput, Flex, Modal, NumberInput, Text, TextInput, Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons-react";
 import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
-import useAspidaSWR from "@aspida/swr";
-import { client } from "@/hooks/useAspidaSWRImmutable";
 import { useEffect } from "react";
 import { z } from "zod";
 import { File } from "buffer";
@@ -26,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { managementClient } from "../../_aspida/managementAspida";
 import { UpdateOfficialSpotDto } from "@/@types";
+import { useOfficialSpot } from "../../_hooks/useOfficialSpot";
 
 type PageProps = {
   params: {
@@ -36,7 +24,7 @@ type PageProps = {
 const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { data, error } = useAspidaSWR(client.official_spot._official_spot_id(params.official_spot_id));
+  const { data, error } = useOfficialSpot(params.official_spot_id);
 
   const router = useRouter();
 
@@ -91,7 +79,7 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
     await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$put({
       body: officialSpotData,
     });
-    router.replace("/management/official_spot");
+    router.push("/management/official_spot");
   };
 
   // 画像更新
@@ -106,13 +94,13 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
       { officialSpotImages: images },
       { withCredentials: true }
     );
-    router.replace("/management/official_spot");
+    router.push("/management/official_spot");
   };
 
   // 削除
   const deleteSubmit = async () => {
     await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$delete();
-    router.replace("/management/official_spot");
+    router.push("/management/official_spot");
   };
 
   // データ取得中

@@ -1,13 +1,12 @@
 "use client";
 
-import { client } from "@/hooks/useAspidaSWRImmutable";
-import useAspidaSWR from "@aspida/swr";
 import { Button, Card, Container, Flex } from "@mantine/core";
 import { IconArrowBackUp, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
+import { useAdminAccountList } from "../_hooks/useAdminAccountList";
 
 const Account = () => {
-  const { data, error } = useAspidaSWR(client.management);
+  const { data, error } = useAdminAccountList();
 
   if (error) return <div>failed to load</div>;
   if (!Array.isArray(data)) return <div>loading...</div>;

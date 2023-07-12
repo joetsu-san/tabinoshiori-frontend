@@ -1,4 +1,5 @@
 "use client";
+import { useParams } from "next/navigation";
 import { Modal, Group, Button, Textarea, Text, Flex, Input, TextInput } from "@mantine/core";
 import { IconDeviceMobileMessage, IconPictureInPicture, IconScreenshot, IconShare } from "@tabler/icons-react";
 import { TimeLineWrapper } from "./_components/TimeLineWrapper/TimeLineWrapper";
@@ -6,6 +7,7 @@ import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
 import { useRef, useState } from "react";
 import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
+import { useUpdateTravelPlan } from "@/hooks/useUpdateTravelPlan";
 import { useTravelPlan } from "@/hooks/useTravelPlan";
 
 const Page = () => {
@@ -23,6 +25,7 @@ const Page = () => {
 
   const imageRef = useRef<HTMLDivElement>(null);
 
+  const { updateTravelPlan } = useUpdateTravelPlan();
   const router = useParams();
   const id = router.id;
   const { data: travelplan, error } = useTravelPlan(id);
@@ -61,7 +64,14 @@ const Page = () => {
                 style={{ width: "100%" }}
                 onChange={(event) => setTitle(event.currentTarget.value)}
               />
-              <Button color="gray" compact onClick={closeTitleInput}>
+              <Button
+                color="gray"
+                compact
+                onClick={() => {
+                  updateTravelPlan(id, { title, description });
+                  closeTitleInput();
+                }}
+              >
                 保存
               </Button>
             </>
@@ -87,7 +97,14 @@ const Page = () => {
                 autosize
                 onChange={(event) => setDescription(event.currentTarget.value)}
               />
-              <Button color="gray" compact onClick={closeDescriptionInput}>
+              <Button
+                color="gray"
+                compact
+                onClick={() => {
+                  updateTravelPlan(id, { title, description });
+                  closeDescriptionInput();
+                }}
+              >
                 保存
               </Button>
             </>

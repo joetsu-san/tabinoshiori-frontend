@@ -3,11 +3,12 @@
 import { Card, Image, Text, Button, Group, TextInput, Grid, Container, Flex } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
-import { setCookie, parseCookies } from "nookies";
-import axios from "axios";
-import { redirect, useRouter } from "next/navigation";
+import { setCookie } from "nookies";
+import { useRouter } from "next/navigation";
 import { NextPageContext } from "next";
 import Link from "next/link";
+import { managementClient } from "../_aspida/managementAspida";
+import { LoginAdministratorDto } from "@/@types";
 
 const Login = (ctx: NextPageContext) => {
   const router = useRouter();
@@ -25,16 +26,11 @@ const Login = (ctx: NextPageContext) => {
     validate: zodResolver(schema),
   });
 
-  const handleSubmit = async (value: any) => {
+  const handleSubmit = async (value: LoginAdministratorDto) => {
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/management/login`,
-        {
-          email: value.email,
-          password: value.password,
-        },
-        { withCredentials: true }
-      );
+      await managementClient.management.login.$post({
+        body: value,
+      });
       setCookie(ctx, "login_cookie", "logging in", {
         maxAge: 30 * 24 * 60 * 60,
       });

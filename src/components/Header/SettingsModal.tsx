@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Box, NavLink, Button, Text, Divider, Image, Avatar } from "@mantine/core";
+import { Modal, Group, Box, NavLink, Button, Text, Divider, Image, Avatar, Loader } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { BirthdayInput } from "./BirthdayInput";
 import { GenderInput } from "./GenderInput";
@@ -18,12 +18,11 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { auth, firebaseSignOut } from "@/lib/firebase";
+import { firebaseSignOut } from "@/lib/firebase";
 import { useRecoilValue } from "recoil";
 import { firebaseUserState } from "@/atoms";
 import { useRouter } from "next/navigation";
 import { useUserData } from "@/hooks/useUserData";
-import { firebaseUserIdState } from "@/atoms";
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
@@ -37,13 +36,13 @@ export const SettingsModal = () => {
 
   const userInfo = useRecoilValue(firebaseUserState);
 
-  const { data, error } = useUserData();
+  const { data: userData, error: userError } = useUserData();
 
   useEffect(() => {
-    if (data) {
-      setGender(data.genderId);
-      if (data.birthday) {
-        const birthday = data.birthday.split("T")[0];
+    if (userData) {
+      setGender(userData.genderId);
+      if (userData.birthday) {
+        const birthday = userData.birthday.split("T")[0];
         setBirthday(birthday);
         setYear(parseInt(birthday.split("-")[0]).toString());
         setMonth(parseInt(birthday.split("-")[1]).toString());
@@ -52,20 +51,7 @@ export const SettingsModal = () => {
         setBirthday("未設定");
       }
     }
-  }, [data, error]);
-
-  const replaceGenderIdtoGender = (genderId: Number | undefined) => {
-    switch (genderId) {
-      case 1:
-        return "男性";
-      case 2:
-        return "女性";
-      case 3:
-        return "その他";
-      default:
-        return "未設定";
-    }
-  };
+  }, [userData, userError]);
 
   const handleLogout = () => {
     firebaseSignOut();
@@ -279,7 +265,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="性別"
-              description={replaceGenderIdtoGender(defaultGender)}
+              description={"aa"}
               icon={
                 <>
                   <IconGenderMale height={"1.5rem"} width={"0.75rem"} />

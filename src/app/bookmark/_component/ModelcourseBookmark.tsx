@@ -15,23 +15,26 @@ import {
 } from "@mantine/core";
 import { IconClockFilled, IconHeart } from "@tabler/icons-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useModelcourseBookmarkList } from "@/hooks/useModelcourseBookmarkList";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
 
 export const ModelcourseBookmark = () => {
-  const { data: modelcourselist, error } = useModelcourseBookmarkList();
+  const { data: modelcourselist, error, mutate } = useModelcourseBookmarkList();
   const [liked, setLiked] = useState<boolean[]>((modelcourselist ?? Array()).map((_) => true));
 
   const toggleLiked = (index: number) => {
     setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
 
+  useEffect(() => {
+    mutate();
+  }, []);
+
   if (!modelcourselist)
     return (
       <Tabs.Panel value="modelCourse">
-        <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
-          <LoadingOverlay visible={!modelcourselist} zIndex={1}></LoadingOverlay>
-        </Box>
+        <LoadingDisplay />
       </Tabs.Panel>
     );
 

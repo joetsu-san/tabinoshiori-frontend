@@ -42,9 +42,9 @@ const Page = () => {
         <Button color="cyan" variant="light" compact onClick={open} leftIcon={<IconShare size="1rem" />}>
           旅のしおりを共有する
         </Button>
-        <Button color="cyan" variant="light" compact onClick={openImageModal} leftIcon={<IconScreenshot size="1rem" />}>
+        {/* <Button color="cyan" variant="light" compact onClick={openImageModal} leftIcon={<IconScreenshot size="1rem" />}>
           画像化する
-        </Button>
+        </Button> */}
       </Group>
 
       <Flex direction="column" gap="xs">

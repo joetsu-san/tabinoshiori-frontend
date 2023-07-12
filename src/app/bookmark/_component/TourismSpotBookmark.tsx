@@ -13,23 +13,26 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
 
 export const TourismSpotBookmark = () => {
-  const { data: tourismspotlist, error } = useTourismspotBookmarkList();
+  const { data: tourismspotlist, error, mutate } = useTourismspotBookmarkList();
   const [liked, setLiked] = useState<boolean[]>((tourismspotlist ?? Array()).map((_) => true));
 
   const toggleLiked = (index: number) => {
     setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
 
+  useEffect(() => {
+    mutate();
+  }, []);
+
   if (!tourismspotlist)
     return (
       <Tabs.Panel value="modelCourse">
-        <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
-          <LoadingOverlay visible={!tourismspotlist} zIndex={1}></LoadingOverlay>
-        </Box>
+        <LoadingDisplay />
       </Tabs.Panel>
     );
 

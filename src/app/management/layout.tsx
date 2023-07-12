@@ -6,6 +6,7 @@ import { NextPageContext } from "next";
 import { usePathname, useRouter } from "next/navigation";
 import { destroyCookie, parseCookies } from "nookies";
 import { useEffect, useState } from "react";
+import { managementClient } from "./_aspida/managementAspida";
 
 export default function ManagementLayout({ children }: { children: React.ReactNode }, ctx?: NextPageContext) {
   const router = useRouter();
@@ -14,13 +15,12 @@ export default function ManagementLayout({ children }: { children: React.ReactNo
 
   useEffect(() => {
     const cookie = parseCookies();
-    console.log(cookie);
     setLogined(cookie);
   }, [pathname]);
 
   const logout = async () => {
     destroyCookie(ctx, "login_cookie");
-    await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/management/logout`, {}, { withCredentials: true });
+    await managementClient.management.logout.post();
     router.push("management/login");
   };
 
@@ -32,7 +32,6 @@ export default function ManagementLayout({ children }: { children: React.ReactNo
             管理者ページ
           </Text>
 
-          {/* TODO: ログインしているかしていないかで条件分岐させる */}
           {logined?.login_cookie ? (
             <Button onClick={logout} color="red">
               ログアウト

@@ -1,10 +1,10 @@
 import { OfficialSpot } from "@/@types";
 import { OfficialSpotBookmark } from "@/@types";
 
-export function formatTourismForSelector(
+export const formatTourismForSelector = (
   tourismspotlist: OfficialSpot[],
   tourismspotBookmarkList: OfficialSpotBookmark[]
-) {
+) => {
   const formattedData = tourismspotlist.map((spot) => {
     const image = spot.officialSpotImages[0]?.src || "/dummyImage.svg";
     const isBookmarked = tourismspotBookmarkList.some((bookmark) => bookmark.officialSpotDetail.id === spot.id);
@@ -18,4 +18,4 @@ export function formatTourismForSelector(
   });
 
   return formattedData;
-}
+};

@@ -12,7 +12,7 @@ import { NextPageContext } from "next";
 import { redirectLogin } from "../_functions/redirectLogin";
 
 const OfficialSpotPage = (ctx: NextPageContext) => {
-  redirectLogin(ctx);
+  // redirectLogin(ctx);
 
   // const {data, error} = useAspidaSWRImmutable(
   //   client.official_spot , {}
@@ -50,7 +50,11 @@ const OfficialSpotPage = (ctx: NextPageContext) => {
   return (
     <div>
       <Container size={"xl"} mb={"6rem"}>
-        <h2>観光地一覧</h2>
+        <Flex direction={"column"} align={"center"}>
+          <Text size={"lg"} mt={20}>
+            観光地一覧
+          </Text>
+        </Flex>
         <Flex direction={"row"} justify={"space-between"} mb={20}>
           <Link href={"/management"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>

@@ -93,7 +93,12 @@ const ModelCourseEdit: NextPage<PageProps> = ({ params }) => {
   return (
     <div>
       <Container size={"lg"}>
-        <h2>モデルコース登録</h2>
+        <Flex direction={"column"} align={"center"}>
+          <Text size={"lg"} mt={20}>
+            モデルコース登録
+          </Text>
+        </Flex>
+
         <Flex direction={"row"} justify={"space-between"}>
           <Link href={"/management/model_course"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>

@@ -23,10 +23,8 @@ import { z } from "zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { NextPageContext } from "next";
-import { redirectLogin } from "../../_functions/redirectLogin";
 
 const RegisterSpot = (ctx: NextPageContext) => {
-  redirectLogin(ctx);
   const router = useRouter();
 
   // バリデーションスキーマ
@@ -73,14 +71,17 @@ const RegisterSpot = (ctx: NextPageContext) => {
 
     await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot`, postData);
     router.replace("/management/official_spot");
-
-    // console.log(postData);
   };
 
   return (
     <div>
       <Container size={"lg"}>
-        <h2>観光地登録</h2>
+        <Flex direction={"column"} align={"center"}>
+          <Text size={"lg"} mt={20} mb={20}>
+            観光地登録
+          </Text>
+        </Flex>
+
         <Flex direction={"row"} justify={"space-between"}>
           <Link href={"/management/official_spot"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>

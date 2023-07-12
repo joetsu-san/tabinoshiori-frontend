@@ -34,7 +34,7 @@ type PageProps = {
 };
 
 const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext) => {
-  redirectLogin(ctx);
+  // redirectLogin(ctx);
   const [opened, { open, close }] = useDisclosure(false);
 
   // const {data, error} = useAspidaSWRImmutable(
@@ -134,8 +134,13 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
   return (
     <div>
       <Container size={"lg"}>
-        <h2>観光地編集</h2>
-        <Flex direction={"row"} justify={"space-between"}>
+        <Flex direction={"column"} align={"center"}>
+          <Text size={"lg"} mt={20}>
+            観光地編集
+          </Text>
+        </Flex>
+
+        <Flex direction={"row"} justify={"space-between"} mb={20}>
           <Link href={"/management/official_spot"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>
               戻る

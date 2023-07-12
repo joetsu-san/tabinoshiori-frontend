@@ -15,8 +15,13 @@ const ModelCourse = () => {
   return (
     <div>
       <Container size={"xl"}>
-        <h2>モデルコース一覧</h2>
-        <Flex direction={"row"} justify={"space-between"}>
+        <Flex direction={"column"} align={"center"}>
+          <Text size={"lg"} mt={20} mb={20}>
+            モデルコース一覧
+          </Text>
+        </Flex>
+
+        <Flex direction={"row"} justify={"space-between"} mb={20}>
           <Link href={"/management"}>
             <Button variant="stable" leftIcon={<IconArrowBackUp />}>
               戻る

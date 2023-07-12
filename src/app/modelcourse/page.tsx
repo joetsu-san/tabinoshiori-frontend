@@ -12,6 +12,7 @@ const ModelCourse = () => {
   const { data, error } = useModelCourseList();
   const [listData, setListData] = useState<ModelCourseOverview[]>();
   const [searchValue, setSearchValue] = useState<string>("");
+  const [msg, setMsg] = useState(false);
   useEffect(() => {
     console.log(data);
     console.log(error);
@@ -19,23 +20,22 @@ const ModelCourse = () => {
   }, [data, error]);
   const searchList = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    setListData(
+    setListData(data);
+    if (
       data?.filter((values, index) => {
         if (values.title.indexOf(e.target.value) !== -1) {
           return values;
         }
-      })
-    );
+      }).length === 0
+    ) {
+      setMsg(true);
+    } else {
+      setMsg(false);
+    }
   };
   const searchRiset = () => {
     setSearchValue("");
-    setListData(
-      data?.filter((values, index) => {
-        if (values.title.indexOf("") !== -1) {
-          return values;
-        }
-      })
-    );
+    setListData(data);
   };
   return (
     <Container size="xl" mt={30}>
@@ -67,7 +67,7 @@ const ModelCourse = () => {
               size="md"
               style={{ zIndex: 100 }}
             />
-            <ModelCourseList modelcourselist={listData} msg={listData.length === 0 ? true : false} />
+            <ModelCourseList ser={searchValue} modelcourselist={listData} msg={msg ? true : false} />
           </Box>
         </>
       )}

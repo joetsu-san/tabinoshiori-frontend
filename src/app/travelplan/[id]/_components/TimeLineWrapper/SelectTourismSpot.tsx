@@ -5,6 +5,7 @@ import { formatTourismForSelector } from "../../utils/formatTourismForSelector";
 import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
+import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
 
 type ItemProps = {
   image: string;
@@ -35,13 +36,16 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItemBase
 export const SelectTourismSpot = () => {
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
 
-  const { data, error } = useOfficialSpotList();
+  const { data: officialSpotList, error: officialSpotListError } = useOfficialSpotList();
+  const { data: tourismspotBookmarkList, error: tourismspotBookmarkListError } = useTourismspotBookmarkList();
   useEffect(() => {
-    console.log(data);
-    console.log(error);
-  }, [data, error]);
+    console.log(officialSpotList);
+    console.log(officialSpotListError);
+    console.log(tourismspotBookmarkList);
+    console.log(tourismspotBookmarkListError);
+  }, [officialSpotList, officialSpotListError, tourismspotBookmarkList, tourismspotBookmarkListError]);
 
-  const formatData = data && formatTourismForSelector(data);
+  const formatData = officialSpotList && formatTourismForSelector(officialSpotList, tourismspotBookmarkList);
 
   const handleOnChange = (selectedId: string) => {
     const selectedSpot = formatData?.find((item) => item.value === selectedId);

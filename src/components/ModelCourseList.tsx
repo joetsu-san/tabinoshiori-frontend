@@ -1,6 +1,6 @@
 "use client";
 import { ModelCourseOverview } from "@/@types";
-import { Card, Image, Group, Text, SimpleGrid, Stack, Box } from "@mantine/core";
+import { Card, Image, Group, Text, SimpleGrid, Stack } from "@mantine/core";
 import { IconClockFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";

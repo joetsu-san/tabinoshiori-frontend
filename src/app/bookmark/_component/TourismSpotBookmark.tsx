@@ -1,4 +1,17 @@
-import { Container, Tabs, SimpleGrid, Card, Stack, Flex, ActionIcon, Grid, Box, Image, Text } from "@mantine/core";
+import {
+  Container,
+  Tabs,
+  SimpleGrid,
+  Card,
+  Stack,
+  Flex,
+  ActionIcon,
+  Grid,
+  Box,
+  Image,
+  Text,
+  Button,
+} from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
@@ -7,6 +20,7 @@ import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
 import { useRecoilValue } from "recoil";
 import { firebaseTokenState } from "@/atoms";
 import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
+import Link from "next/link";
 
 export const TourismSpotBookmark = () => {
   const { data: tourismspotlist, error, mutate } = useTourismspotBookmarkList();
@@ -88,6 +102,11 @@ export const TourismSpotBookmark = () => {
                     {tourismspot.officialSpotDetail.description}
                   </Text>
                 </Stack>
+                <Flex justify="flex-end">
+                  <Button size="xs" variant="outline" color="cyan" mt={10}>
+                    <Link href={`/tourismspot/${tourismspot.officialSpotDetail.id}`}>詳細</Link>
+                  </Button>
+                </Flex>
               </Card>
             ))}
           </SimpleGrid>

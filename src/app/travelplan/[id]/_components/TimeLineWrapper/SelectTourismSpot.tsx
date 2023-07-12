@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { forwardRef } from "react";
 import { Group, Avatar, Text, Select, Image, Skeleton } from "@mantine/core";
 import { formatTourismForSelector } from "../../utils/formatTourismForSelector";
@@ -36,14 +36,8 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItemBase
 export const SelectTourismSpot = () => {
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
 
-  const { data: officialSpotList, error: officialSpotListError } = useOfficialSpotList();
-  const { data: tourismspotBookmarkList, error: tourismspotBookmarkListError } = useTourismspotBookmarkList();
-  useEffect(() => {
-    console.log(officialSpotList);
-    console.log(officialSpotListError);
-    console.log(tourismspotBookmarkList);
-    console.log(tourismspotBookmarkListError);
-  }, [officialSpotList, officialSpotListError, tourismspotBookmarkList, tourismspotBookmarkListError]);
+  const { data: officialSpotList } = useOfficialSpotList();
+  const { data: tourismspotBookmarkList } = useTourismspotBookmarkList();
 
   const formatData = officialSpotList && formatTourismForSelector(officialSpotList, tourismspotBookmarkList);
 

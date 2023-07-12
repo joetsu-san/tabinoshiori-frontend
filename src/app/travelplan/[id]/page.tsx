@@ -1,13 +1,13 @@
 "use client";
 import { Modal, Group, Button, Textarea, Text, Flex, Input, TextInput } from "@mantine/core";
-import { IconDeviceMobileMessage, IconPictureInPicture, IconScreenshot, IconShare } from "@tabler/icons-react";
+import { IconScreenshot, IconShare } from "@tabler/icons-react";
 import { TimeLineWrapper } from "./_components/TimeLineWrapper/TimeLineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
 import { updateTravelPlanOverview } from "@/utils/updateTravelPlanOverview";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const Page = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -21,15 +21,11 @@ const Page = () => {
   const openTitleInput = () => setIsTitleInput(true);
   const closeTitleInput = () => setIsTitleInput(false);
 
-  const router = useSearchParams();
-  const collaborateId = router.get("id");
+  const router = useParams();
+  const collaborateId = router.id;
   const openDescriptionInput = () => {
     setIsDescriptionInput(true);
   };
-
-  useEffect(() => {
-    console.log(collaborateId);
-  }, [collaborateId]);
 
   const closeDescriptionInput = () => {
     updateTravelPlanOverview(collaborateId!, { title: title, description: description, visitedAt: visitedAt });
@@ -112,7 +108,7 @@ const Page = () => {
           )}
         </Flex>
       </Flex>
-      <TimeLineWrapper ref={imageRef} />
+      <TimeLineWrapper ref={imageRef} collaborateId={collaborateId} />
     </main>
   );
 };

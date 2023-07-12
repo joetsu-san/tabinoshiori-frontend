@@ -1,7 +1,7 @@
 "use client";
 import { Modal, Group, Button, Textarea, Text, Flex, Input, TextInput } from "@mantine/core";
 import { IconDeviceMobileMessage, IconPictureInPicture, IconScreenshot, IconShare } from "@tabler/icons-react";
-import { TimeLineWrapper } from "./_components/TimeLineWrapper";
+import { TimeLineWrapper } from "./_components/TimeLineWrapper/TimeLineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
 import { useRef, useState } from "react";
@@ -47,37 +47,49 @@ const Page = () => {
         </Button>
       </Group>
 
-      <Flex direction="column">
-        <Flex justify="space-between">
+      <Flex direction="column" gap="xs">
+        <Flex justify="space-between" align="center" gap="sm" style={{ width: "90vw" }}>
           {isTitleInput ? (
             <>
-              <Input defaultValue={title} />
-              <Button color="gray" variant="light" compact onClick={closeTitleInput}>
-                終了
+              <Input
+                defaultValue={title}
+                style={{ width: "100%" }}
+                onChange={(event) => setTitle(event.currentTarget.value)}
+              />
+              <Button color="gray" compact onClick={closeTitleInput}>
+                保存
               </Button>
             </>
           ) : (
             <>
-              <Text fz="xl">{title}</Text>
-              <Button color="gray" variant="light" compact onClick={openTitleInput}>
+              <Text fz="xl" fw={600}>
+                {title}
+              </Text>
+              <Button size="xs" color="gray" variant="light" compact onClick={openTitleInput}>
                 編集
               </Button>
             </>
           )}
         </Flex>
 
-        <Flex justify="space-between">
+        <Flex justify="space-between" align="center" gap="sm" style={{ width: "90vw" }}>
           {isDescriptionInput ? (
             <>
-              <TextInput defaultValue={description} onChange={(event) => setTitle(event.currentTarget.value)} />
-              <Button color="gray" variant="light" compact onClick={closeDescriptionInput}>
-                終了
+              <Textarea
+                defaultValue={description}
+                style={{ width: "100%" }}
+                size="xs"
+                autosize
+                onChange={(event) => setDescription(event.currentTarget.value)}
+              />
+              <Button color="gray" compact onClick={closeDescriptionInput}>
+                保存
               </Button>
             </>
           ) : (
             <>
-              <Text>{description}</Text>
-              <Button color="gray" variant="light" compact onClick={openDescriptionInput}>
+              <Text size="sm">{description}</Text>
+              <Button size="xs" color="gray" variant="light" compact onClick={openDescriptionInput}>
                 編集
               </Button>
             </>

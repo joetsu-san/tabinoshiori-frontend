@@ -1,3 +1,6 @@
+import { ModelCourseOverview } from "@/@types";
+import { OfficialSpotBookmark } from "../../api/@types/index";
+
 export const data = [
   {
     id: "auvfuwfba",
@@ -49,60 +52,84 @@ export const data = [
   },
 ];
 
-export const modelcourselist = [
+export const modelcourselist: ModelCourseOverview[] = [
   {
     id: "1",
-    image:
-      "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    modelCourseImages: [
+      {
+        id: "",
+        src: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+      },
+    ],
     title: "#上越もよう おすすめお出かけプラン",
     description:
       "当市のスポットを巡る「お出かけプラン」をインスタグラムで募集するキャンペーンを実施し、市民や上越市にお越しのみなさんから投稿いただいたプランをご紹介します。",
-    requiredMinute: "1時間",
+    requiredMinute: 120,
   },
   {
     id: "2",
     title: "サクラ咲く！春爛漫コース",
     description:
       "日本三大夜桜のひとつに称される高田城址公園の桜をはじめ、城下町高田には徒歩圏内にさまざまな桜の名所が存在します。地元スタッフおすすめの、隠れた名所を散策してみてください。",
-    requiredMinute: "2時間",
-    image:
-      "https://images.unsplash.com/photo-1559494007-9f5847c49d94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    requiredMinute: 120,
+    modelCourseImages: [
+      {
+        id: "",
+        src: "https://images.unsplash.com/photo-1559494007-9f5847c49d94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+      },
+    ],
   },
   {
     id: "3",
     title: "城下町高田さんぽ",
     description:
       "慶長19年（1614年）の高田城築城とともに造られた城下町高田。平成26年（2014年）に開府400年を迎えたこの地には、今も城下町の風情を残す町家と、雁木の街並みが残ります。歴史の香り漂う城下町で、四季折々の風情を味わってみませんか。",
-    requiredMinute: "5時間",
-    image:
-      "https://images.unsplash.com/photo-1608481337062-4093bf3ed404?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    requiredMinute: 300,
+    modelCourseImages: [
+      {
+        id: "",
+        src: "https://images.unsplash.com/photo-1608481337062-4093bf3ed404?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+      },
+    ],
   },
   {
     id: "4",
     title: "春日山城じっくり堪能コース",
     description:
       "上杉謙信公が居城としていた天下の名城・春日山城。標高180mの山の地形を生かした天然の要害には、今なお土塁や空堀などの遺構が数多く残っています。当時に思いを馳せながら、城跡に点在する遺構を巡ることで、壮大な戦国ロマンを体感することができます。",
-    requiredMinute: "0.5時間",
-    image:
-      "https://images.unsplash.com/photo-1507272931001-fc06c17e4f43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    requiredMinute: 30,
+    modelCourseImages: [
+      {
+        id: "",
+        src: "https://images.unsplash.com/photo-1507272931001-fc06c17e4f43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+      },
+    ],
   },
   {
     id: "5",
     title: "わくわく学習コース",
     description:
       "上杉謙信公が居城としていた天下の名城・春日山城。標高180mの山の地形を生かした天然の要害には、今なお土塁や空堀などの遺構が数多く残っています。当時に思いを馳せながら、城跡に点在する遺構を巡ることで、壮大な戦国ロマンを体感することができます。",
-    requiredMinute: "3.5時間",
-    image:
-      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    requiredMinute: 210,
+    modelCourseImages: [
+      {
+        id: "",
+        src: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+      },
+    ],
   },
   {
     id: "6",
     title: "上杉謙信公ゆかりの地めぐり",
     description:
       "上杉謙信公は、越後守護代であった長尾為景（ながおためかげ）の末子として誕生。幼名を虎千代と名乗りました。謙信公の戦歴は、元服をした天文12（1543）年に始まります。以降、武田晴信（信玄）や北条氏康、織田信長といった戦国時代の名将と戦を重ねましたが、その戦いは欲によるものではなく、義を重んじ出兵したものだったといわれています。",
-    requiredMinute: "2時間",
-    image:
-      "https://images.unsplash.com/photo-1582721478779-0ae163c05a60?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    requiredMinute: 120,
+    modelCourseImages: [
+      {
+        id: "",
+        src: "https://images.unsplash.com/photo-1582721478779-0ae163c05a60?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+      },
+    ],
   },
 ];
 
@@ -214,3 +241,52 @@ export const modelcoursedetail = {
     },
   ],
 };
+
+export const officialSpotBookmarkList: OfficialSpotBookmark[] = [
+  {
+    officialSpotDetail: {
+      id: "05337c8b-2b42-4326-b605-0fd0c48ff9af",
+      title: "大潟夕日の森展望台",
+      description:
+        "日本海を一望する事ができる展望台です。\n海岸沿いの夕日スポットは数多いですが、ここからの景色は遮るものがほとんどなく\n海と夕日のコントラストを思う存分満喫することができます。\nまた、天気の良い日は佐渡を眺めることもできます。",
+      address: "新潟県上越市大潟区九戸浜110",
+      latitude: 37.23802096,
+      longitude: 138.3342061,
+      ruby: "おおがたゆうひのもりてんぼうだい",
+      officialSpotStatus: {
+        id: 1,
+        title: "open",
+      },
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+    },
+    sortIndex: 0,
+  },
+  {
+    officialSpotDetail: {
+      id: "082cfc0e-4c80-48cc-9df8-e541a4c83574",
+      title: "風巻神社",
+      description:
+        "この神社は、祭神として級長津彦命（しなつひこのみこと）、級長戸辺命（しなとべのみこと）、天照大御神（あまてらすおおみかみ）、月読命（つくよみのみこと）、建御名方神（たけみなかたのかみ）、十二神大神を祀っています。境内は両側を大きくそびえたった杉に囲まれた114段の石段を登ったところにあり、近郷近在の崇敬を受け、上杉、松平越中守、榊原の藩主のあつい崇敬を受けました。また、神社奥社には樹齢約200～300年のエドヒガン桜が所在し、風巻山の特徴的な存在で、地域の人々にうるおいと安らぎを与えています。",
+      address: "新潟県上越市三和区岡田24",
+      latitude: 37.1221599,
+      longitude: 138.3831518,
+      ruby: "かざまきじんじゃ",
+      officialSpotStatus: {
+        id: 1,
+        title: "open",
+      },
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+    },
+    sortIndex: 0,
+  },
+];

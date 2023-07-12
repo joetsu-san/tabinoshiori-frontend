@@ -34,7 +34,6 @@ export const SpotButton = (props: any) => {
 
   const token = useRecoilValue(firebaseTokenState); // ユーザートークン
   const { data: bookmarkList, error } = useTourismspotBookmarkList(); // ユーザーの観光地ブックマーク
-  const [liked, setLiked] = useState<boolean[]>([]);
 
   const infoOption = {
     pixelOffset: props.offsetSize,
@@ -61,10 +60,11 @@ export const SpotButton = (props: any) => {
   const [inputText, setInputText] = useState("");
   const debouncedInputText = useDebounce(inputText, 500);
   const handleChange = (event: any) => setInputText(event.target.value);
+
   useEffect(() => {
     if (spotList == null) return;
     // 観光地検索処理
-    if (debouncedInputText != "") {
+    if (debouncedInputText != null) {
       const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
       setTempSpotList(temp);
     } else {
@@ -72,21 +72,8 @@ export const SpotButton = (props: any) => {
     }
   }, [debouncedInputText, setTempSpotList, spotList]);
 
-  const handleBookmark = async (id: string) => {
-    await createTourismspotBookmark(id, token!);
-  };
-  const handleRemoveBookmark = async (id: string) => {
-    await deleteTourismspotBookmark(id, token!);
-  };
-
-  useEffect(() => {
-    if (spotList != null) setLiked(spotList.map((spot) => false));
-    // setLiked(spotList.map((spot) => bookmarkList?.some((v) => v.officialSpotDetail.id === spot.id)));
-  }, [bookmarkList, spotList]);
-
   if (error) return <div>failed to load</div>;
   if (!bookmarkList) return <div>loading...</div>;
-  if (!liked) return <div>loading...</div>;
 
   return (
     <div
@@ -150,45 +137,6 @@ export const SpotButton = (props: any) => {
               <Text weight={500}>{val.title}</Text>
 
               <Group position="right">
-                {/* {token ? (
-                  <ActionIcon
-                    variant="light"
-                    size="lg"
-                    radius={50}
-                    mt={"1rem"}
-                    disabled={!token}
-                    onClick={() => {
-                      liked[i] ? handleRemoveBookmark(val.id) : handleBookmark(val.id);
-                      setLiked((prev) => {
-                        const temp = [...prev];
-                        temp[i] = !temp[i];
-                        return temp;
-                      });
-                    }}
-                  >
-                    <IconHeart
-                      size="2rem"
-                      stroke={1.5}
-                      style={{
-                        fill: liked[i] ? "red" : "#9999",
-                      }}
-                      color={liked[i] ? "red" : "#9999"}
-                    />
-                  </ActionIcon>
-                ) : (
-                  <Tooltip label="ログイン限定機能です">
-                    <ActionIcon variant="light" size="lg" radius={50} mt={"1rem"}>
-                      <IconHeartBroken
-                        size="2rem"
-                        stroke={1.5}
-                        style={{
-                          fill: "#9999",
-                        }}
-                        color={"#9999"}
-                      />
-                    </ActionIcon>
-                  </Tooltip>
-                )} */}
                 <Link href={`tourismspot/${val.id}`}>
                   <Button variant="light" color="blue" mt="md" radius="md">
                     詳細

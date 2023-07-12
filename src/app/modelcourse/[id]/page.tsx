@@ -31,7 +31,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   const [zoom, setZoom] = useState(9);
   const [like, setLike] = useState(false);
   const [actives, setActives] = useState(0);
-  const keys = process.env.NEXT_PUBLIC_MAP_KEY;
+  const key = process.env.NEXT_PUBLIC_MAP_KEY as string;
   const courseSize = 100;
   const containerStyle = {
     height: "100%",
@@ -74,7 +74,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
       ) : (
         <Box>
           <Card p={0} h={300} m="10px 0 0 0">
-            <LoadScript googleMapsApiKey={String(keys)} onLoad={() => createOffsetSize()}>
+            <LoadScript googleMapsApiKey={key} onLoad={() => createOffsetSize()}>
               <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={zoom} clickableIcons={false}>
                 {data.modelCourseSpots.map((markers, index) => (
                   <Marker

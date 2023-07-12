@@ -1,29 +1,31 @@
-import {
-  Container,
-  Tabs,
-  SimpleGrid,
-  Card,
-  Stack,
-  Flex,
-  ActionIcon,
-  Grid,
-  Box,
-  Image,
-  Text,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Container, Tabs, SimpleGrid, Card, Stack, Flex, ActionIcon, Grid, Box, Image, Text } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
 import { LoadingDisplay } from "@/components/LoadingDisplay";
+import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
+import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
 
 export const TourismSpotBookmark = () => {
   const { data: tourismspotlist, error, mutate } = useTourismspotBookmarkList();
   const [liked, setLiked] = useState<boolean[]>((tourismspotlist ?? Array()).map((_) => true));
+  const token = useRecoilValue(firebaseTokenState);
 
   const toggleLiked = (index: number) => {
+    const spotId = tourismspotlist![index].officialSpotDetail.id;
+    if (liked[index]) {
+      deleteTourismspotBookmark(spotId, token!!);
+    } else {
+      createTourismspotBookmark(spotId, token!!);
+    }
     setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
+
+  useEffect(() => {
+    setLiked((tourismspotlist ?? Array()).map((_) => true));
+  }, [tourismspotlist]);
 
   useEffect(() => {
     mutate();

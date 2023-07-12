@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { z } from "zod";
 import { File } from "buffer";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { managementClient } from "../../_aspida/managementAspida";
@@ -79,28 +78,38 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
     await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$put({
       body: officialSpotData,
     });
-    router.push("/management/official_spot");
+    // router.push("/management/official_spot");
   };
 
   // 画像更新
   const fileSubmit = async (value: any) => {
-    const images: File[] = [];
+    const images: globalThis.File[] = [];
+
+    console.log(value.files);
     for (let i = 0; i < value.files.length; i++) {
       const f = value.files[i];
-      images.push(await f.arrayBuffer());
+      images.push(
+        new globalThis.File([await f.ArrayBuffer], f.name, {
+          type: "image/jpg",
+        })
+      );
     }
-    await axios.put(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}/image`,
-      { officialSpotImages: images },
-      { withCredentials: true }
-    );
-    router.push("/management/official_spot");
+
+    await managementClient.management.official_spot._official_spot_id(params.official_spot_id).image.$put({
+      body: { files: images },
+      config: {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    });
+    // router.push("/management/official_spot");
   };
 
   // 削除
   const deleteSubmit = async () => {
     await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$delete();
-    router.push("/management/official_spot");
+    // router.push("/management/official_spot");
   };
 
   // データ取得中

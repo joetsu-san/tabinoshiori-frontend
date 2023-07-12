@@ -1,39 +1,44 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import { Card, Container, Image, Text, ActionIcon, Flex, Group, LoadingOverlay, Box } from "@mantine/core";
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, Container, Image, Text, ActionIcon, Flex, Group, AspectRatio } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
 import { useOfficialSpot } from "@/hooks/useOfficialSpot";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
+import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
+import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
 
 const OfficialSpotDetail = () => {
   const router = useParams();
   const spotId = router.official_spot_id;
-  const { data: tourismDetailDatas, error } = useOfficialSpot(spotId);
-  console.log("tourismDetailDatas", tourismDetailDatas);
-
+  const { data: tourismDetailDatas, error: tourismDetailDatasError } = useOfficialSpot(spotId);
+  const { data: tourismspotBookmark, error: tourismspotBookmarkError } = useTourismspotBookmarkList();
   const [liked, setLiked] = useState<boolean>(false);
+  const token = useRecoilValue(firebaseTokenState);
+
+  const handleLike = useCallback(async () => {
+    if (liked) {
+      await deleteTourismspotBookmark(spotId, token!!);
+    } else {
+      await createTourismspotBookmark(spotId, token!!);
+    }
+    setLiked((prev) => !prev);
+  }, [liked, spotId, token]);
 
   useEffect(() => {
-    console.log(tourismDetailDatas);
-    console.log(error);
-  }, [tourismDetailDatas, error]);
+    setLiked(tourismspotBookmark?.some((bookmark) => bookmark.officialSpotDetail.id === spotId));
+  }, [spotId, tourismspotBookmark]);
 
-  if (!tourismDetailDatas)
-    return (
-      <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
-        <LoadingOverlay visible={!tourismDetailDatas} zIndex={1}></LoadingOverlay>
-      </Box>
-    );
+  if (!tourismDetailDatas) return <LoadingDisplay />;
 
   return (
     <div>
       <Image
-        src={
-          tourismDetailDatas.officialSpotImages.length === 0
-            ? "/dummyImage.svg"
-            : tourismDetailDatas.officialSpotImages[0].src
-        }
+        src={tourismDetailDatas.officialSpotImages[0]?.src || "/dummyImage.svg"}
         fit="cover"
         alt="観光地画像"
         height={300}
@@ -49,7 +54,8 @@ const OfficialSpotDetail = () => {
             </Text>
           </Group>
           <ActionIcon
-            onClick={() => setLiked(!liked)}
+            disabled={!token}
+            onClick={handleLike}
             mb={15}
             variant="light"
             size="xxl"
@@ -90,13 +96,17 @@ const OfficialSpotDetail = () => {
           <Text fw={500} size={14} color={"#555555"} mb={10}>
             {tourismDetailDatas.address}
           </Text>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d203595.9883919925!2d138.1535143964451!3d37.12445829757502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5ff67612bb2da995%3A0x4f7fe4e9f38ac675!2z5paw5r2f55yM5LiK6LaK5biC!5e0!3m2!1sja!2sjp!4v1686749502221!5m2!1sja!2sjp"
-            width="100%"
-            height="100%"
-            style={{ border: 0, borderRadius: 5 }}
-            loading="lazy"
-          ></iframe>
+          <AspectRatio ratio={16 / 16}>
+            <iframe
+              src={`https://maps.google.com/maps?output=embed&q=${tourismDetailDatas.title}&ll=${tourismDetailDatas.latitude},${tourismDetailDatas.longitude}&t=m&hl=ja&z=18`}
+              title="Google map"
+              width="100%"
+              height="100%"
+              style={{ border: 0, borderRadius: 5 }}
+              loading="lazy"
+              allowFullScreen
+            />
+          </AspectRatio>
         </Card>
       </Container>
     </div>

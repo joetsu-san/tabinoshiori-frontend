@@ -35,6 +35,7 @@ export const SettingsModal = () => {
   const { data, error } = useUserData();
 
   const userInfo = useRecoilValue(firebaseUserState);
+  const { data, error } = useUserData();
 
   const handleLogout = () => {
     firebaseSignOut();

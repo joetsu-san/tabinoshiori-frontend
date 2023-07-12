@@ -4,21 +4,37 @@ import { IconDeviceMobileMessage, IconPictureInPicture, IconScreenshot, IconShar
 import { TimeLineWrapper } from "./_components/TimeLineWrapper/TimeLineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
+import { updateTravelPlanOverview } from "@/utils/updateTravelPlanOverview";
+import { useSearchParams } from "next/navigation";
 
 const Page = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [openedIamgeModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
+  const [openedImageModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
 
   const [title, setTitle] = useState("タイトル");
   const [description, setDescription] = useState("説明");
+  const [visitedAt, setVisitedAt] = useState(() => new Date().toISOString());
   const [isTitleInput, setIsTitleInput] = useState(false);
   const [isDescriptionInput, setIsDescriptionInput] = useState(false);
   const openTitleInput = () => setIsTitleInput(true);
   const closeTitleInput = () => setIsTitleInput(false);
-  const openDescriptionInput = () => setIsDescriptionInput(true);
-  const closeDescriptionInput = () => setIsDescriptionInput(false);
+
+  const router = useSearchParams();
+  const collaborateId = router.get("id");
+  const openDescriptionInput = () => {
+    setIsDescriptionInput(true);
+  };
+
+  useEffect(() => {
+    console.log(collaborateId);
+  }, [collaborateId]);
+
+  const closeDescriptionInput = () => {
+    updateTravelPlanOverview(collaborateId!, { title: title, description: description, visitedAt: visitedAt });
+    setIsDescriptionInput(false);
+  };
 
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +50,7 @@ const Page = () => {
       <Modal opened={opened} onClose={close} title="旅のしおりを共有する" centered>
         <ShareModalContent />
       </Modal>
-      <Modal opened={openedIamgeModal} onClose={closeImageModal} title="画像化する" centered>
+      <Modal opened={openedImageModal} onClose={closeImageModal} title="画像化する" centered>
         <GenerateImageModalContent imageRef={imageRef} />
       </Modal>
 

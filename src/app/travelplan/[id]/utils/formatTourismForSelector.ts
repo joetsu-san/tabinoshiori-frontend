@@ -12,8 +12,8 @@ export const formatTourismForSelector = (
     return {
       image: image,
       label: spot.title,
-      value: spot.id,
       group: group,
+      id: spot.id,
     };
   });
 

@@ -42,19 +42,19 @@ export const SelectTourismSpot = () => {
   const formatData = officialSpotList && formatTourismForSelector(officialSpotList, tourismspotBookmarkList);
 
   const handleOnChange = (selectedId: string) => {
-    const selectedSpot = formatData?.find((item) => item.value === selectedId);
+    const selectedSpot = formatData?.find((item) => item.id === selectedId);
     if (selectedSpot) {
       setTravelPlanTourismSpotInput({
         ...travelPlanTourismSpotInput,
+        id: selectedSpot.id,
         image: selectedSpot.image,
-        value: selectedSpot.value,
         label: selectedSpot.label,
       });
     } else {
       setTravelPlanTourismSpotInput({
         ...travelPlanTourismSpotInput,
+        id: "",
         image: "",
-        value: "",
         label: "",
       });
     }
@@ -73,8 +73,14 @@ export const SelectTourismSpot = () => {
           label="観光地を選択"
           placeholder="選択してください"
           itemComponent={SelectItem}
-          data={formatData}
           searchable
+          data={formatData.map(({ image, label, id }) => {
+            return {
+              image: image,
+              label: label,
+              value: id,
+            };
+          })}
           maxDropdownHeight={160}
           nothingFound="見つかりませんでした"
           filter={(value, item) =>

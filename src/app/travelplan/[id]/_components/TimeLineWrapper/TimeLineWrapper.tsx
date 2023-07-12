@@ -1,14 +1,17 @@
 "use client";
-import { useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { RefObject } from "react";
-import { useRecoilState } from "recoil";
-import { travelPlanTourismSpotListState, travelPlanTourismSpotInputState } from "@/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { travelPlanTourismSpotListState, travelPlanTourismSpotInputState, firebaseTokenState } from "@/atoms";
 import { Divider, Box, Button, Modal, Textarea, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFlag3, IconPlus } from "@tabler/icons-react";
 import { TravelPlanSpot } from "@/@types";
 import DndkitList from "./DndkitList";
 import { SelectTourismSpot } from "./SelectTourismSpot";
+import { updateTravelPlanOverview } from "@/utils/updateTravelPlanOverview";
+import { useParams, useSearchParams } from "next/navigation";
+import { createTravelPlanSpot } from "@/utils/createTravelPlanSpot";
 
 type Props = {
   ref: RefObject<HTMLDivElement>;
@@ -16,43 +19,31 @@ type Props = {
 
 export const TimeLineWrapper = (props: Props) => {
   const { ref } = props;
+  const commentRef = useRef<HTMLTextAreaElement>(null);
   const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
   const [opened, { open, close }] = useDisclosure(false);
   const [comment, setComment] = useState<string>("");
+  const router = useSearchParams();
+  const travelPlanId = router.get("id");
 
-  const handleTourismSpotCount = () => {
-    // TODO: トラベルプランpostの処理を書く
+  const token = useRecoilValue(firebaseTokenState);
 
-    // MEMO: バックエンドからとってくるモックデータ。今はフロントだけでも追加できているように見えるようにtitle, src, commentに入力データを入れている
-    const travelPlanSpot: TravelPlanSpot = {
-      travelPlanSpotId: travelPlanTourismSpotInput.value,
-      tourismSpotId: window.crypto.randomUUID(),
-      title: travelPlanTourismSpotInput.label,
-      description: "string",
-      address: "string",
-      latitude: 31,
-      longitude: 30,
-      ruby: "じょうえつみょうこうえき",
-      officialSpotStatus: {
-        id: 1,
-        title: "open",
-      },
-      officialSpotImages: [
-        {
-          id: window.crypto.randomUUID(),
-          src: travelPlanTourismSpotInput.image,
-        },
-      ],
-      comment: comment,
-      sortIndex: travelPlanTourismSpotList.length + 1,
-      minuteSincePrevious: 15,
-    };
-    setTravelPlanTourismSpotList([...travelPlanTourismSpotList, travelPlanSpot]);
-    setComment("");
+  useEffect(() => {
+    console.log(travelPlanId);
+  }, [travelPlanId]);
+
+  const handleTourismSpotCount = async () => {
+    await createTravelPlanSpot(travelPlanId!, {
+      tourismSpotId: travelPlanTourismSpotInput.id,
+      comment: commentRef.current!.value,
+      sortIndex: travelPlanTourismSpotList[travelPlanTourismSpotList.length].sortIndex + 1,
+      minuteSincePrevious: 5,
+    });
+    // setTravelPlanTourismSpotList([...travelPlanTourismSpotList, travelPlanSpot]);
     setTravelPlanTourismSpotInput({
+      id: "",
       image: "",
-      value: "",
       label: "",
     });
   };
@@ -79,7 +70,7 @@ export const TimeLineWrapper = (props: Props) => {
           <SelectTourismSpot />
           <Textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            ref={commentRef}
             placeholder="コメントを入力してください"
             label="コメント"
             size="md"
@@ -94,7 +85,7 @@ export const TimeLineWrapper = (props: Props) => {
               close();
             }}
             color="cyan"
-            disabled={!travelPlanTourismSpotInput.value}
+            disabled={!travelPlanTourismSpotInput.id}
           >
             プランを追加
           </Button>

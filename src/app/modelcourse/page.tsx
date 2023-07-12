@@ -44,7 +44,7 @@ const ModelCourse = () => {
         </Flex>
       ) : (
         <>
-          <CardsCarousel />
+          <CardsCarousel data={listData} />
           <Box>
             <Input
               placeholder="検索"

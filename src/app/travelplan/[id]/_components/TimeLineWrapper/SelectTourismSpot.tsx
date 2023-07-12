@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { forwardRef } from "react";
 import { Group, Avatar, Text, Select, Image, Skeleton } from "@mantine/core";
 import { formatTourismForSelector } from "../../utils/formatTourismForSelector";
 import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
+import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
 
 type ItemProps = {
   image: string;
@@ -35,13 +36,10 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItemBase
 export const SelectTourismSpot = () => {
   const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
 
-  const { data, error } = useOfficialSpotList();
-  useEffect(() => {
-    console.log(data);
-    console.log(error);
-  }, [data, error]);
+  const { data: officialSpotList } = useOfficialSpotList();
+  const { data: tourismspotBookmarkList } = useTourismspotBookmarkList();
 
-  const formatData = data && formatTourismForSelector(data);
+  const formatData = officialSpotList && formatTourismForSelector(officialSpotList, tourismspotBookmarkList);
 
   const handleOnChange = (selectedId: string) => {
     const selectedSpot = formatData?.find((item) => item.value === selectedId);

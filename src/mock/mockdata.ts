@@ -1,4 +1,5 @@
 import { ModelCourseOverview } from "@/@types";
+import { OfficialSpotBookmark } from "../../api/@types/index";
 
 export const data = [
   {
@@ -240,3 +241,52 @@ export const modelcoursedetail = {
     },
   ],
 };
+
+export const officialSpotBookmarkList: OfficialSpotBookmark[] = [
+  {
+    officialSpotDetail: {
+      id: "05337c8b-2b42-4326-b605-0fd0c48ff9af",
+      title: "大潟夕日の森展望台",
+      description:
+        "日本海を一望する事ができる展望台です。\n海岸沿いの夕日スポットは数多いですが、ここからの景色は遮るものがほとんどなく\n海と夕日のコントラストを思う存分満喫することができます。\nまた、天気の良い日は佐渡を眺めることもできます。",
+      address: "新潟県上越市大潟区九戸浜110",
+      latitude: 37.23802096,
+      longitude: 138.3342061,
+      ruby: "おおがたゆうひのもりてんぼうだい",
+      officialSpotStatus: {
+        id: 1,
+        title: "open",
+      },
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+    },
+    sortIndex: 0,
+  },
+  {
+    officialSpotDetail: {
+      id: "082cfc0e-4c80-48cc-9df8-e541a4c83574",
+      title: "風巻神社",
+      description:
+        "この神社は、祭神として級長津彦命（しなつひこのみこと）、級長戸辺命（しなとべのみこと）、天照大御神（あまてらすおおみかみ）、月読命（つくよみのみこと）、建御名方神（たけみなかたのかみ）、十二神大神を祀っています。境内は両側を大きくそびえたった杉に囲まれた114段の石段を登ったところにあり、近郷近在の崇敬を受け、上杉、松平越中守、榊原の藩主のあつい崇敬を受けました。また、神社奥社には樹齢約200～300年のエドヒガン桜が所在し、風巻山の特徴的な存在で、地域の人々にうるおいと安らぎを与えています。",
+      address: "新潟県上越市三和区岡田24",
+      latitude: 37.1221599,
+      longitude: 138.3831518,
+      ruby: "かざまきじんじゃ",
+      officialSpotStatus: {
+        id: 1,
+        title: "open",
+      },
+      officialSpotImages: [
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          src: "https://example.com/image.jpg",
+        },
+      ],
+    },
+    sortIndex: 0,
+  },
+];

@@ -24,7 +24,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { useModelCourseDetail } from "@/hooks/useModelCourseDetail";
 import { firebaseTokenState } from "@/atoms";
 import { createModelcourseBookmark } from "@/utils/createModelcourseBookmark";
-import { removeModelcourseBookmark } from "@/utils/removeModelcourseBookmark copy";
+import { removeModelcourseBookmark } from "@/utils/removeModelcourseBookmark";
 
 const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   //データ取得

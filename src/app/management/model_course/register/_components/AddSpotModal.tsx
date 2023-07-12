@@ -1,11 +1,10 @@
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
-import { client } from "@/hooks/useAspidaSWRImmutable";
-import useAspidaSWR from "@aspida/swr";
 import { Button, Image, Text, TextInput, NumberInput, Card, Input, Grid, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { OfficialSpot } from "../../../../../../api/@types";
+import { useOfficialSpotList } from "@/app/management/_hooks/useOfficialSpotList";
 
 type ModalProps = {
   modelCourseList: any[];
@@ -22,7 +21,7 @@ export const AddSpotModal: React.FC<ModalProps> = ({
   setViewList,
   closeAction,
 }) => {
-  const { data, error } = useAspidaSWR(client.official_spot);
+  const { data, error } = useOfficialSpotList();
 
   const [spotList, setSpotList] = useState<OfficialSpot[]>([]);
 

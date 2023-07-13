@@ -110,7 +110,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
                   radius={5}
                   width={100}
                   height={100}
-                  src={data.modelCourseImages[0]?.src || "/dummyImage.svg"}
+                  src={data.modelCourseSpots[0]?.officialSpotImages[0]?.src || "/dummyImage.svg"}
                   alt="コース画像"
                 />
               </Card.Section>

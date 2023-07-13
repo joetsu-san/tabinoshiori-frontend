@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Box, NavLink, Button, Text, Divider, Image, Avatar } from "@mantine/core";
+import { Modal, Group, Box, NavLink, Button, Text, Divider, Image, Avatar, Loader } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { BirthdayInput } from "./BirthdayInput";
 import { GenderInput } from "./GenderInput";
@@ -15,29 +15,53 @@ import {
   IconCheck,
   IconGenderMale,
   IconGenderFemale,
+  IconTrash,
 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { firebaseSignOut } from "@/lib/firebase";
 import { useRecoilValue } from "recoil";
 import { firebaseUserState } from "@/atoms";
 import { useRouter } from "next/navigation";
 import { useUserData } from "@/hooks/useUserData";
-
 export const SettingsModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
 
-  const [defaultGender, setGender] = useState<string | undefined>(undefined);
+  const [defaultGender, setGender] = useState<Number | undefined>(undefined);
 
   const [defaultYear, setYear] = useState<string | undefined>(undefined);
   const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
   const [defaultDay, setDay] = useState<string | undefined>(undefined);
+  const [defaultBirthday, setBirthday] = useState<string | undefined>(undefined);
 
   const userInfo = useRecoilValue(firebaseUserState);
   const { data, error } = useUserData();
 
+  const { data: userData, error: userError } = useUserData();
+
+  useEffect(() => {
+    if (userData) {
+      setGender(userData.genderId);
+      if (userData.birthday) {
+        const birthday = userData.birthday.split("T")[0];
+        setBirthday(birthday);
+        setYear(parseInt(birthday.split("-")[0]).toString());
+        setMonth(parseInt(birthday.split("-")[1]).toString());
+        setDay(parseInt(birthday.split("-")[2]).toString());
+      } else {
+        setBirthday("未設定");
+      }
+    }
+  }, [userData, userError]);
+
   const handleLogout = () => {
     firebaseSignOut();
+    modals.closeAll();
+    router.push("/tourismspot");
+  };
+
+  const handleDelete = () => {
+    // firebaseSignOut();
     modals.closeAll();
     router.push("/tourismspot");
   };
@@ -162,6 +186,46 @@ export const SettingsModal = () => {
       ),
     });
 
+  //アカウント削除モーダル
+  const openDeleteModal = () =>
+    modals.open({
+      padding: "0px",
+      centered: true,
+      radius: 10,
+      withCloseButton: false,
+      children: (
+        <>
+          <Group position="left" sx={{ height: "100%" }} pt={10} pb={10}>
+            <Button variant="subtle" color="dark" onClick={() => modals.closeAll()} w={"20%"}>
+              <IconX></IconX>
+            </Button>
+            <Box w={"75%"}>
+              <Text ml={"18%"}>アカウント削除</Text>
+            </Box>
+          </Group>
+          <Divider></Divider>
+          <Box p={"20px"}>
+            <Text my={20}>アカウント削除してもよろしいですか？</Text>
+            <Group position="apart">
+              <Button
+                onClick={() => {
+                  modals.closeAll();
+                  openSettingModal();
+                }}
+                variant="light"
+                color="gray"
+              >
+                キャンセル
+              </Button>
+              <Button color="red" onClick={handleDelete}>
+                削除
+              </Button>
+            </Group>
+          </Box>
+        </>
+      ),
+    });
+
   const openSettingModal = () =>
     modals.open({
       withCloseButton: false,
@@ -190,15 +254,19 @@ export const SettingsModal = () => {
           {/* TODO: 中身の実装 */}
           {/* ログインしてる時のモーダルコンテンツ */}
           <Box sx={{ width: "100%" }}>
-            <NavLink label="ユーザー名" description="hogehoge" icon={<IconUser size="1.5rem" stroke={1.5} />} />
+            <NavLink
+              label="ユーザー名"
+              description={userInfo?.displayName}
+              icon={<IconUser size="1.5rem" stroke={1.5} />}
+            />
             <NavLink
               label="メールアドレス"
-              description="hoge@example.com"
+              description={userInfo?.email}
               icon={<IconMail size="1.5rem" stroke={1.5} />}
             />
             <NavLink
               label="性別"
-              // description={}
+              description={"aa"}
               icon={
                 <>
                   <IconGenderMale height={"1.5rem"} width={"0.75rem"} />
@@ -213,6 +281,7 @@ export const SettingsModal = () => {
             />
             <NavLink
               label="生年月日"
+              description={defaultBirthday}
               // description={data[0].birthday}
               icon={<IconCake size="1.5rem" stroke={1.5} />}
               rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
@@ -231,6 +300,19 @@ export const SettingsModal = () => {
               onClick={() => {
                 modals.closeAll();
                 openLogoutModal();
+              }}
+            />
+            <NavLink
+              label="アカウント削除"
+              icon={<IconTrash size="1.5rem" stroke={1.5} />}
+              rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+              active={true}
+              color="red"
+              py={15}
+              variant="filled"
+              onClick={() => {
+                modals.closeAll();
+                openDeleteModal();
               }}
             />
           </Box>
@@ -274,6 +356,43 @@ export const LogoutModal = () => {
         icon={<IconLogout size="1.5rem" stroke={1.5} />}
         rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         active={true}
+        color="red"
+        py={15}
+        onClick={open}
+      />
+    </>
+  );
+};
+// ユーザー削除用modal
+export const Deletemodal = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const handleDelete = () => {
+    console.log("削除");
+    close();
+    // firebaseSignOut();
+  };
+
+  return (
+    <>
+      <Modal opened={opened} onClose={close} centered title="アカウント削除してもよろしいですか？">
+        <Text my={20}></Text>
+        <Group position="apart">
+          <Button onClick={close} variant="light" color="gray">
+            キャンセル
+          </Button>
+          <Button color="red" onClick={handleDelete}>
+            削除
+          </Button>
+        </Group>
+      </Modal>
+
+      <NavLink
+        label="アカウント削除"
+        icon={<IconTrash size="1.5rem" stroke={1.5} />}
+        rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        active={true}
+        variant="filled"
         color="red"
         py={15}
         onClick={open}

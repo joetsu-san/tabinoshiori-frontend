@@ -6,7 +6,7 @@ import { SaveCancelButton } from "../_components/SaveCancelButton";
 import { useState } from "react";
 
 const Gender = () => {
-  const [defaultGender, setGender] = useState<string | undefined>(undefined);
+  const [defaultGender, setGender] = useState<Number | undefined>(undefined);
   return (
     <>
       <Box mx={"10%"}>

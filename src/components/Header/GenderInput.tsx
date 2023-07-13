@@ -1,6 +1,6 @@
 import { Select } from "@mantine/core";
 
-export const GenderInput = ({ defaultGender }: { defaultGender?: string }) => {
+export const GenderInput = ({ defaultGender }: { defaultGender?: Number }) => {
   return (
     <Select
       placeholder="性別を選択してください"
@@ -11,7 +11,7 @@ export const GenderInput = ({ defaultGender }: { defaultGender?: string }) => {
       ]}
       mt={10}
       mb={"80px"}
-      defaultValue={defaultGender}
+      defaultValue={defaultGender?.toString()}
     />
   );
 };

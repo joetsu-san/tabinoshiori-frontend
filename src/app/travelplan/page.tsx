@@ -2,79 +2,33 @@
 import type { NextPage } from "next";
 import { IconWriting } from "@tabler/icons-react";
 import { TravelPlanCard } from "./_component/TravelplanCard";
-import { Button } from "@mantine/core";
+import { Box, Button, LoadingOverlay } from "@mantine/core";
 import { TravelPlanDetail } from "@/@types";
+import { useTravelPlanList } from "@/hooks/useTravelPlanList";
+import { createTravelplan } from "@/utils/createTravelplan";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Page: NextPage = () => {
-  const travelPlans: TravelPlanDetail[] = [
-    {
-      id: "1",
-      title: "旅のタイトル",
-      authorId: "bfwiuqbfwq",
-      description: "旅の説明",
-      visitedAt: "",
-      travelPlanSpots: [
-        {
-          travelPlanSpotInfo: {
-            id: "1",
-            title: "上越妙高駅",
-            description: "string",
-            address: "string",
-            latitude: 31,
-            longitude: 30,
-            ruby: "じょうえつみょうこうえき",
-            officialSpotStatus: {
-              id: 1,
-              title: "open",
-            },
-            officialSpotImages: [
-              {
-                id: "1",
-                src: "https://picsum.photos/200/300",
-              },
-            ],
-          },
-          comment: "string",
-          sortIndex: 1,
-          minuteSincePrevious: 1,
-        },
-      ],
-    },
-    {
-      id: "2",
-      title:
-        "タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトル",
-      authorId: "bfwiuqbfwq",
-      description: "説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明説明",
-      visitedAt: "",
-      travelPlanSpots: [
-        {
-          travelPlanSpotInfo: {
-            id: "1",
-            title: "上越妙高駅",
-            description: "string",
-            address: "string",
-            latitude: 31,
-            longitude: 30,
-            ruby: "じょうえつみょうこうえき",
-            officialSpotStatus: {
-              id: 1,
-              title: "open",
-            },
-            officialSpotImages: [
-              {
-                id: "1",
-                src: "https://picsum.photos/200/300",
-              },
-            ],
-          },
-          comment: "string",
-          sortIndex: 1,
-          minuteSincePrevious: 1,
-        },
-      ],
-    },
-  ];
+  const { data: travelPlans, error } = useTravelPlanList();
+  const token = useRecoilValue(firebaseTokenState);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async () => {
+    setIsLoading(true);
+    const res = await createTravelplan(token!!);
+    router.push(`/travelplan/${res.id}`);
+  };
+
+  if (!travelPlans)
+    return (
+      <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
+        <LoadingOverlay visible={true} zIndex={1}></LoadingOverlay>
+      </Box>
+    );
 
   return (
     <main
@@ -85,7 +39,7 @@ const Page: NextPage = () => {
         minHeight: "100vh",
       }}
     >
-      <Button color="cyan" variant="light" leftIcon={<IconWriting size="1rem" />} m={10}>
+      <Button color="cyan" variant="light" leftIcon={<IconWriting size="1rem" />} m={10} onClick={handleClick}>
         旅のしおりを作成する
       </Button>
 

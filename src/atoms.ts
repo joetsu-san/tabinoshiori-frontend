@@ -1,7 +1,9 @@
-import { atom } from "recoil";
+import { AtomEffect, atom, atomFamily } from "recoil";
 import { TravelPlanSpot } from "@/@types";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { client } from "./lib/aspida";
+import { TravelPlan, subscribeRemoteTravelPlan } from "./utils/subscribeRemoteTravelPlan";
 
 export const travelPlanTourismSpotListState = atom<TravelPlanSpot[]>({
   key: "travelPlanTourismSpotListState",
@@ -16,16 +18,16 @@ export const travelPlanTourismSpotCountState = atom({
 });
 
 type TravelPlanTourismSpotInput = {
+  id: string;
   image: string;
-  value: string;
   label: string;
 };
 
 export const travelPlanTourismSpotInputState = atom<TravelPlanTourismSpotInput>({
   key: "travelPlanTourismSpotInputState",
   default: {
+    id: "",
     image: "",
-    value: "",
     label: "",
   },
   effects: [],
@@ -67,6 +69,18 @@ export const firebaseTokenState = atom<string | null>({
       const user = auth.currentUser;
       if (!user) return setSelf(null);
       user.getIdToken().then((token) => setSelf(token));
+    },
+  ],
+});
+
+export const travelPlanState = atomFamily<TravelPlan | undefined, string>({
+  key: "travelPlanState",
+  default: undefined,
+  effects: (travelPlanId: string): AtomEffect<TravelPlan | undefined>[] => [
+    ({ setSelf }) => {
+      return subscribeRemoteTravelPlan(travelPlanId, (snapshot: TravelPlan) => {
+        setSelf(snapshot);
+      });
     },
   ],
 });

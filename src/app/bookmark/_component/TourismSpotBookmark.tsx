@@ -10,26 +10,45 @@ import {
   Box,
   Image,
   Text,
-  LoadingOverlay,
+  Button,
 } from "@mantine/core";
 import { IconHeart, IconMapPin } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
+import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
+import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
+import Link from "next/link";
 
 export const TourismSpotBookmark = () => {
-  const { data: tourismspotlist, error } = useTourismspotBookmarkList();
+  const { data: tourismspotlist, error, mutate } = useTourismspotBookmarkList();
   const [liked, setLiked] = useState<boolean[]>((tourismspotlist ?? Array()).map((_) => true));
+  const token = useRecoilValue(firebaseTokenState);
 
   const toggleLiked = (index: number) => {
+    const spotId = tourismspotlist![index].officialSpotDetail.id;
+    if (liked[index]) {
+      deleteTourismspotBookmark(spotId, token!!);
+    } else {
+      createTourismspotBookmark(spotId, token!!);
+    }
     setLiked(liked.map((bool, i) => (i === index ? !bool : bool)));
   };
+
+  useEffect(() => {
+    setLiked((tourismspotlist ?? Array()).map((_) => true));
+  }, [tourismspotlist]);
+
+  useEffect(() => {
+    mutate();
+  }, []);
 
   if (!tourismspotlist)
     return (
       <Tabs.Panel value="modelCourse">
-        <Box h={"calc(100vh - 12rem)"} maw={400} pos="relative">
-          <LoadingOverlay visible={!tourismspotlist} zIndex={1}></LoadingOverlay>
-        </Box>
+        <LoadingDisplay />
       </Tabs.Panel>
     );
 
@@ -83,6 +102,11 @@ export const TourismSpotBookmark = () => {
                     {tourismspot.officialSpotDetail.description}
                   </Text>
                 </Stack>
+                <Flex justify="flex-end">
+                  <Button size="xs" variant="outline" color="cyan" mt={10}>
+                    <Link href={`/tourismspot/${tourismspot.officialSpotDetail.id}`}>詳細</Link>
+                  </Button>
+                </Flex>
               </Card>
             ))}
           </SimpleGrid>

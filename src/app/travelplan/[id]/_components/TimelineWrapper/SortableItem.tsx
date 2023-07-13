@@ -8,7 +8,6 @@ import { TravelPlanSpot } from "@/@types";
 
 type Props = {
   item: TravelPlanSpot;
-  sortIndex: number;
 };
 const useStyles = createStyles((theme) => ({
   item: {
@@ -31,8 +30,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const SortableItem = (props: Props) => {
-  const { item, sortIndex } = props;
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: props.sortIndex });
+  const { item } = props;
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.travelPlanSpotId });
   const { classes, cx } = useStyles();
 
   // Modal用
@@ -61,7 +60,7 @@ export const SortableItem = (props: Props) => {
           width={80}
           height={80}
           radius={5}
-          src={item.officialSpotImages[0].src}
+          src={item.officialSpotImages?.[0].src}
           alt="トラベルプランアイテム画像"
         />
         <Stack spacing="xs">

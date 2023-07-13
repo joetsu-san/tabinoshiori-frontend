@@ -30,7 +30,9 @@ const OfficialSpotDetail = () => {
   }, [liked, spotId, token]);
 
   useEffect(() => {
-    setLiked(tourismspotBookmark?.some((bookmark) => bookmark.officialSpotDetail.id === spotId));
+    if (tourismspotBookmark) {
+      setLiked(tourismspotBookmark.some((bookmark) => bookmark.officialSpotDetail.id === spotId));
+    }
   }, [spotId, tourismspotBookmark]);
 
   if (!tourismDetailDatas) return <LoadingDisplay />;

@@ -3,14 +3,12 @@ import { client } from "@/lib/aspida";
 import useAspidaSWR from "@aspida/swr";
 import { useRecoilValue } from "recoil";
 
-export const useModelcourseBookmarkList = () => {
+export const useTourismspotBookmarkList = () => {
   const token = useRecoilValue(firebaseTokenState);
-  const { data, error } = useAspidaSWR(client.user.model_course_bookmark, "$get", {
+  return useAspidaSWR(client.user.official_spot_bookmark, "$get", {
     config: {
       headers: { Authorization: `Bearer ${token}` },
     },
     enabled: !!token,
   });
-
-  return { data, error };
 };

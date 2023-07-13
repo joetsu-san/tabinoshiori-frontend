@@ -35,6 +35,7 @@ export const SettingsModal = () => {
   const [defaultBirthday, setBirthday] = useState<string | undefined>(undefined);
 
   const userInfo = useRecoilValue(firebaseUserState);
+  const { data, error } = useUserData();
 
   const { data: userData, error: userError } = useUserData();
 

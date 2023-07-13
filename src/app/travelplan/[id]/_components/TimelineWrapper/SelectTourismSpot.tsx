@@ -78,11 +78,12 @@ export const SelectTourismSpot = () => {
           placeholder="選択してください"
           itemComponent={SelectItem}
           searchable
-          data={formatData.map(({ image, label, id }) => {
+          data={formatData.map(({ image, label, id, group }) => {
             return {
               image: image,
               label: label,
               value: id,
+              group: group,
             };
           })}
           maxDropdownHeight={160}

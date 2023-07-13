@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { officialSpotBookmarkList } from "@/mock/mockdata";
 
 type ItemProps = {
   image: string;
@@ -39,7 +40,10 @@ export const SelectTourismSpot = () => {
   const { data: officialSpotList } = useOfficialSpotList();
   const { data: tourismspotBookmarkList } = useTourismspotBookmarkList();
 
-  const formatData = officialSpotList && formatTourismForSelector(officialSpotList, tourismspotBookmarkList);
+  const formatData =
+    officialSpotList && tourismspotBookmarkList
+      ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList)
+      : undefined;
 
   const handleOnChange = (selectedId: string) => {
     const selectedSpot = formatData?.find((item) => item.id === selectedId);

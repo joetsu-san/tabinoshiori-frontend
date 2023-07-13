@@ -12,4 +12,5 @@ export const createTravelplan = async (token: string) => {
       },
     },
   });
+  return travelPlan;
 };

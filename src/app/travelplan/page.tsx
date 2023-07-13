@@ -5,16 +5,22 @@ import { TravelPlanCard } from "./_component/TravelplanCard";
 import { Box, Button, LoadingOverlay } from "@mantine/core";
 import { TravelPlanDetail } from "@/@types";
 import { useTravelPlanList } from "@/hooks/useTravelPlanList";
-import { createTravelplan } from "@/lib/api/createTravelplan";
+import { createTravelplan } from "@/utils/createTravelplan";
 import { useRecoilValue } from "recoil";
 import { firebaseTokenState } from "@/atoms";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Page: NextPage = () => {
   const { data: travelPlans, error } = useTravelPlanList();
   const token = useRecoilValue(firebaseTokenState);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async () => {
-    await createTravelplan(token!!);
+    setIsLoading(true);
+    const res = await createTravelplan(token!!);
+    router.push(`/travelplan/${res.id}`);
   };
 
   if (!travelPlans)

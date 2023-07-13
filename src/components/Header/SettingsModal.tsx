@@ -32,7 +32,6 @@ export const SettingsModal = () => {
   const [defaultYear, setYear] = useState<string | undefined>(undefined);
   const [defaultMonth, setMonth] = useState<string | undefined>(undefined);
   const [defaultDay, setDay] = useState<string | undefined>(undefined);
-  const { data, error } = useUserData();
 
   const userInfo = useRecoilValue(firebaseUserState);
   const { data, error } = useUserData();

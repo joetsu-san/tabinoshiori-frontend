@@ -3,6 +3,7 @@ import { TravelPlanSpot } from "@/@types";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { client } from "./lib/aspida";
+import { TravelPlan, subscribeRemoteTravelPlan } from "./utils/subscribeRemoteTravelPlan";
 
 export const travelPlanTourismSpotListState = atom<TravelPlanSpot[]>({
   key: "travelPlanTourismSpotListState",
@@ -72,25 +73,13 @@ export const firebaseTokenState = atom<string | undefined>({
   ],
 });
 
-export type TravelPlan = {
-  title: string;
-  description: string;
-  visitedAt?: Date;
-};
-
-export const receiveRemoteTravelPlan =
-  (travelPlanId: string): AtomEffect<TravelPlan | undefined> =>
-  ({ setSelf }) => {};
-
 export const travelPlanState = atomFamily<TravelPlan | undefined, string>({
   key: "travelPlanState",
   default: undefined,
   effects: (travelPlanId: string): AtomEffect<TravelPlan | undefined>[] => [
     ({ setSelf }) => {
-      const remoteState = client.user.travel_plan._travel_plan_id(travelPlanId).$get();
-      setSelf(remoteState);
-      return onAuthStateChanged(auth, async (user) => {
-        setSelf(await user?.getIdToken());
+      return subscribeRemoteTravelPlan(travelPlanId, (snapshot: TravelPlan) => {
+        setSelf(snapshot);
       });
     },
   ],

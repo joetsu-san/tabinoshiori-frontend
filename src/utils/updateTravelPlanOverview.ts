@@ -1,8 +1,8 @@
 import { UpdateTravelPlanDto } from "@/@types";
 import { client } from "@/lib/aspida";
 
-export const updateTravelPlanOverview = async (collaborateId: string, data: UpdateTravelPlanDto) => {
-  const bookmarkList = await client.collaborate._collaborate_id(collaborateId).$put({
+export const updateTravelPlanOverview = async (travelPlanId: string, data: UpdateTravelPlanDto) => {
+  const bookmarkList = await client.user.travel_plan._travel_plan_id(travelPlanId).$put({
     body: data,
   });
 

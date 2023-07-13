@@ -11,7 +11,7 @@ export const TravelPlanCard = (props: Props) => {
   const { travelplan } = props;
   return (
     <Card shadow="sm" radius="md" withBorder w={"90%"} p={0} m={10}>
-      <Link href={`/travelplan/${travelplan.collaborateId}`}>
+      <Link href={`/travelplan/${travelplan.id}`}>
         <Flex>
           <Image
             src={travelplan.thumbnail?.src || dummyImageSrc}

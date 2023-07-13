@@ -31,11 +31,12 @@ const Page = () => {
       return;
     }
     setTitle(travelPlan.title);
-    setIsDescriptionInput(true);
+    setIsTitleInput(true);
   };
+
   const closeTitleInput = () => {
     updateTravelPlanOverview(travelPlanId!, {
-      title,
+      title: title,
       description: travelPlan?.description ?? "",
       visitedAt: travelPlan?.visitedAt?.toISOString(),
     });
@@ -56,7 +57,7 @@ const Page = () => {
     }
     updateTravelPlanOverview(travelPlanId!, {
       title: travelPlan?.title,
-      description,
+      description: description,
       visitedAt: travelPlan?.visitedAt?.toISOString(),
     });
     setIsDescriptionInput(false);

@@ -35,7 +35,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   const [zoom, setZoom] = useState(9);
   const [like, setLike] = useState(false);
   const [actives, setActives] = useState(0);
-  const key = process.env.NEXT_PUBLIC_MAP_KEY as string;
+  const key = process.env.NEXT_PUBLIC_GOOGLEMAP_KEY as string;
   const courseSize = 100;
   const containerStyle = {
     height: "100%",

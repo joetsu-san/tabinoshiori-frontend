@@ -73,7 +73,7 @@ export const SpotButton = (props: any) => {
   }, [debouncedInputText, setTempSpotList, spotList]);
 
   if (error) return <div>failed to load</div>;
-  if (!bookmarkList) return <div>loading...</div>;
+  // if (!bookmarkList) return <div>loading...</div>;
 
   return (
     <div

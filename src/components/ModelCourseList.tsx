@@ -71,7 +71,9 @@ export const ModelCourseList = ({ modelcourselist, msg, ser }: ModelCourseListPr
               <Text fw={500} size={18} mt={10}>
                 {modelcourse.title}
               </Text>
-              <Text size={12}>{modelcourse.description}</Text>
+              <Text size={12} lineClamp={2}>
+                {modelcourse.description}
+              </Text>
               <Group spacing="xs">
                 <IconClockFilled />
                 <Text size={13}> {modelcourse.requiredMinute}分</Text>

@@ -25,6 +25,7 @@ import { useModelCourseDetail } from "@/hooks/useModelCourseDetail";
 import { firebaseTokenState } from "@/atoms";
 import { createModelcourseBookmark } from "@/utils/createModelcourseBookmark";
 import { removeModelcourseBookmark } from "@/utils/removeModelcourseBookmark";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
 
 const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   //データ取得
@@ -80,9 +81,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   return (
     <Container>
       {!data ? (
-        <Flex align="center">
-          <Loader size={75} color="#66D9E8" style={{ display: "block", margin: "200px auto 0 auto" }} />
-        </Flex>
+        <LoadingDisplay />
       ) : (
         <Box>
           <Card p={0} h={300} m="10px 0 0 0">
@@ -110,7 +109,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
                   radius={5}
                   width={100}
                   height={100}
-                  src={data.modelCourseImages[0]?.src || "/dummyImage.svg"}
+                  src={data.modelCourseSpots[0]?.officialSpotImages[0]?.src || "/dummyImage.svg"}
                   alt="コース画像"
                 />
               </Card.Section>

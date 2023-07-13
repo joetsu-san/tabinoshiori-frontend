@@ -1,6 +1,7 @@
 "use client";
 
-import { Container, Input, Box, Title, Loader, Flex, ActionIcon } from "@mantine/core";
+import { Container, Input, Box, Flex, ActionIcon } from "@mantine/core";
+import { LoadingDisplay } from "@/components/LoadingDisplay";
 import { CardsCarousel } from "@/components/CardsCarousel";
 import { ModelCourseList } from "@/components/ModelCourseList";
 import { IconSearch, IconX } from "@tabler/icons-react";
@@ -39,9 +40,7 @@ const ModelCourse = () => {
   return (
     <Container size="xl" mt={30}>
       {!listData ? (
-        <Flex align="center">
-          <Loader size={75} color="#66D9E8" style={{ display: "block", margin: "200px auto 0 auto" }} />
-        </Flex>
+        <LoadingDisplay />
       ) : (
         <>
           <CardsCarousel data={listData} />

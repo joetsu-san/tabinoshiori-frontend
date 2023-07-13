@@ -1,26 +1,82 @@
 "use client";
 import { Modal, Group, Button, Textarea, Text, Flex, Input, TextInput } from "@mantine/core";
-import { IconDeviceMobileMessage, IconPictureInPicture, IconScreenshot, IconShare } from "@tabler/icons-react";
-import { TimeLineWrapper } from "./_components/TimeLineWrapper/TimeLineWrapper";
+import { IconPlus, IconScreenshot, IconShare } from "@tabler/icons-react";
+import { TimelineWrapper } from "./_components/TimelineWrapper/TimelineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
+import { updateTravelPlanOverview } from "@/utils/updateTravelPlanOverview";
+import { useParams } from "next/navigation";
+import { useTravelPlan } from "@/hooks/useTravelPlan";
+import { TravelPlan, subscribeRemoteTravelPlan } from "@/utils/subscribeRemoteTravelPlan";
+import { TravelPlanSpotModal } from "./_components/TimelineWrapper/TravelPlanSpotModal";
 
 const Page = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [openedIamgeModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
+  const router = useParams();
+  const travelPlanId = router.id;
+  const travelPlan = useTravelPlan(travelPlanId);
 
-  const [title, setTitle] = useState("タイトル");
-  const [description, setDescription] = useState("説明");
+  const [opened, { open, close }] = useDisclosure(false);
+  const [openedImageModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
+  const [openedTourismSpot, { open: tourismSpotOpen, close: tourismSpotClose }] = useDisclosure(false);
+
+  const [title, setTitle] = useState("...");
+  const [description, setDescription] = useState("...");
+  const [visitedAt, setVisitedAt] = useState(() => new Date().toISOString());
   const [isTitleInput, setIsTitleInput] = useState(false);
   const [isDescriptionInput, setIsDescriptionInput] = useState(false);
-  const openTitleInput = () => setIsTitleInput(true);
-  const closeTitleInput = () => setIsTitleInput(false);
-  const openDescriptionInput = () => setIsDescriptionInput(true);
-  const closeDescriptionInput = () => setIsDescriptionInput(false);
+  const openTitleInput = () => {
+    if (travelPlan == null) {
+      return;
+    }
+    setTitle(travelPlan.title);
+    setIsDescriptionInput(true);
+  };
+  const closeTitleInput = () => {
+    updateTravelPlanOverview(travelPlanId!, {
+      title,
+      description: travelPlan?.description ?? "",
+      visitedAt: travelPlan?.visitedAt?.toISOString(),
+    });
+    setIsTitleInput(false);
+  };
+
+  const openDescriptionInput = () => {
+    if (travelPlan == null) {
+      return;
+    }
+    setDescription(travelPlan.description);
+    setIsDescriptionInput(true);
+  };
+
+  const closeDescriptionInput = () => {
+    if (travelPlan == null) {
+      return;
+    }
+    updateTravelPlanOverview(travelPlanId!, {
+      title: travelPlan?.title,
+      description,
+      visitedAt: travelPlan?.visitedAt?.toISOString(),
+    });
+    setIsDescriptionInput(false);
+  };
 
   const imageRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   subscribeRemoteTravelPlan(travelPlanId, (snapshot) => {
+  //     // タイトル・説明文の編集の「キャンセル」を行えるようにする場合は、
+  //     // 編集中のタイトル・説明文を保持する専用のstateを用意することで、
+  //     // 編集中でもサーバーからのタイトル・説明文の更新を反映できる必要がある
+  //     if (!isTitleInput) {
+  //       setTitle(snapshot.title);
+  //     }
+  //     if (!isDescriptionInput) {
+  //       setDescription(snapshot.description);
+  //     }
+  //   });
+  // }, [travelPlanId]);
 
   return (
     <main
@@ -34,7 +90,7 @@ const Page = () => {
       <Modal opened={opened} onClose={close} title="旅のしおりを共有する" centered>
         <ShareModalContent />
       </Modal>
-      <Modal opened={openedIamgeModal} onClose={closeImageModal} title="画像化する" centered>
+      <Modal opened={openedImageModal} onClose={closeImageModal} title="画像化する" centered>
         <GenerateImageModalContent imageRef={imageRef} />
       </Modal>
 
@@ -63,7 +119,7 @@ const Page = () => {
           ) : (
             <>
               <Text fz="xl" fw={600}>
-                {title}
+                {travelPlan?.title ?? "..."}
               </Text>
               <Button size="xs" color="gray" variant="light" compact onClick={openTitleInput}>
                 編集
@@ -88,7 +144,7 @@ const Page = () => {
             </>
           ) : (
             <>
-              <Text size="sm">{description}</Text>
+              <Text size="sm">{travelPlan?.description ?? "..."}</Text>
               <Button size="xs" color="gray" variant="light" compact onClick={openDescriptionInput}>
                 編集
               </Button>
@@ -96,7 +152,12 @@ const Page = () => {
           )}
         </Flex>
       </Flex>
-      <TimeLineWrapper ref={imageRef} />
+      <TimelineWrapper ref={imageRef} travelPlanId={travelPlanId} />
+
+      <Button onClick={tourismSpotOpen} color="cyan" variant="light" leftIcon={<IconPlus />}>
+        プランを追加
+      </Button>
+      <TravelPlanSpotModal travelPlanId={travelPlanId} opened={openedTourismSpot} close={tourismSpotClose} />
     </main>
   );
 };

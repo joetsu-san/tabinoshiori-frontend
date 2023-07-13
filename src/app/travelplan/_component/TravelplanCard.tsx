@@ -1,19 +1,20 @@
 import { Card, Group, Badge, Button, Image, Text, Flex } from "@mantine/core";
-import { TravelPlanDetail } from "../../../../api/@types";
+import { TravelPlanOverview } from "@/@types";
 import Link from "next/link";
 
 type Props = {
-  travelplan: TravelPlanDetail;
+  travelplan: TravelPlanOverview;
 };
 
 export const TravelPlanCard = (props: Props) => {
+  const dummyImageSrc = "/dummyImage.svg";
   const { travelplan } = props;
   return (
     <Card shadow="sm" radius="md" withBorder w={"90%"} p={0} m={10}>
       <Link href={`/travelplan/${travelplan.id}`}>
         <Flex>
           <Image
-            src={travelplan.travelPlanSpots[0].travelPlanSpotInfo.officialSpotImages[0].src}
+            src={travelplan.thumbnail?.src || dummyImageSrc}
             height={80}
             width={80}
             // width={80}

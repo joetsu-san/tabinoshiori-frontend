@@ -5,8 +5,6 @@ export const createTravelplan = async (token: string) => {
     body: {
       title: "タイトル",
       description: "説明",
-      visitedAt: undefined,
-      travelPlanSpots: [],
     },
     config: {
       headers: {
@@ -14,4 +12,5 @@ export const createTravelplan = async (token: string) => {
       },
     },
   });
+  return travelPlan;
 };

@@ -1,5 +1,8 @@
 # tabinoshiori-frontend
 
+## 資料
+[上越旅のしおり.pdf](https://github.com/joetsu-san/tabinoshiori-frontend/files/12037197/default.pdf)
+
 ## Getting Started
 
 node@16

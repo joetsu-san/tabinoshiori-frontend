@@ -5,6 +5,7 @@ import { firebaseUserState } from "@/atoms";
 import useAspidaSWR from "@aspida/swr";
 import { client } from "@/lib/aspida";
 import { modals } from "@mantine/modals";
+import { useUserData } from "@/hooks/useUserData";
 
 type Props = {
   opened: boolean;
@@ -13,7 +14,7 @@ type Props = {
 };
 export const UserProfileModal = ({ opened, onClose, onOpen }: Props) => {
   const currentUser = useRecoilValue(firebaseUserState);
-  const { data: userData, isLoading: userIsLoading } = useAspidaSWR(client.user);
+  const { data: userData, isLoading: userIsLoading } = useUserData();
   const { data: genderData, isLoading: genderIsLoading } = useAspidaSWR(client.gender);
 
   const { openConfirmModal } = modals;

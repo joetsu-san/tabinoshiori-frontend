@@ -29,8 +29,13 @@ export const auth = getAuth(app);
 
 export const firebaseSignIn = async () => {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider);
-  const credential = GoogleAuthProvider.credentialFromResult(result);
+  const result = await signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential!.accessToken;
+      const user = result.user;
+    })
+    .catch((error) => {});
 };
 
 export const firebaseSignOut = () => {

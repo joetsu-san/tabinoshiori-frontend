@@ -18,14 +18,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <RecoilRoot>
       <Providers>
         <SWRConfig
-          value={{
-            revalidateIfStale: false,
-            revalidateOnFocus: false,
-            revalidateOnReconnect: false,
-          }}
+          value={
+            {
+              // revalidateIfStale: false,
+              // revalidateOnFocus: false,
+              // revalidateOnReconnect: false,
+            }
+          }
         >
           <html lang="ja">
-            <body className={inter.className} style={{ minHeight: "100vh", color: "#343434" }}>
+            <body className={inter.className} style={{ minHeight: "100vh", color: "#343434", paddingBottom: "6rem" }}>
               {adminFlg ? undefined : <Header />}
               {children}
               {adminFlg ? undefined : <FooterNav />}

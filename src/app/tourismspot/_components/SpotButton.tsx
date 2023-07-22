@@ -82,7 +82,6 @@ export const SpotButton = (props: any) => {
         maxWidth: "500px",
         margin: "0 auto",
         marginTop: "5px",
-        paddingBottom: "5.5rem",
       }}
     >
       <div

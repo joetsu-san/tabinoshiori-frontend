@@ -28,10 +28,6 @@ export const ModelcourseBookmark = () => {
     setLiked((modelcourselist ?? Array()).map((_) => true));
   }, [modelcourselist]);
 
-  useEffect(() => {
-    mutate();
-  }, []);
-
   if (!modelcourselist)
     return (
       <Tabs.Panel value="modelCourse">
@@ -44,8 +40,6 @@ export const ModelcourseBookmark = () => {
       <Container size="xl" mt={30}>
         <SimpleGrid
           cols={3}
-          mt={20}
-          pb={100}
           spacing="md"
           breakpoints={[
             { maxWidth: "48rem", cols: 2, spacing: "sm" },

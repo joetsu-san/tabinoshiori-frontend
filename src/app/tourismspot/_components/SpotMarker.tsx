@@ -17,17 +17,5 @@ export const SpotMarker = (props: any) => {
     setSpotInfoWindow(<SpotInfoWindow spot={spot} infoOption={infoOption} />);
   };
 
-  return (
-    <>
-      {spotList.map((val: OfficialSpot, i: number) => {
-        const LatLng = {
-          lat: val.latitude,
-          lng: val.longitude,
-        };
-        return <Marker key={i} position={LatLng} onClick={() => clickMarker(val)} />;
-      })}
-
-      {spotInfoWindow}
-    </>
-  );
+  return <>{spotInfoWindow}</>;
 };

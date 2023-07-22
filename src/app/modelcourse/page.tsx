@@ -1,49 +1,31 @@
 "use client";
 
-import { Container, Input, Box, Flex, ActionIcon } from "@mantine/core";
+import { Container, Input, Box, ActionIcon } from "@mantine/core";
 import { LoadingDisplay } from "@/components/LoadingDisplay";
-import { CardsCarousel } from "@/components/CardsCarousel";
-import { ModelCourseList } from "@/components/ModelCourseList";
+import { ModelCourseList } from "@/app/modelcourse/_components/ModelCourseList";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { useModelCourseList } from "@/hooks/useModelCourseList";
-import { useEffect, useState } from "react";
-import { ModelCourseOverview } from "../../../api/@types";
+import { useState } from "react";
+import { CardsCarousel } from "./_components/CardsCarousel";
 
 const ModelCourse = () => {
   const { data, error } = useModelCourseList();
-  const [listData, setListData] = useState<ModelCourseOverview[]>();
   const [searchValue, setSearchValue] = useState<string>("");
-  const [msg, setMsg] = useState(false);
-  useEffect(() => {
-    console.log(error);
-    setListData(data);
-  }, [data, error]);
+
   const searchList = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    setListData(data);
-    if (
-      data?.filter((values, index) => {
-        if (values.title.indexOf(e.target.value) !== -1) {
-          return values;
-        }
-      }).length === 0
-    ) {
-      setMsg(true);
-    } else {
-      setMsg(false);
-    }
   };
-  const searchRiset = () => {
+
+  const searchReset = () => {
     setSearchValue("");
-    setListData(data);
   };
   return (
     <Container size="xl" mt={30}>
-      {!listData ? (
+      {!data ? (
         <LoadingDisplay />
       ) : (
         <>
-          <CardsCarousel data={listData} />
+          <CardsCarousel data={data} />
           <Box>
             <Input
               placeholder="検索"
@@ -53,7 +35,7 @@ const ModelCourse = () => {
               onChange={searchList}
               value={searchValue}
               rightSection={
-                <ActionIcon onClick={searchRiset}>
+                <ActionIcon onClick={searchReset}>
                   <IconX />
                 </ActionIcon>
               }
@@ -62,7 +44,7 @@ const ModelCourse = () => {
               size="md"
               style={{ zIndex: 100 }}
             />
-            <ModelCourseList ser={searchValue} modelcourselist={listData} msg={msg} />
+            <ModelCourseList ser={searchValue} modelcourselist={data} />
           </Box>
         </>
       )}

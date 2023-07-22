@@ -41,10 +41,6 @@ export const TourismSpotBookmark = () => {
     setLiked((tourismspotlist ?? Array()).map((_) => true));
   }, [tourismspotlist]);
 
-  useEffect(() => {
-    mutate();
-  }, []);
-
   if (!tourismspotlist)
     return (
       <Tabs.Panel value="modelCourse">
@@ -53,13 +49,12 @@ export const TourismSpotBookmark = () => {
     );
 
   return (
-    <Container size="xl" mt={30}>
+    <Container size="xl">
       <Tabs.Panel value="tourismSpot">
         <Box>
           <SimpleGrid
             cols={3}
             mt={20}
-            pb={100}
             spacing="md"
             breakpoints={[
               { maxWidth: "48rem", cols: 2, spacing: "sm" },

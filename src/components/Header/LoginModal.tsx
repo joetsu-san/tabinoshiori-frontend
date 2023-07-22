@@ -8,7 +8,6 @@ export const GoogleButton = (props: ButtonProps) => {
     await firebaseSignIn();
     const token = await auth.currentUser?.getIdToken();
     const name = auth.currentUser?.displayName;
-    console.log(name, token);
     if (name == null) return;
     if (token == null) return;
 

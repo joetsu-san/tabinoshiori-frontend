@@ -3,7 +3,7 @@ import Link from "next/link";
 import Autoplay from "embla-carousel-autoplay";
 import { Carousel } from "@mantine/carousel";
 import { useMediaQuery } from "@mantine/hooks";
-import { createStyles, Paper, Text, Title, Button, useMantineTheme, rem } from "@mantine/core";
+import { createStyles, Paper, Text, Title, Button, useMantineTheme, rem, Box } from "@mantine/core";
 import { ModelCourseOverview } from "@/@types";
 
 const useStyles = createStyles((theme) => ({
@@ -49,14 +49,14 @@ const Card = ({ modelcourse }: CardProps) => {
       sx={{ backgroundImage: `url(${modelcourse.modelCourseImages[0]?.src || "/dummyImage.svg"})` }}
       className={classes.card}
     >
-      <div>
+      <Box>
         <Text className={classes.requiredMinute} size="xs">
           {modelcourse.requiredMinute}分
         </Text>
-        <Title order={3} className={classes.title}>
+        <Title order={3} className={classes.title} styles={{ textStroke: "1px #000" }}>
           {modelcourse.title}
         </Title>
-      </div>
+      </Box>
       <Button variant="white" color="dark" component={Link} href={"/modelcourse/" + modelcourse.id}>
         詳細を見る
       </Button>
@@ -73,7 +73,7 @@ export const CardsCarousel = ({ data }: CardsCarouselProps) => {
   const theme = useMantineTheme();
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
   const slides = data.map((modelcourse) => (
-    <Carousel.Slide key={modelcourse.title}>
+    <Carousel.Slide key={modelcourse.id}>
       <Card modelcourse={modelcourse} />
     </Carousel.Slide>
   ));

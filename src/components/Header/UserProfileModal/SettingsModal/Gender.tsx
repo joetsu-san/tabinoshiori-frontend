@@ -1,7 +1,7 @@
 import { Box, Group, NavLink, Select } from "@mantine/core";
 import { OpenConfirmModal } from "@mantine/modals/lib/context";
 import { IconChevronRight, IconGenderFemale, IconGenderMale, IconX } from "@tabler/icons-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { usePutUser } from "./hooks";
 import { useUserData } from "@/hooks/useUserData";
 
@@ -29,14 +29,16 @@ type Props = {
 export const Gender = ({ genderId, openConfirmModal, rootClose, rootOpen }: Props) => {
   const [gender, setGender] = useState<number>(genderId ?? 0);
 
+  const { putUser } = usePutUser();
+  const { data } = useUserData();
+
   const handleChange = (e: string | null) => {
+    console.log(e);
     setGender(Number(e ?? 0));
   };
 
-  const { putUser } = usePutUser();
-  const { data } = useUserData();
   const handleSubmit = async () => {
-    console.debug(data?.birthday);
+    console.log(gender);
     try {
       data && (await putUser(data.username, data.birthday ? new Date(data.birthday) : undefined, gender));
     } catch (error) {
@@ -44,8 +46,9 @@ export const Gender = ({ genderId, openConfirmModal, rootClose, rootOpen }: Prop
     }
   };
 
-  const open = () => {
-    rootClose();
+  console.debug(`genderId: ${genderId}`);
+
+  const open = useCallback(() => {
     openConfirmModal({
       title: "性別を変更",
       labels: { confirm: "変更", cancel: "キャンセル" },
@@ -54,14 +57,14 @@ export const Gender = ({ genderId, openConfirmModal, rootClose, rootOpen }: Prop
         <Box p={"20px"} h="10rem">
           <Group position="apart">
             <Select
+              label="性別"
+              value={gender.toString()}
               placeholder="性別を選択してください"
-              onChange={handleChange}
-              data={genderText.map(({ id, title }) => {
-                return {
-                  value: id.toString(),
-                  label: title,
-                };
+              onChange={(e) => handleChange(e)}
+              data={genderText.map((val) => {
+                return { value: val.id.toString(), label: val.title };
               })}
+              defaultValue={genderId?.toString() ?? null}
             />
           </Group>
         </Box>
@@ -75,18 +78,24 @@ export const Gender = ({ genderId, openConfirmModal, rootClose, rootOpen }: Prop
       },
       onConfirm: handleSubmit,
       onClose: () => {
+        // debugger;
         rootOpen();
       },
     });
-  };
+  }, [genderId]);
+
+  console.debug(`genderId: ${genderId}`);
 
   return (
     <Box>
       <NavLink
         h="3rem"
         label="性別"
-        description={genderId ? genderText[genderId].title : "未設定"}
-        onClick={open}
+        description={genderId ? genderText[genderId - 1].title : "未設定"}
+        onClick={() => {
+          open();
+          rootClose();
+        }}
         icon={
           <>
             <IconGenderMale height={"1.5rem"} width={"0.75rem"} />

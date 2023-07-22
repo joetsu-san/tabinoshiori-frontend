@@ -25,7 +25,9 @@ export const AddSpotModal: React.FC<ModalProps> = ({
 
   const [spotList, setSpotList] = useState<OfficialSpot[]>([]);
 
-  const [selectedSpot, setSelectedSpot] = useState<any>({});
+  // 選択した観光地
+  const [selectedSpot, setSelectedSpot] = useState<any>(undefined);
+  const [selectIsError, setSelectIsError] = useState<boolean>(true);
 
   const text = useForm({
     initialValues: {
@@ -43,11 +45,13 @@ export const AddSpotModal: React.FC<ModalProps> = ({
   useEffect(() => {
     console.log(`「${debouncedInputText}」`);
     // 観光地検索処理
-    if (debouncedInputText != "") {
-      const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
-      setSpotList(temp);
-    } else {
-      if (data) setSpotList(data);
+    if (data) {
+      if (debouncedInputText != "") {
+        const temp = data.filter((spot) => spot.title.match(debouncedInputText));
+        setSpotList(temp);
+      } else {
+        setSpotList(data);
+      }
     }
   }, [debouncedInputText]);
 
@@ -61,6 +65,7 @@ export const AddSpotModal: React.FC<ModalProps> = ({
 
   // 観光スポット選択
   const selectSpot = (data: any) => {
+    setSelectIsError(false);
     const spotData = {
       officialSpotId: data.id,
       title: data.title,
@@ -71,33 +76,65 @@ export const AddSpotModal: React.FC<ModalProps> = ({
 
   // 観光スポット追加
   const setSpot = (formValues: any) => {
-    const viewObj = {
-      title: selectedSpot.title,
-      comment: formValues.comment,
-      stayMinutes: formValues.stayMinutes,
-    };
+    if (selectedSpot) {
+      const viewObj = {
+        // 見た目用オブジェクト
+        title: selectedSpot.title,
+        comment: formValues.comment,
+        stayMinutes: formValues.stayMinutes,
+      };
 
-    const tempObj = {
-      officialSpotId: selectedSpot.id,
-      comment: formValues.comment,
-      sortIndex: modelCourseList.length,
-      stayMinute: formValues.stayMinutes,
-      minuteSincePrevious: 1,
-    };
+      const tempObj = {
+        // データ登録用オブジェクト
+        officialSpotId: selectedSpot.id,
+        comment: formValues.comment,
+        sortIndex: modelCourseList.length,
+        stayMinute: formValues.stayMinutes,
+        minuteSincePrevious: 1,
+      };
 
-    setViewList([...viewList, viewObj]);
-    setModelCourseList([...modelCourseList, tempObj]);
-    closeAction();
+      setViewList([...viewList, viewObj]);
+      setModelCourseList([...modelCourseList, tempObj]);
+      closeAction();
+    }
   };
 
   return (
-    <form onSubmit={text.onSubmit((value) => setSpot(value))}>
-      <TextInput label="備考" {...text.getInputProps("comment")} />
-      <NumberInput label="滞在時間" mb={20} {...text.getInputProps("stayMinutes")} />
-      <div>
-        <Input mb={20} placeholder="観光地検索" onChange={handleChange} />
-        <Text mb={20}>選択：{selectedSpot.title}</Text>
-        <Grid mb={20}>
+    <div
+      style={{
+        height: "calc(100vh - (5vh * 2) - 54px - 1rem)",
+        width: "100%",
+        overflowX: "scroll",
+      }}
+    >
+      <form
+        id="spotForm"
+        onSubmit={text.onSubmit((value) => setSpot(value))}
+        style={{
+          position: "sticky",
+          top: "0",
+          zIndex: "10",
+        }}
+      >
+        <div
+          style={{
+            paddingBottom: "1px",
+            backgroundColor: "white",
+          }}
+        >
+          <TextInput label="備考" {...text.getInputProps("comment")} />
+          <NumberInput label="滞在時間" mb={20} {...text.getInputProps("stayMinutes")} />
+          <Input mb={20} placeholder="観光地検索" onChange={handleChange} />
+          <Text mb={20}>選択：{selectIsError ? "観光地を選択してください" : selectedSpot.title}</Text>
+        </div>
+      </form>
+      <div
+        style={{
+          padding: "0 10px 3rem 10px",
+          zIndex: "5",
+        }}
+      >
+        <Grid>
           {spotList.map((val, i) => {
             return (
               <Grid.Col key={i} md={6} lg={3}>
@@ -116,11 +153,21 @@ export const AddSpotModal: React.FC<ModalProps> = ({
           })}
         </Grid>
       </div>
-      <Flex direction={"row"} justify={"center"}>
-        <Button variant="filled" type="submit" leftIcon={<IconPlus />}>
-          追加
-        </Button>
-      </Flex>
-    </form>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0",
+          width: "100%",
+          padding: "1rem",
+          backgroundColor: "white",
+        }}
+      >
+        <Flex direction={"row"} justify={"center"}>
+          <Button variant="filled" type="submit" form="spotForm" leftIcon={<IconPlus />} disabled={selectIsError}>
+            追加
+          </Button>
+        </Flex>
+      </div>
+    </div>
   );
 };

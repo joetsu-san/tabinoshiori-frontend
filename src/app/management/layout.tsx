@@ -1,14 +1,12 @@
 "use client";
 import { Header as MantineHeader, Group, Text } from "@mantine/core";
-import { Button, Flex } from "@mantine/core";
-import axios from "axios";
-import { NextPageContext } from "next";
+import { Button } from "@mantine/core";
 import { usePathname, useRouter } from "next/navigation";
 import { destroyCookie, parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 import { managementClient } from "./_aspida/managementAspida";
 
-export default function ManagementLayout({ children }: { children: React.ReactNode }, ctx?: NextPageContext) {
+export default function ManagementLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [logined, setLogined] = useState<{ [key: string]: string }>();
@@ -19,7 +17,7 @@ export default function ManagementLayout({ children }: { children: React.ReactNo
   }, [pathname]);
 
   const logout = async () => {
-    destroyCookie(ctx, "login_cookie");
+    destroyCookie(null, "login_cookie");
     await managementClient.management.logout.post();
     router.push("management/login");
   };

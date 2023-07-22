@@ -1,16 +1,15 @@
 "use client";
 
-import { Card, Image, Text, Button, Group, TextInput, Grid, Container, Flex } from "@mantine/core";
+import { Text, Button, TextInput, Container, Flex } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { setCookie } from "nookies";
 import { useRouter } from "next/navigation";
-import { NextPageContext } from "next";
 import Link from "next/link";
 import { managementClient } from "../_aspida/managementAspida";
 import { LoginAdministratorDto } from "@/@types";
 
-const Login = (ctx: NextPageContext) => {
+const Login = () => {
   const router = useRouter();
 
   const schema = z.object({
@@ -31,7 +30,7 @@ const Login = (ctx: NextPageContext) => {
       await managementClient.management.login.$post({
         body: value,
       });
-      setCookie(ctx, "login_cookie", "logging in", {
+      setCookie(null, "login_cookie", "logging in", {
         maxAge: 30 * 24 * 60 * 60,
       });
       router.push("management/");

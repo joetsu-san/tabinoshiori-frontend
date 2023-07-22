@@ -174,7 +174,7 @@ export const subscribeRemoteTravelPlan = (
   // サーバーからTravelPlanUpdateEventを受信し、ローカルのTravelPlanに同じ操作を反映させる
   const processEvent = () => {
     const eventSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_API_URL}user/travel_plan/${travelPlanId}/subscribe_update`
+      `${process.env.NEXT_PUBLIC_API_URL}/user/travel_plan/${travelPlanId}/subscribe_update`
     );
 
     const cancelEventSource = () => {

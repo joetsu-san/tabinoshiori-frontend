@@ -1,14 +1,11 @@
 "use client";
 
 import { Button, Container, Flex, Text } from "@mantine/core";
-import { NextPageContext } from "next";
 import Link from "next/link";
-import { redirectLogin } from "./_functions/redirectLogin";
-import { useRouter } from "next/navigation";
+// import { redirectLogin } from "./_functions/redirectLogin";
 
-const Management = (ctx?: NextPageContext) => {
-  const router = useRouter();
-  redirectLogin(router, ctx);
+const Management = () => {
+  // redirectLogin();
 
   return (
     <Container size={"sm"}>

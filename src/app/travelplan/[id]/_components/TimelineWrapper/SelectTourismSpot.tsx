@@ -88,10 +88,6 @@ export const SelectTourismSpot = () => {
           })}
           maxDropdownHeight={160}
           nothingFound="見つかりませんでした"
-          filter={(value, item) =>
-            (item.label && item.label.toLowerCase().includes(value.toLowerCase().trim())) ||
-            item.comment.toLowerCase().includes(value.toLowerCase().trim())
-          }
           style={{ width: " 95%" }}
           onChange={handleOnChange}
         />

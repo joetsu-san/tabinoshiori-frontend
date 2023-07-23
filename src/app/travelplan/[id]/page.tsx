@@ -1,6 +1,6 @@
 "use client";
 import { Modal, Group, Button, Textarea, Text, Flex, Input, TextInput } from "@mantine/core";
-import { IconPlus, IconScreenshot, IconShare } from "@tabler/icons-react";
+import { IconMapPin, IconPlus, IconScreenshot, IconShare } from "@tabler/icons-react";
 import { TimelineWrapper } from "./_components/TimelineWrapper/TimelineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,11 +11,14 @@ import { useParams } from "next/navigation";
 import { useTravelPlan } from "@/hooks/useTravelPlan";
 import { TravelPlan, subscribeRemoteTravelPlan } from "@/utils/subscribeRemoteTravelPlan";
 import { TravelPlanSpotModal } from "./_components/TimelineWrapper/TravelPlanSpotModal";
+import Link from "next/link";
+import { useMapNaviUrl } from "./_hooks/useMapNaviUrl";
 
 const Page = () => {
   const router = useParams();
   const travelPlanId = router.id;
   const travelPlan = useTravelPlan(travelPlanId);
+  const { mapNaviUrl } = useMapNaviUrl(travelPlanId);
 
   const [opened, { open, close }] = useDisclosure(false);
   const [openedImageModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
@@ -99,9 +102,11 @@ const Page = () => {
         <Button color="cyan" variant="light" compact onClick={open} leftIcon={<IconShare size="1rem" />}>
           旅のしおりを共有する
         </Button>
-        {/* <Button color="cyan" variant="light" compact onClick={openImageModal} leftIcon={<IconScreenshot size="1rem" />}>
-          画像化する
-        </Button> */}
+        <Link href={mapNaviUrl} target="_blank">
+          <Button color="cyan" variant="light" compact leftIcon={<IconMapPin size="1rem" />}>
+            マップで見る
+          </Button>
+        </Link>
       </Group>
 
       <Flex direction="column" gap="xs">

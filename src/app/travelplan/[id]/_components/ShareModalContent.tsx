@@ -1,13 +1,9 @@
-import { usePathname } from "next/navigation";
 import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex, ScrollArea } from "@mantine/core";
 import { IconPaperclip, IconCopy, IconCheck, IconQrcode } from "@tabler/icons-react";
 import { useQRCode } from "next-qrcode";
 
 export const ShareModalContent = () => {
-  //TODO: 本番環境になったら変える
-  const baseURL = "http://localhost:3000";
-  const pathname = usePathname();
-  const currentURL = `${baseURL}${pathname}`;
+  const currentURL = window.location.href;
   const { SVG } = useQRCode();
 
   return (

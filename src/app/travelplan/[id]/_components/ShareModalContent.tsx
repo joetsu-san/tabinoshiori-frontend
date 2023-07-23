@@ -1,8 +1,6 @@
-import { usePathname, useSearchParams } from "next/navigation";
 import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex, ScrollArea } from "@mantine/core";
 import { IconPaperclip, IconCopy, IconCheck, IconQrcode } from "@tabler/icons-react";
 import { useQRCode } from "next-qrcode";
-import { useRouter } from "next/navigation";
 
 export const ShareModalContent = () => {
   const currentURL = window.location.href;

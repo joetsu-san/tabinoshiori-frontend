@@ -21,18 +21,22 @@ const OfficialSpotPage = () => {
 
   // 検索用
   useEffect(() => {
-    // 観光地検索処理
-    if (debouncedInputText != "") {
-      const temp = spotList.filter((spot) => spot.title.match(debouncedInputText));
-      setSpotList(temp);
-    } else {
-      if (data) setSpotList(data);
+    if (data) {
+      // 観光地検索処理
+      if (debouncedInputText != "") {
+        const temp = data.filter((spot) => spot.title.match(debouncedInputText));
+        setSpotList(temp);
+      } else {
+        setSpotList(data);
+      }
     }
   }, [debouncedInputText]);
 
   // データ取得用
   useEffect(() => {
-    if (data) setSpotList(data);
+    if (data) {
+      setSpotList(data);
+    }
   }, [data]);
 
   if (error) return <div>failed to load</div>;

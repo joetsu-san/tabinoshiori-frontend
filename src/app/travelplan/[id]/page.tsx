@@ -4,12 +4,10 @@ import { IconMapPin, IconMapPinCancel, IconPlus, IconShare } from "@tabler/icons
 import { TimelineWrapper } from "./_components/TimelineWrapper/TimelineWrapper";
 import { ShareModalContent } from "./_components/ShareModalContent";
 import { useDisclosure } from "@mantine/hooks";
-import { useRef, useState } from "react";
-import { GenerateImageModalContent } from "./_components/GenerateImageModalContent";
+import { useState } from "react";
 import { updateTravelPlanOverview } from "@/utils/updateTravelPlanOverview";
 import { useParams } from "next/navigation";
 import { useTravelPlan } from "@/hooks/useTravelPlan";
-import { TravelPlan, subscribeRemoteTravelPlan } from "@/utils/subscribeRemoteTravelPlan";
 import { TravelPlanSpotModal } from "./_components/TimelineWrapper/TravelPlanSpotModal";
 import Link from "next/link";
 import { useMapNaviUrl } from "./_hooks/useMapNaviUrl";
@@ -21,12 +19,10 @@ const Page = () => {
   const { mapNaviUrl, error } = useMapNaviUrl(travelPlanId);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [openedImageModal, { open: openImageModal, close: closeImageModal }] = useDisclosure(false);
   const [openedTourismSpot, { open: tourismSpotOpen, close: tourismSpotClose }] = useDisclosure(false);
 
   const [title, setTitle] = useState("...");
   const [description, setDescription] = useState("...");
-  const [visitedAt, setVisitedAt] = useState(() => new Date().toISOString());
   const [isTitleInput, setIsTitleInput] = useState(false);
   const [isDescriptionInput, setIsDescriptionInput] = useState(false);
   const openTitleInput = () => {
@@ -66,22 +62,6 @@ const Page = () => {
     setIsDescriptionInput(false);
   };
 
-  const imageRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   subscribeRemoteTravelPlan(travelPlanId, (snapshot) => {
-  //     // タイトル・説明文の編集の「キャンセル」を行えるようにする場合は、
-  //     // 編集中のタイトル・説明文を保持する専用のstateを用意することで、
-  //     // 編集中でもサーバーからのタイトル・説明文の更新を反映できる必要がある
-  //     if (!isTitleInput) {
-  //       setTitle(snapshot.title);
-  //     }
-  //     if (!isDescriptionInput) {
-  //       setDescription(snapshot.description);
-  //     }
-  //   });
-  // }, [travelPlanId]);
-
   return (
     <main
       style={{
@@ -94,10 +74,6 @@ const Page = () => {
       <Modal opened={opened} onClose={close} title="旅のしおりを共有する" centered>
         <ShareModalContent />
       </Modal>
-      <Modal opened={openedImageModal} onClose={closeImageModal} title="画像化する" centered>
-        <GenerateImageModalContent imageRef={imageRef} />
-      </Modal>
-
       <Group position="center" m={10}>
         <Button color="cyan" variant="light" compact onClick={open} leftIcon={<IconShare size="1rem" />}>
           旅のしおりを共有する
@@ -164,7 +140,7 @@ const Page = () => {
           )}
         </Flex>
       </Flex>
-      <TimelineWrapper ref={imageRef} travelPlanId={travelPlanId} />
+      <TimelineWrapper travelPlanId={travelPlanId} />
 
       <Button onClick={tourismSpotOpen} color="cyan" variant="light" leftIcon={<IconPlus />}>
         プランを追加

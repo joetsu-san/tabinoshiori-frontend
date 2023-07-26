@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   DndContext,
   closestCenter,
@@ -8,20 +8,11 @@ import {
   useSensors,
   DragEndEvent,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "./SortableItem";
-import { useRecoilState } from "recoil";
-import { travelPlanTourismSpotListState } from "@/atoms";
-import { updateTravelPlanSpot } from "@/utils/updateTravelPlanSpot";
-import { useSearchParams } from "next/navigation";
 import { useTravelPlan } from "@/hooks/useTravelPlan";
-import { TravelPlan } from "@/utils/subscribeRemoteTravelPlan";
 import { TravelPlanSpot } from "@/@types";
+import { Box } from "@mantine/core";
 
 export type TimelineEditorProps = {
   travelPlanId: string;
@@ -47,56 +38,11 @@ export const TimelineEditor = (props: TimelineEditorProps) => {
     })
   );
 
-  // const handleDragEnd = (event: { active: any; over: any }) => {
-  //   const { active, over } = event;
-
-  //   if (active.id !== over.id) {
-  //     setTravelPlanTourismSpotList((prev) => {
-  //       const oldIndex = prev.findIndex((item) => item.sortIndex === active.id);
-  //       const newIndex = prev.findIndex((item) => item.sortIndex === over.id);
-
-  //       return arrayMove(prev, oldIndex, newIndex);
-  //     });
-  //   }
-  // };
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over == null || active.id === over.id) {
       return;
     }
-
-    // setTravelPlanTourismSpotList((prev) => {
-    //   const oldIndex = prev.findIndex((item) => item.sortIndex === active.id);
-    //   const newIndex = prev.findIndex((item) => item.sortIndex === over.id);
-
-    //   const updatedList = [...prev];
-
-    //   // Get the dragged item
-    //   const draggedItem = updatedList[oldIndex];
-
-    //   // Remove the dragged item from the list
-    //   updatedList.splice(oldIndex, 1);
-
-    //   // Calculate the middle index
-    //   const middleIndex = (prev[newIndex].sortIndex + prev[newIndex + 1].sortIndex) / 2;
-
-    //   // Set the sortIndex of the dragged item to the middle index
-    //   draggedItem.sortIndex = middleIndex;
-
-    //   // Insert the dragged item at the new index
-    //   updatedList.splice(newIndex + 1, 0, draggedItem);
-
-    //   updateTravelPlanSpot(travelPlanId!, draggedItem.travelPlanSpotId, {
-    //     tourismSpotId: draggedItem.tourismSpotId,
-    //     comment: draggedItem.comment,
-    //     id: draggedItem.travelPlanSpotId,
-    //     sortIndex: middleIndex,
-    //     minuteSincePrevious: draggedItem.minuteSincePrevious,
-    //   });
-
-    //   return updatedList;
-    // });
   };
 
   return sortedSpots == null ? (
@@ -104,11 +50,11 @@ export const TimelineEditor = (props: TimelineEditorProps) => {
   ) : (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={sortedSpots.map((item) => item.sortIndex)} strategy={verticalListSortingStrategy}>
-        <div style={{ width: "90vw" }}>
+        <Box w="90vw">
           {sortedSpots.map((item) => (
             <SortableItem key={item.travelPlanSpotId} item={item} />
           ))}
-        </div>
+        </Box>
       </SortableContext>
     </DndContext>
   );

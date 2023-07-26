@@ -6,7 +6,6 @@ import { useRecoilState } from "recoil";
 import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
-import { officialSpotBookmarkList } from "@/mock/mockdata";
 
 type ItemProps = {
   image: string;

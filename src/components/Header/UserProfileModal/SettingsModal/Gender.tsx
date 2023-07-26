@@ -46,8 +46,6 @@ export const Gender = ({ genderId, openConfirmModal, rootClose, rootOpen }: Prop
     }
   };
 
-  console.debug(`genderId: ${genderId}`);
-
   const open = useCallback(() => {
     openConfirmModal({
       title: "性別を変更",
@@ -83,8 +81,6 @@ export const Gender = ({ genderId, openConfirmModal, rootClose, rootOpen }: Prop
       },
     });
   }, [genderId]);
-
-  console.debug(`genderId: ${genderId}`);
 
   return (
     <Box>

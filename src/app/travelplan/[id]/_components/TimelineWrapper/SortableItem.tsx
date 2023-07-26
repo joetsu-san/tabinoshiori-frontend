@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Card, Image, Modal, Text, Stack, createStyles, rem } from "@mantine/core";
-// import { useDisclosure } from "@mantine/hooks";
+import { Card, Image, Flex, Text, Stack, createStyles, rem, Box, Button } from "@mantine/core";
 import { IconGripVertical } from "@tabler/icons-react";
 import { TravelPlanSpot } from "@/@types";
+import { useDisclosure } from "@mantine/hooks";
+import { UpdateTravelPlanModal } from "./UpdateTravelPlanModal/UpdateTravelPlanModal";
 
 type Props = {
   item: TravelPlanSpot;
@@ -29,45 +30,53 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const SortableItem = (props: Props) => {
-  const { item } = props;
+export const SortableItem = ({ item }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.travelPlanSpotId });
   const { classes, cx } = useStyles();
 
-  // Modal用
-  // const [opened, { open, close }] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure();
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
+  // TODO: onClick doesn't work
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      open();
+    },
+    [open]
+  );
+
   return (
-    <>
-      {/* TODO: カードを押したら、モーダルが開いて編集できるようにする
-      <Modal opened={opened} onClose={close} title="旅のしおりを共有する" centered>
-        コンテンツ
-      </Modal> */}
-
+    <Box onClick={handleClick}>
       <Card ref={setNodeRef} style={style} {...attributes} {...listeners} className={cx(classes.item)}>
-        <div className={classes.dragHandle}>
+        <Box className={classes.dragHandle}>
           <IconGripVertical size="1.05rem" stroke={1.5} />
-        </div>
-
+        </Box>
         <Image
           m="0 10px 0 0"
           fit="cover"
           width={80}
           height={80}
           radius={5}
-          src={item.officialSpotImages?.[0].src}
-          alt="トラベルプランアイテム画像"
+          src={item.officialSpotImages?.[0]?.src ?? "/dummyImage.svg"}
+          alt="旅のしおり地点画像"
         />
         <Stack spacing="xs">
           <Text>{item.title}</Text>
           <Text size="xs">{item.comment}</Text>
         </Stack>
+        <UpdateTravelPlanModal
+          onClose={close}
+          opened={opened}
+          tourismSpotId={item.tourismSpotId}
+          travelPlanSpotId={item.travelPlanSpotId}
+          tourismSpotImage={item.officialSpotImages?.[0]?.src ?? "/dummyImage.svg"}
+          comment={item.comment}
+        />
       </Card>
-    </>
+    </Box>
   );
 };

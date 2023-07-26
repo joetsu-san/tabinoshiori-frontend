@@ -1,27 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
-import { RefObject } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { travelPlanTourismSpotListState, travelPlanTourismSpotInputState, firebaseTokenState } from "@/atoms";
-import { Divider, Box, Button, Modal, Textarea, Flex } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconFlag3, IconPlus } from "@tabler/icons-react";
+import { Divider, Box, Flex } from "@mantine/core";
+import { IconFlag3 } from "@tabler/icons-react";
 import { TimelineEditor } from "./TimelineEditor";
-import { SelectTourismSpot } from "./SelectTourismSpot";
-import { createTravelPlanSpot } from "@/utils/createTravelPlanSpot";
 
 type Props = {
-  ref: RefObject<HTMLDivElement>;
   travelPlanId: string;
 };
 
 export const TimelineWrapper = (props: Props) => {
-  const { ref, travelPlanId } = props;
-
-  const token = useRecoilValue(firebaseTokenState);
+  const { travelPlanId } = props;
 
   return (
-    <Flex ref={ref} direction="column">
+    <Flex direction="column">
       <Divider
         my="xs"
         variant="dashed"

@@ -45,7 +45,12 @@ export const TravelPlanSpotModal = ({ travelPlanId, opened, close }: Props) => {
           minRows={3}
         />
 
-        <Button variant="light" onClick={handleTourismSpotCount} color="cyan" disabled={!travelPlanTourismSpotInput.id}>
+        <Button
+          variant="light"
+          onClick={handleTourismSpotCount}
+          color="cyan"
+          disabled={!travelPlanTourismSpotInput.id || !comment}
+        >
           プランを追加
         </Button>
       </Flex>

@@ -13,6 +13,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { managementClient } from "../../_aspida/managementAspida";
 import { UpdateOfficialSpotDto } from "@/@types";
 import { useOfficialSpot } from "../../_hooks/useOfficialSpot";
+import axios from "axios";
 
 type PageProps = {
   params: {
@@ -78,38 +79,33 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
     await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$put({
       body: officialSpotData,
     });
-    // router.push("/management/official_spot");
+    router.push("/management/official_spot");
   };
 
   // 画像更新
-  const fileSubmit = async (value: any) => {
-    const images: globalThis.File[] = [];
+  const fileSubmit = async (value: { files: File[] }) => {
+    const formData = new FormData();
 
-    console.log(value.files);
-    for (let i = 0; i < value.files.length; i++) {
-      const f = value.files[i];
-      images.push(
-        new globalThis.File([await f.ArrayBuffer], f.name, {
-          type: "image/jpg",
-        })
+    if (value.files) {
+      for (let i = 0; i < value.files.length; i++) {
+        const f = value.files[i];
+        const newBlob = new Blob([await f.arrayBuffer()], { type: "image/jpeg" });
+        formData.append("files", newBlob);
+      }
+
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/management/official_spot/${params.official_spot_id}/image`,
+        formData,
+        { withCredentials: true }
       );
+      router.push("/management/official_spot");
     }
-
-    await managementClient.management.official_spot._official_spot_id(params.official_spot_id).image.$put({
-      body: { files: images },
-      config: {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      },
-    });
-    // router.push("/management/official_spot");
   };
 
   // 削除
   const deleteSubmit = async () => {
     await managementClient.management.official_spot._official_spot_id(params.official_spot_id).$delete();
-    // router.push("/management/official_spot");
+    router.push("/management/official_spot");
   };
 
   // データ取得中
@@ -158,7 +154,7 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
           </Flex>
         </form>
 
-        <form onSubmit={formFiles.onSubmit((value) => fileSubmit(value))}>
+        <form onSubmit={formFiles.onSubmit((value: any) => fileSubmit(value))}>
           <Flex direction={"column"} gap={20} mb={40}>
             <FileInput placeholder="画像を選択" label="観光地画像" multiple {...formFiles.getInputProps("files")} />
             <Button variant="filled" type="submit">

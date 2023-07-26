@@ -4,6 +4,8 @@ import { Group, Avatar, Text, Select, Image, Skeleton } from "@mantine/core";
 import { formatTourismForSelector } from "../../utils/formatTourismForSelector";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
 
 export type SelectDataItem = {
   value: string;
@@ -44,13 +46,16 @@ type TourismSpot = {
 export const SelectTourismSpot = (props: SelectTourismSpotProps) => {
   const { onChange } = props;
   const [selectedSpot, setSelectedSpot] = useState<TourismSpot | undefined>();
+  const token = useRecoilValue(firebaseTokenState);
 
   const { data: officialSpotList } = useOfficialSpotList();
   const { data: tourismspotBookmarkList } = useTourismspotBookmarkList();
 
   const formatData: TourismSpot[] | undefined =
     officialSpotList && tourismspotBookmarkList
-      ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList)
+      ? token
+        ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList)
+        : formatTourismForSelector(officialSpotList, [])
       : undefined;
 
   const selectData: SelectDataItem[] | undefined = useMemo(

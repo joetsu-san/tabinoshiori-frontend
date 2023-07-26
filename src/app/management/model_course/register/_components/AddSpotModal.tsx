@@ -1,6 +1,7 @@
 import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
 import { Button, Image, Text, TextInput, NumberInput, Card, Input, Grid, Flex } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
+import { z } from "zod";
 import { IconPlus } from "@tabler/icons-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { OfficialSpot } from "../../../../../../api/@types";
@@ -27,11 +28,17 @@ export const AddSpotModal: React.FC<ModalProps> = ({
 
   const [selectedSpot, setSelectedSpot] = useState<any>({});
 
+  // バリデーションスキーマ
+  const schema = z.object({
+    comment: z.string().min(1, { message: "コメントが入力されていません" }),
+  });
+
   const text = useForm({
     initialValues: {
       comment: "",
       stayMinutes: 1,
     },
+    validate: zodResolver(schema),
   });
 
   // 検索 Debounce

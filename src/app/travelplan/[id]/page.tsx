@@ -142,7 +142,7 @@ const Page = () => {
       </Flex>
       <TimelineWrapper travelPlanId={travelPlanId} />
 
-      <Button onClick={tourismSpotOpen} color="cyan" variant="light" leftIcon={<IconPlus />}>
+      <Button onClick={tourismSpotOpen} color="cyan" variant="light" leftIcon={<IconPlus />} mt="xs">
         プランを追加
       </Button>
       <TravelPlanSpotModal travelPlanId={travelPlanId} opened={openedTourismSpot} close={tourismSpotClose} />

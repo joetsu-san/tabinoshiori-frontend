@@ -1,4 +1,5 @@
 "use client";
+import { RefObject } from "react";
 import { Divider, Box, Flex } from "@mantine/core";
 import { IconFlag3 } from "@tabler/icons-react";
 import { TimelineEditor } from "./TimelineEditor";

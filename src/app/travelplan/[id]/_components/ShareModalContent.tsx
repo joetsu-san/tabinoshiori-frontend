@@ -1,4 +1,4 @@
-import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex, ScrollArea } from "@mantine/core";
+import { CopyButton, ActionIcon, Tooltip, Text, Box, Flex, ScrollArea, rem } from "@mantine/core";
 import { IconPaperclip, IconCopy, IconCheck, IconQrcode } from "@tabler/icons-react";
 import { useQRCode } from "next-qrcode";
 
@@ -19,13 +19,12 @@ export const ShareModalContent = () => {
           display: "flex",
           justifyContent: "space-between",
           backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
-          textAlign: "center",
           padding: theme.spacing.md,
           borderRadius: theme.radius.md,
         })}
       >
-        <ScrollArea w={300}>
-          <Text fw={600}>{currentURL}</Text>
+        <ScrollArea>
+          <Text truncate>{currentURL}</Text>
         </ScrollArea>
         <CopyButton value={currentURL} timeout={2000}>
           {({ copied, copy }) => (

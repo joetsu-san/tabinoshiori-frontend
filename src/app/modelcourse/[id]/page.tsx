@@ -13,11 +13,11 @@ import {
   Stack,
   Timeline,
   Badge,
-  Loader,
   Spoiler,
   Title,
+  Button,
 } from "@mantine/core";
-import { IconClockFilled, IconFlipFlops, IconHeart, IconWalk } from "@tabler/icons-react";
+import { IconArrowUpRight, IconClockFilled, IconFlipFlops, IconHeart, IconMapPin, IconWalk } from "@tabler/icons-react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { MapCenterState } from "@/atoms/SpotAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -26,11 +26,15 @@ import { firebaseTokenState } from "@/atoms";
 import { createModelcourseBookmark } from "@/utils/createModelcourseBookmark";
 import { removeModelcourseBookmark } from "@/utils/removeModelcourseBookmark";
 import { LoadingDisplay } from "@/components/LoadingDisplay";
+import Link from "next/link";
+import { useMapNaviUrl } from "./_hooks/useMapNaviUrl";
 
 const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
   //データ取得
   const token = useRecoilValue(firebaseTokenState);
   const { data, error } = useModelCourseDetail(params);
+
+  const { mapNaviUrl } = useMapNaviUrl(data!!);
   const [size, setSize] = useState<undefined | google.maps.Size>(undefined);
   const [mapCenter, setMapCenter] = useRecoilState(MapCenterState);
   const [zoom, setZoom] = useState(9);
@@ -42,10 +46,6 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
     height: "100%",
     width: "100%",
   };
-
-  useEffect(() => {
-    console.log(error);
-  }, [data, error]);
 
   const likes = () => {
     if (like) {
@@ -67,6 +67,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
       lng: data.modelCourseSpots[spotIndex].longitude,
     });
   };
+
   const mapCourseCenter = () => {
     setZoom(9);
     setMapCenter({
@@ -75,9 +76,14 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
       lng: 138.236285,
     });
   };
+
   const createOffsetSize = () => {
     return setSize(new window.google.maps.Size(0, -45));
   };
+
+  if (!data) return <LoadingDisplay />;
+  if (!mapNaviUrl) return <LoadingDisplay />;
+
   return (
     <Container>
       {!data ? (
@@ -100,7 +106,23 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
             </LoadScript>
           </Card>
 
-          <Card shadow="sm" m="10px 0 0 0" h="auto" onClick={mapCourseCenter}>
+          <Box m={10}>
+            <Link href={mapNaviUrl} target="_brank">
+              <Button
+                color="cyan"
+                variant="outline"
+                leftIcon={<IconMapPin />}
+                rightIcon={<IconArrowUpRight />}
+                fullWidth
+              >
+                <Text size={15} weight={600}>
+                  ナビをする
+                </Text>
+              </Button>
+            </Link>
+          </Box>
+
+          <Card shadow="sm" mt={10} h="auto" onClick={mapCourseCenter}>
             <Flex align="center" justify="center" direction="row">
               <Card.Section>
                 <Image
@@ -131,7 +153,7 @@ const ModelCourseDetail = ({ params }: { params: { id: string } }) => {
             </Flex>
           </Card>
 
-          <Card m="10px 0 100px 0" shadow="sm">
+          <Card mt={10} shadow="sm">
             <Group w="fit-content" m="0 auto">
               <Timeline active={actives} bulletSize={24} lineWidth={2}>
                 {data.modelCourseSpots.map((spot, index) => (

@@ -1,24 +1,26 @@
-import React, { useCallback } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Card, Image, Flex, Text, Stack, createStyles, rem, Box, Button } from "@mantine/core";
+import { Card, Image, Text, Stack, createStyles, rem, Selectors, DefaultProps } from "@mantine/core";
+// import { useDisclosure } from "@mantine/hooks";
 import { IconGripVertical } from "@tabler/icons-react";
 import { TravelPlanSpot } from "@/@types";
 import { useDisclosure } from "@mantine/hooks";
 import { UpdateTravelPlanModal } from "./UpdateTravelPlanModal/UpdateTravelPlanModal";
 
-type Props = {
+// Mantineや内部のコンポーネントと関係しない、純粋なProps
+export type SortableItemNativeProps = {
   item: TravelPlanSpot;
 };
-const useStyles = createStyles((theme) => ({
-  item: {
+
+export type SortableItemStylesParams = {};
+
+const useStyles = createStyles((theme, {}: SortableItemStylesParams) => ({
+  root: {
     display: "flex",
     borderRadius: theme.radius.md,
     border: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]}`,
     padding: `${theme.spacing.sm} ${theme.spacing.xl}`,
-    marginTop: "1rem",
     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.white,
-    marginBottom: theme.spacing.sm,
   },
 
   dragHandle: {
@@ -27,34 +29,39 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     color: theme.colorScheme === "dark" ? theme.colors.dark[1] : theme.colors.gray[6],
     paddingRight: theme.spacing.xs,
+    touchAction: "none",
   },
 }));
 
-export const SortableItem = ({ item }: Props) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.travelPlanSpotId });
-  const { classes, cx } = useStyles();
+export type SortableItemStylesNames = Selectors<typeof useStyles>;
+export type SortableItemProps = DefaultProps<SortableItemStylesNames, SortableItemStylesParams> &
+  SortableItemNativeProps;
+
+export const SortableItem = (props: SortableItemProps) => {
+  const { item, className, classNames, styles, unstyled } = props;
+  const { classes, cx } = useStyles({}, { name: "SortableItem", classNames, styles, unstyled });
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
+    id: item.travelPlanSpotId,
+  });
 
   const [opened, { open, close }] = useDisclosure();
 
-  const style = {
+  const draggableRootStyle = {
+    opacity: isDragging ? 0.4 : undefined,
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
-  // TODO: onClick doesn't work
-  const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      open();
-    },
-    [open]
-  );
-
+  // TODO: カードを押したら、モーダルが開いて編集できるようにする
   return (
-    <Box onClick={handleClick}>
-      <Card ref={setNodeRef} style={style} {...attributes} {...listeners} className={cx(classes.item)}>
-        <Box className={classes.dragHandle}>
+    <>
+      {/* <Modal opened={opened} onClose={close} title="旅のしおりを共有する" centered>
+        コンテンツ
+      </Modal> */}
+      <Card className={cx(className, classes.root)} style={draggableRootStyle} ref={setNodeRef}>
+        <div className={classes.dragHandle} {...attributes} {...listeners} ref={setActivatorNodeRef}>
           <IconGripVertical size="1.05rem" stroke={1.5} />
-        </Box>
+        </div>
         <Image
           m="0 10px 0 0"
           fit="cover"
@@ -77,6 +84,6 @@ export const SortableItem = ({ item }: Props) => {
           comment={item.comment}
         />
       </Card>
-    </Box>
+    </>
   );
 };

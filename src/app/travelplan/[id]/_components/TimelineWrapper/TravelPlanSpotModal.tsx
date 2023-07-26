@@ -1,9 +1,8 @@
 import { Button, Flex, Modal, Textarea } from "@mantine/core";
 import { SelectTourismSpot } from "./SelectTourismSpot";
 import { createTravelPlanSpot } from "@/utils/createTravelPlanSpot";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { travelPlanTourismSpotInputState, travelPlanTourismSpotListState } from "@/atoms";
+import { useCallback, useState } from "react";
+import { useTravelPlan } from "@/hooks/useTravelPlan";
 
 type Props = {
   travelPlanId: string;
@@ -12,29 +11,34 @@ type Props = {
 };
 
 export const TravelPlanSpotModal = ({ travelPlanId, opened, close }: Props) => {
+  const [selectedTourismSpotId, setSelectedTourismSpotId] = useState<string | undefined>();
   const [comment, setComment] = useState<string>("");
-  const [travelPlanTourismSpotList, setTravelPlanTourismSpotList] = useRecoilState(travelPlanTourismSpotListState);
-  const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
+  const sortIndexForNewSpot = useSortIndexForNewSpot(travelPlanId);
+  const addButtonDisabled = selectedTourismSpotId == null || sortIndexForNewSpot == null;
 
-  const handleTourismSpotCount = async () => {
-    await createTravelPlanSpot(travelPlanId!, travelPlanTourismSpotInput.id, {
-      tourismSpotId: travelPlanTourismSpotInput.id,
-      comment: comment,
-      sortIndex: travelPlanTourismSpotList.length + 1,
+  const handleSelectTourismSpotChange = useCallback((tourismSpotId?: string) => {
+    setSelectedTourismSpotId(tourismSpotId);
+  }, []);
+
+  const handleAddButtonClick = useCallback(async () => {
+    if (addButtonDisabled) return;
+
+    await createTravelPlanSpot(travelPlanId, selectedTourismSpotId, {
+      tourismSpotId: selectedTourismSpotId,
+      comment,
+      sortIndex: sortIndexForNewSpot,
       minuteSincePrevious: 5,
     });
-    // setTravelPlanTourismSpotList([...travelPlanTourismSpotList, travelPlanSpot]);
-    setTravelPlanTourismSpotInput({
-      id: "",
-      image: "",
-      label: "",
-    });
+
+    setSelectedTourismSpotId(undefined);
+    setComment("");
     close();
-  };
+  }, [addButtonDisabled, close, comment, sortIndexForNewSpot, selectedTourismSpotId, travelPlanId]);
+
   return (
     <Modal opened={opened} onClose={close} title="地点を追加する" centered size="lg">
       <Flex mih={50} gap="md" justify="center" align="center" direction="column">
-        <SelectTourismSpot />
+        <SelectTourismSpot onChange={handleSelectTourismSpotChange} />
         <Textarea
           value={comment}
           onChange={(e) => setComment(e.currentTarget.value)}
@@ -45,15 +49,18 @@ export const TravelPlanSpotModal = ({ travelPlanId, opened, close }: Props) => {
           minRows={3}
         />
 
-        <Button
-          variant="light"
-          onClick={handleTourismSpotCount}
-          color="cyan"
-          disabled={!travelPlanTourismSpotInput.id || !comment}
-        >
+        <Button variant="light" onClick={handleAddButtonClick} color="cyan" disabled={addButtonDisabled}>
           プランを追加
         </Button>
       </Flex>
     </Modal>
   );
+};
+
+const useSortIndexForNewSpot = (travelPlanId: string): number | undefined => {
+  const travelPlan = useTravelPlan(travelPlanId);
+  if (travelPlan == null) return;
+
+  const maxSortIndex = travelPlan.travelPlanSpots.reduce((prev, curr) => Math.max(prev, curr.sortIndex), 0);
+  return maxSortIndex + 1;
 };

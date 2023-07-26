@@ -1,22 +1,27 @@
-import React from "react";
+import React, { ComponentPropsWithoutRef, useMemo, useState } from "react";
 import { forwardRef } from "react";
 import { Group, Avatar, Text, Select, Image, Skeleton } from "@mantine/core";
 import { formatTourismForSelector } from "../../utils/formatTourismForSelector";
-import { useRecoilState } from "recoil";
-import { travelPlanTourismSpotInputState } from "@/atoms";
 import { useOfficialSpotList } from "@/hooks/useOfficialSpotList";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
+import { useRecoilValue } from "recoil";
+import { firebaseTokenState } from "@/atoms";
 
-type ItemProps = {
-  image: string;
+export type SelectDataItem = {
+  value: string;
   label: string;
-  comment: string;
+  group: string;
+  image: string;
 };
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItemBase(
-  { image, label, comment, ...others }: ItemProps,
-  ref
-) {
+export type SelectTourismSpotProps = {
+  onChange: (tourismSpotId: string | undefined) => void;
+};
+
+type SelectItemComponentProps = ComponentPropsWithoutRef<"div"> & SelectDataItem;
+
+const SelectItemComponent = forwardRef<HTMLDivElement, SelectItemComponentProps>((props, ref) => {
+  const { value, label, image, group, ...others } = props;
   return (
     <div ref={ref} {...others}>
       <Group noWrap>
@@ -24,71 +29,66 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItemBase
 
         <div>
           <Text size="sm">{label}</Text>
-          <Text size="xs" opacity={0.65}>
-            {comment}
-          </Text>
         </div>
       </Group>
     </div>
   );
 });
+SelectItemComponent.displayName = "SelectItemComponent";
 
-export const SelectTourismSpot = () => {
-  const [travelPlanTourismSpotInput, setTravelPlanTourismSpotInput] = useRecoilState(travelPlanTourismSpotInputState);
+type TourismSpot = {
+  id: string;
+  label: string;
+  group: string;
+  image: string;
+};
+
+export const SelectTourismSpot = (props: SelectTourismSpotProps) => {
+  const { onChange } = props;
+  const [selectedSpot, setSelectedSpot] = useState<TourismSpot | undefined>();
+  const token = useRecoilValue(firebaseTokenState);
 
   const { data: officialSpotList } = useOfficialSpotList();
   const { data: tourismspotBookmarkList } = useTourismspotBookmarkList();
 
-  const formatData =
+  const formatData: TourismSpot[] | undefined =
     officialSpotList && tourismspotBookmarkList
-      ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList)
+      ? token
+        ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList)
+        : formatTourismForSelector(officialSpotList, [])
       : undefined;
 
-  const handleOnChange = (selectedId: string) => {
-    const selectedSpot = formatData?.find((item) => item.id === selectedId);
-    if (selectedSpot) {
-      setTravelPlanTourismSpotInput({
-        ...travelPlanTourismSpotInput,
-        id: selectedSpot.id,
-        image: selectedSpot.image,
-        label: selectedSpot.label,
-      });
-    } else {
-      setTravelPlanTourismSpotInput({
-        ...travelPlanTourismSpotInput,
-        id: "",
-        image: "",
-        label: "",
-      });
-    }
+  const selectData: SelectDataItem[] | undefined = useMemo(
+    () => formatData?.map(({ id, image, label, group }): SelectDataItem => ({ value: id, label, image, group })),
+    [formatData]
+  );
+
+  const handleChange = (value: string | null) => {
+    const spot = formatData?.find((item) => item.id === value);
+    setSelectedSpot(spot);
+    onChange(spot?.id);
   };
 
   return (
     <>
-      {travelPlanTourismSpotInput.image ? (
-        <Image src={travelPlanTourismSpotInput.image} alt="観光地画像" width={200} height={150} fit="cover" />
+      {selectedSpot ? (
+        <Image src={selectedSpot.image} alt="観光地画像" width={200} height={150} fit="cover" />
       ) : (
         <Skeleton animate={false} width={200} height={150} />
       )}
 
-      {formatData && (
+      {selectData && (
         <Select
           label="観光地を選択"
           placeholder="選択してください"
-          itemComponent={SelectItem}
+          itemComponent={SelectItemComponent}
           searchable
-          data={formatData.map(({ image, label, id, group }) => {
-            return {
-              image: image,
-              label: label,
-              value: id,
-              group: group,
-            };
-          })}
+          data={selectData}
           maxDropdownHeight={160}
           nothingFound="見つかりませんでした"
+          filter={(value: string, item: SelectDataItem) => new RegExp(value.trim(), "i").test(item.label)}
           style={{ width: " 95%" }}
-          onChange={handleOnChange}
+          onChange={handleChange}
         />
       )}
     </>

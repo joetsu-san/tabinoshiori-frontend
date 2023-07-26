@@ -19,6 +19,7 @@ const useStyles = createStyles((theme, {}: SortableItemStylesParams) => ({
     border: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]}`,
     padding: `${theme.spacing.sm} ${theme.spacing.xl}`,
     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.white,
+    touchAction: "none",
   },
 
   dragHandle: {

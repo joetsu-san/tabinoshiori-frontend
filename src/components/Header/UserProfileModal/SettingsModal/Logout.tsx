@@ -17,7 +17,7 @@ export const Logout = ({ rootOpen, openConfirmModal, rootClose }: Props) => {
   const handleSubmit = () => {
     firebaseSignOut();
     setUserProfile(undefined);
-    router.replace("/tourismspot");
+    router.replace("/");
   };
 
   const open = () => {

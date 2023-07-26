@@ -36,7 +36,7 @@ export const FooterNav = () => {
 
   const navItems = [
     {
-      path: "/tourismspot",
+      path: "/",
       label: "観光地一覧",
       icon: <IconMap />,
     },

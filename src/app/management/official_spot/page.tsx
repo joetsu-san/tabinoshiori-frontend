@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Card, Image, Text, Button, Grid, Container, Flex, Input } from "@mantine/core";
 import { IconArrowBackUp, IconAt, IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
-import { OfficialSpot } from "../../../../api/@types";
+import { useDebounce } from "@/app/_hooks/useDebounce";
+import { OfficialSpot } from "@/@types";
 import { useOfficialSpotList } from "../_hooks/useOfficialSpotList";
 
 const OfficialSpotPage = () => {

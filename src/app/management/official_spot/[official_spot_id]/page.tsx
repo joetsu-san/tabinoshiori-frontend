@@ -156,7 +156,13 @@ const OfficialSpotEdit: NextPage<PageProps> = ({ params }, ctx: NextPageContext)
 
         <form onSubmit={formFiles.onSubmit((value: any) => fileSubmit(value))}>
           <Flex direction={"column"} gap={20} mb={40}>
-            <FileInput placeholder="画像を選択" label="観光地画像" multiple {...formFiles.getInputProps("files")} />
+            <FileInput
+              placeholder="画像を選択"
+              label="観光地画像"
+              accept=".jpg,.jpeg"
+              multiple
+              {...formFiles.getInputProps("files")}
+            />
             <Button variant="filled" type="submit">
               画像更新
             </Button>

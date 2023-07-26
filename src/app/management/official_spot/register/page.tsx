@@ -52,7 +52,8 @@ const RegisterSpot = () => {
     const images: string[] = [];
     for (let i = 0; i < value.files.length; i++) {
       const f = value.files[i];
-      images.push(Buffer.from(await f.arrayBuffer()).toString("base64"));
+      const data = Buffer.from(await f.arrayBuffer()).toString("base64");
+      images.push(data);
     }
 
     const postData = {
@@ -69,7 +70,7 @@ const RegisterSpot = () => {
     await managementClient.management.official_spot.$post({
       body: postData,
     });
-    router.replace("/management/official_spot");
+    router.push("/management/official_spot");
   };
 
   return (
@@ -107,7 +108,13 @@ const RegisterSpot = () => {
               precision={8}
               {...form.getInputProps("longitude")}
             />
-            <FileInput placeholder="画像を選択" label="観光地画像" multiple {...form.getInputProps("files")} />
+            <FileInput
+              placeholder="画像を選択"
+              label="観光地画像"
+              accept=".jpg,.jpeg"
+              multiple
+              {...form.getInputProps("files")}
+            />
 
             <Button variant="filled" type="submit">
               登録

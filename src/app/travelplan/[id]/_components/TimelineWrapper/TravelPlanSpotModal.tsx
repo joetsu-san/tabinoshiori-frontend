@@ -30,6 +30,8 @@ export const TravelPlanSpotModal = ({ travelPlanId, opened, close }: Props) => {
       minuteSincePrevious: 5,
     });
 
+    setSelectedTourismSpotId(undefined);
+    setComment("");
     close();
   }, [addButtonDisabled, close, comment, sortIndexForNewSpot, selectedTourismSpotId, travelPlanId]);
 

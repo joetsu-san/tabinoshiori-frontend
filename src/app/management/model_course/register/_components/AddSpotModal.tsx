@@ -1,4 +1,4 @@
-import { useDebounce } from "@/app/tourismspot/_hooks/useDebounce";
+import { useDebounce } from "@/app/_hooks/useDebounce";
 import { Button, Image, Text, TextInput, NumberInput, Card, Input, Grid, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons-react";

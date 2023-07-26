@@ -18,10 +18,8 @@ import { useDebounce } from "../_hooks/useDebounce";
 import { SpotInfoWindow } from "./SpotInfoWindow";
 import Link from "next/link";
 import { OfficialSpot } from "@/@types";
-import { createTourismspotBookmark } from "@/utils/createTourismspotBookmark";
 import { firebaseTokenState } from "@/atoms";
 import { useTourismspotBookmarkList } from "@/hooks/useTourismspotBookmarkList";
-import { deleteTourismspotBookmark } from "@/utils/deleteTourismspotBookmark";
 
 export const SpotButton = (props: any) => {
   const spotList = useRecoilValue(SpotList); // 観光地データマスター

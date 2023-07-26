@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import { useTravelPlan } from "@/hooks/useTravelPlan";
 
 const generateMapNaviUrlOfFirst = (latitude: number, longitude: number) => {

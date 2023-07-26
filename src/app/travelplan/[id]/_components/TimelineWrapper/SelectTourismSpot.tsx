@@ -49,8 +49,8 @@ export const SelectTourismSpot = (props: SelectTourismSpotProps) => {
   const { data: tourismspotBookmarkList } = useTourismspotBookmarkList();
 
   const formatData: TourismSpot[] | undefined =
-    officialSpotList && tourismspotBookmarkList
-      ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList)
+    officialSpotList && (tourismspotBookmarkList || [])
+      ? formatTourismForSelector(officialSpotList, tourismspotBookmarkList ?? [])
       : undefined;
 
   const selectData: SelectDataItem[] | undefined = useMemo(

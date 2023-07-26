@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Box, createStyles, Grid, Popover, rem, Text, Tooltip } from "@mantine/core";
+import { Box, createStyles, Grid, rem, Text, Tooltip } from "@mantine/core";
 import { IconBookmark, IconCalendar, IconMap, IconTimeline } from "@tabler/icons-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { firebaseUserIdState } from "@/atoms";
-import { useDisclosure } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   footer_nav: {
@@ -15,14 +13,11 @@ const useStyles = createStyles((theme) => ({
     bottom: 0,
     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
     marginTop: rem(120),
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "center",
     padding: `${theme.spacing.md} ${theme.spacing.md}`,
     borderTop: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]}`,
     width: "100%",
 
-    fontSize: rem(4),
+    fontSize: rem(10),
     zIndex: 100,
   },
 }));
@@ -30,9 +25,7 @@ const useStyles = createStyles((theme) => ({
 export const FooterNav = () => {
   const { classes } = useStyles();
   const pathname = usePathname();
-  const router = useSearchParams();
   const firebaseUserId = useRecoilValue(firebaseUserIdState);
-  const [opened, { close, open }] = useDisclosure(false);
 
   const navItems = [
     {
@@ -62,7 +55,6 @@ export const FooterNav = () => {
   return (
     <>
       <div className={classes.footer_nav}>
-        {/* <Group spacing="xl"> */}
         <Grid grow gutter="lg">
           {navItems.map((item, index) => (
             <Grid.Col
@@ -86,7 +78,6 @@ export const FooterNav = () => {
             </Grid.Col>
           ))}
         </Grid>
-        {/* </Group> */}
       </div>
     </>
   );

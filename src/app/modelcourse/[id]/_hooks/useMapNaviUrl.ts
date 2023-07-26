@@ -1,4 +1,4 @@
-import { useTravelPlan } from "@/hooks/useTravelPlan";
+import { ModelCourseDetail } from "@/@types";
 
 const generateMapNaviUrlOfFirst = (latitude: number, longitude: number) => {
   const origin = `&origin=${latitude},${longitude}`;
@@ -10,20 +10,19 @@ const generateMapNaviUrlOfLast = (latitude: number, longitude: number) => {
   return destination;
 };
 
-export const useMapNaviUrl = (travelPlanId: string) => {
+export const useMapNaviUrl = (modelcoursedetail: ModelCourseDetail) => {
   const baseUrl = "https://www.google.com/maps/dir/?api=1";
-  const travelPlan = useTravelPlan(travelPlanId);
   let mapNaviUrl = baseUrl;
   let waypoints = `&waypoints=`;
 
-  if (!travelPlan) return { error: "旅程が見つかりませんでした。" };
+  if (!modelcoursedetail) return { error: "モデルコースが見つかりませんでした。" };
 
-  for (const [index, spot] of travelPlan.travelPlanSpots.entries()) {
+  for (const [index, spot] of modelcoursedetail.modelCourseSpots.entries()) {
     if (index === 0) {
       mapNaviUrl += generateMapNaviUrlOfFirst(spot.latitude, spot.longitude);
       continue;
     }
-    if (index === travelPlan.travelPlanSpots.length - 1) {
+    if (index === modelcoursedetail.modelCourseSpots.length - 1) {
       mapNaviUrl += generateMapNaviUrlOfLast(spot.latitude, spot.longitude);
       continue;
     }

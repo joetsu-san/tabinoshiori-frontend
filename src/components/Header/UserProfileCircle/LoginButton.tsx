@@ -6,7 +6,7 @@ export const LoginButton = () => {
   const [opened, { open, close }] = useDisclosure();
   return (
     <Group position="center">
-      <Button color="cyan" onClick={open} size="xs" compact fz={"0.1rem"}>
+      <Button color="cyan" onClick={open} size="xs">
         ログイン
       </Button>
       <LoginModal opened={opened} onClose={close} />

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { destroyCookie, parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 import { managementClient } from "./_aspida/managementAspida";
+import { SWRConfig } from "swr";
 
 export default function ManagementLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function ManagementLayout({ children }: { children: React.ReactNo
   };
 
   return (
-    <>
+    <SWRConfig value={{ revalidateIfStale: true }}>
       <MantineHeader height={60} px="md">
         <Group position="apart" sx={{ height: "100%" }}>
           <Text weight={700} fz={"lg"}>
@@ -40,6 +41,6 @@ export default function ManagementLayout({ children }: { children: React.ReactNo
         </Group>
       </MantineHeader>
       {children}
-    </>
+    </SWRConfig>
   );
 }
